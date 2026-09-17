@@ -53,6 +53,14 @@ main{padding:14px 6px calc(86px + env(safe-area-inset-bottom));max-width:1100px;
 .card h2 .badge.pu{background:var(--purple-soft);color:var(--purple)}
 .card h2 .badge.am{background:var(--amber-soft);color:var(--amber)}
 .hint{font-size:12px;color:var(--sub)}
+.ocs-in{display:flex;flex-direction:column;gap:6px;margin:0 0 9px}
+.ocs-in-btn{display:flex;align-items:center;justify-content:center;gap:7px;border:1.5px dashed var(--brand);
+  border-radius:11px;padding:10px 12px;background:var(--brand-soft);color:var(--brand-deep);
+  font-size:13px;font-weight:800;cursor:pointer}
+.ocs-in-btn:active{opacity:.85}
+.ocs-in-sub{font-size:9.5px;font-weight:700;opacity:.75;background:rgba(255,255,255,.7);border-radius:999px;padding:1px 7px}
+.ocs-in-st:empty{display:none}
+.ocs-in-st{font-size:11.5px;line-height:1.5}
 .ocs-file-box{border:1.5px dashed var(--brand);border-radius:12px;padding:11px 12px;background:var(--brand-soft,rgba(0,120,110,.06))}
 .ocs-file-label{display:block;font-size:13.5px;font-weight:800;color:var(--brand)}
 .ocs-file-label .badge{font-size:10px;font-weight:700;background:var(--brand);color:#fff;padding:1px 7px;border-radius:999px;margin-left:4px;vertical-align:middle}
@@ -88,6 +96,25 @@ main{padding:14px 6px calc(86px + env(safe-area-inset-bottom));max-width:1100px;
 .tc-search input{flex:1;min-width:0;border:none;background:none;font-size:13px;font-family:inherit;color:var(--ink);outline:none}
 .tc-sx{flex:0 0 auto;border:none;background:var(--line);color:var(--sub);border-radius:50%;width:19px;height:19px;
   font-size:11px;font-weight:800;cursor:pointer;line-height:1}
+.due-card{border:1.5px solid #EADFD0;background:linear-gradient(180deg,#FFFDF8,#fff)}
+.due-sec{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:800;color:var(--sub);margin:9px 0 5px}
+.due-sec:first-of-type{margin-top:2px}
+.due-dot{width:11px;height:11px;border-radius:50%;flex:0 0 auto}
+.due-dot.red{background:#E03B3B}.due-dot.amber{background:#E8930C}.due-dot.gray{background:#C8D2CD}
+.due-row{display:flex;align-items:flex-start;gap:6px;border-radius:11px;padding:8px 10px;margin-bottom:6px;font-size:12px;line-height:1.5}
+.due-row.is-late{background:#FFF6E3;border:1.3px solid #F0D9A8}
+.due-row.is-soon{background:#FDF0F0;border:1.3px solid #F2D2D2}
+.due-row.is-later{background:#FDF3F3;border:1.3px solid #F0DCDC}
+.due-ic{font-size:14px;flex:0 0 auto;line-height:1.3}
+.due-dep{font-size:9.5px;padding:1px 6px;border-radius:5px;font-weight:800;flex:0 0 auto;margin-top:1px}
+.due-tx{flex:1;min-width:0;color:#8A4B2A}
+.due-row.is-soon .due-tx,.due-row.is-later .due-tx{color:#B03A3A}
+.due-due{font-weight:600;opacity:.85}
+.due-btn{display:inline-block;margin-left:5px;background:#fff;border:1.3px solid var(--line);border-radius:999px;
+  padding:2px 10px;font-size:10.5px;font-weight:800;color:var(--sub);cursor:pointer;font-family:inherit;white-space:nowrap}
+.due-btn:active{background:#F2F5F3}
+.due-late{color:#D23B3B;font-weight:800;font-size:11px;flex:0 0 auto;white-space:nowrap;margin-top:1px}
+.due-dn{color:var(--sub);font-weight:800;font-size:11px;flex:0 0 auto;white-space:nowrap;margin-top:1px}
 .drgrp{font-size:10.5px;font-weight:800;color:var(--sub);background:#F4F7F5;border-radius:6px;padding:3px 8px;margin:7px 0 2px;display:inline-block}
 .ocs-hi-btn{opacity:.3}
 .otbl tr.ocs-hi td{background:#FFF6D6}
@@ -618,18 +645,10 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
   </div>
 
   <div class="osec" id="o-day">
-    <div class="card" style="border:2px solid var(--brand)">
-      <h2>📥 OCS 입력 <span class="badge">엑셀 파일 또는 붙여넣기</span></h2>
-      <p class="hint">OCS에서 그날 예약 행들을 <b>통째로 복사</b>해 붙여넣으면 당일 뷰·토탈 자동매칭에 바로 반영돼요. 같은 날짜 재붙여넣기=새 행만 추가(중복 자동 제거) · <b>하루 지난 데이터는 내 토탈 환자 행만 남기고 자동 정리</b>.</p>
-      <div class="ocs-file-box">
-        <label class="ocs-file-label" for="ocs-file">📁 OCS 엑셀 파일 올리기 <span class="badge">.xlsx · 🔐 암호 OK</span></label>
-        <p class="hint" style="margin:4px 0 6px">OCS 예약 목록을 <b>엑셀(.xlsx)로 저장</b>한 뒤 여기서 파일만 고르면 자동 분석돼요. (암호가 걸려 있으면 엑셀에서 암호를 푼 뒤 다시 저장해 올려주세요.)</p>
-        <input type="file" id="ocs-file" accept=".xlsx,.xls,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" onchange="ocsFileRun(this)" style="width:100%;font-size:12px">
-        <div id="ocs-file-status"></div>
-      </div>
-      <div class="ocs-or"><span>또는 붙여넣기</span></div>
-      <textarea id="ocs-paste" rows="4" placeholder="예: 2026/07/18 09:00 00676704 홍길동 치과교정과 ○○○ 6M r/c ..." style="font-size:11px"></textarea>
-      <button class="btn" style="width:100%;margin-top:6px;background:var(--brand);border-color:var(--brand);color:#fff;font-weight:800" onclick="ocsPasteRun()">붙여넣은 OCS 분석·저장</button>
+    <div class="ocs-in">
+      <label class="ocs-in-btn" for="ocs-file">📁 OCS 엑셀 올리기<span class="ocs-in-sub">.xlsx · 🔐 암호 OK</span></label>
+      <input type="file" id="ocs-file" accept=".xlsx,.xls,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" onchange="ocsFileRun(this)" style="display:none">
+      <div id="ocs-file-status" class="ocs-in-st"></div>
       <div id="ocs-paste-status"></div>
     </div>
     <div class="card">
@@ -860,7 +879,7 @@ const BASE_SCHED={"v":2,"events":[]}; /* 공유판: 개인 일정 시드 없음 
 function txtOn(hex){try{const x=(hex||"").replace("#","");const r=parseInt(x.substr(0,2),16),g=parseInt(x.substr(2,2),16),b=parseInt(x.substr(4,2),16);return (0.299*r+0.587*g+0.114*b)/255>0.62?"#1E2823":"#fff";}catch(e){return "#fff";}}
 const DEPT_COLOR={"소치":"#EE7A1A","내과":"#C29B00","교정":"#2E9E44","치주":"#12A5B0","보존":"#3D7BE0","보철":"#23408F","외과":"#A8262A","영상":"#4F7FA8","병리":"#B0637C","원진실":"#9A5FD6","관악":"#6B2D8F","공통":"#5C6B73","기타":"#8A938D"};
 const KEY="wonnae-share-v1";
-const BUILD_ID="16";   /* 🎁 공유판(배포용) 빌드 — 새 파일마다 +1 */
+const BUILD_ID="17";   /* 🎁 공유판(배포용) 빌드 — 새 파일마다 +1 */
 function esc(s){return String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");}
 /* 저장 어댑터: 클로드 앱/웹에서 열면 계정 저장소(폰·PC 자동 동기화), 
    파일을 따로 브라우저로 열면 그 기기 localStorage(비동기화)로 폴백 */
@@ -2597,6 +2616,64 @@ function tglProto(k){S.protoDone[k]=!S.protoDone[k];save();renderToday();
 let todayView=null;
 function todayMove(n){if(!todayView)todayView=ymd(new Date());const d=new Date(todayView+"T00:00");d.setDate(d.getDate()+n);todayView=ymd(d);renderToday();}
 function todayReset(){todayView=null;renderToday();}
+/* ═══ 📌 케이스 마감 할일 — 유폴/레포트 기한을 한데 모아 지남·임박·예정으로 ═══ */
+function dueTasks(){
+  const today=ymd(new Date());
+  const T=[];
+  (S.totals||[]).forEach(t=>{
+    if(t.done)return;
+    const vs=(t.visits||[]).filter(Boolean).slice().sort();
+    const lastV=vs.length?vs[vs.length-1]:null;
+    const done=vs.length>=t.need;
+    const nm=`${t.pt} `;
+    /* 토탈 완료 후: 유폴 D+7 · 레포트 D+14 */
+    if(done&&lastV){
+      if(!t.ufol)T.push({id:t.id,k:"ufol",dept:t.dept,ic:"📤",
+        tx:`${nm}유폴리오 검사`,due:ymd(daysFrom(lastV,7)),why:"내원완료 +7일",btn:"유폴 완료"});
+      if(!t.report)T.push({id:t.id,k:"report",dept:t.dept,ic:"📝",
+        tx:`${nm}토탈 레포트 검사`,due:ymd(daysFrom(lastV,14)),why:"내원완료 +14일",btn:"레포트 완료"});
+    }
+    /* 차팅(첫 내원) 후 프리토탈 레포트 D+7 — 아직 목표 미달이고 사인 전인 경우 */
+    if(!done&&vs.length>=1&&!t.pre)T.push({id:t.id,k:"pre",dept:t.dept,ic:"📄",
+      tx:`${nm}프리토탈 레포트 작성`,due:ymd(daysFrom(vs[0],7)),why:"차팅 +7일",btn:"작성함"});
+  });
+  T.forEach(x=>{x.d=dLeft(new Date(x.due+"T00:00"));});
+  T.sort((a,b)=>a.d-b.d);
+  return T;
+}
+function dueToggle(id,k){
+  const t=findT(id);if(!t)return;
+  t[k]=!t[k];save(true);syncTotals();
+  try{renderToday();}catch(e){}
+}
+function dueCardHtml(){
+  const T=dueTasks();
+  if(!T.length)return "";
+  const G={late:[],soon:[],later:[]};
+  T.forEach(x=>{ if(x.d<=0)G.late.push(x); else if(x.d<=3)G.soon.push(x); else G.later.push(x); });
+  const sec=(list,cls,dot,label)=>{
+    if(!list.length)return "";
+    return `<div class="due-sec"><span class="due-dot ${dot}"></span>${label}</div>`+
+      list.map(x=>{
+        const col=DEPT_COLOR[x.dept]||"#666";
+        const badge=x.d<0?`<span class="due-late">${Math.abs(x.d)}일 지남</span>`
+                  :x.d===0?`<span class="due-late">오늘까지</span>`
+                  :`<span class="due-dn">D-${x.d}</span>`;
+        return `<div class="due-row ${cls}">
+          <span class="due-ic">${x.ic}</span>
+          <span class="dept-tag due-dep" style="background:${col};color:${txtOn(col)}">${esc(x.dept)}</span>
+          <span class="due-tx"><b>${esc(x.tx)}</b> <span class="due-due">~${fmtD(x.due)} (${esc(x.why)})</span>
+            <button class="due-btn" onclick="dueToggle(${x.id},'${x.k}')">✓ ${esc(x.btn)}</button></span>
+          ${badge}
+        </div>`;}).join("");
+  };
+  return `<div class="card due-card">
+    <h2 style="margin-bottom:7px">📌 케이스 마감 할일 <span class="badge">${T.length}건</span></h2>
+    ${sec(G.late,"is-late","red","지금 · 오늘")}
+    ${sec(G.soon,"is-soon","amber","곧 (3일 내)")}
+    ${sec(G.later,"is-later","gray","예정")}
+  </div>`;
+}
 function renderToday(){
   const realToday=ymd(new Date());
   const today=todayView||realToday;
@@ -2645,7 +2722,7 @@ function renderToday(){
       if(!t.report&&dLeft(daysFrom(lastV,14))<=2)a+=`<div class="alertline">⚠ [${t.dept}] ${esc(t.pt)} 레포트 임박/초과</div>`;
     }});
   const miss=rtEvs.filter(e=>!e.time&&!e.span);miss.length&&(a+=`<div class="alertline warn">⏰ 오늘 시간 미정 일정 ${miss.length}건 — OCS 확인</div>`);
-  document.getElementById("deadline-alerts").innerHTML=a;
+  document.getElementById("deadline-alerts").innerHTML=dueCardHtml()+a;
   renderTomorrowBrief();renderRoutine();
 }
 function slotOfHour(h){if(h<12)return"오전";if(h<13)return"점심";if(h<17)return"오후";return"저녁";}
@@ -3168,9 +3245,9 @@ function catLabel(c){for(const[re,l] of CAT_LABELS)if(re.test(c||""))return l;re
 /* ═══ 워크인 접근성: 교수 진료·달신·장부·원스톱은 전부 예약제 → 실질 워크인 = 레지쌤 진료만 ═══ */
 const PROFS={ /* 확정 교수님 명단(2026-07) — 이 명단만 교수로 제외, 그 외 전원 전공의로 카운트. 수정하려면 아래 이름을 고치세요 */
  교정:["안정섭","양일형","백승학","임원희","안석준"], /* ⭐교정은 교수님 진료도 원내생 참여 가능(확정) — accessOf 예외 */
- 치주:["구기태","설양조","이용무","김성태","조영단","구영"],
+ 치주:["구기태","설양조","이용무","김성태","조영단","구영","이정원"],
  내과:["박지운","정진우","고홍섭","박희경","조정환","장지희"],
- 보존:["서덕규","손원준","이인복","이우철","금기연","김선영","유연지","이창하"],
+ 보존:["서덕규","손원준","이인복","이우철","금기연","김선영","유연지","이창하","이윤선"],
  보철:["여인성","김명주","곽재영","임영준","김성균","권호범","윤형인","박지만","이재현","조준호"],
  소치:["현홍근","김정욱","장기택","김영재","신터전","송지수","김현태"],
  외과:[]};
@@ -3733,7 +3810,7 @@ function renderOcsDay(){
   const dows=["일","월","화","수","목","금","토"];
   document.getElementById("ocs-nav-title").textContent=ocsDate?`${d.getMonth()+1}/${d.getDate()} (${dows[day]})`:"오늘";
   {const o=ocsStore();const nd=Object.keys(o.days).length;
-   document.getElementById("ocs-day-meta").textContent=nd?`보유 ${nd}일 · 예약 ${UPCOMING.length}건`:"OCS 붙여넣기 대기";}
+   document.getElementById("ocs-day-meta").textContent=nd?`보유 ${nd}일 · 예약 ${UPCOMING.length}건`:"OCS 파일 올리기 대기";}
   const st=document.getElementById("ocs-paste-status");if(st)st.innerHTML=ocsStatusHtml();
   const raw=upOn(ds);
   const MSg=matchSet();
@@ -3792,7 +3869,7 @@ function renderOcsDay(){
         })()}</div></details>`;}).join("")}
     </div>`;
   }else{
-    bd=`<div class="card"><h2>이 날 OCS</h2><p class="hint">이 날짜 데이터가 없어요 — 위 <b>📥 OCS 붙여넣기</b>에 그날 OCS 행들을 넣어주세요.</p></div>`;
+    bd=`<div class="card"><h2>이 날 OCS</h2><p class="hint">이 날짜 데이터가 없어요 — 위 <b>📁 OCS 엑셀 올리기</b>로 그날 파일을 올려주세요.</p></div>`;
   }
   const evs=evOn(ds);
   const zoneBusy=z=>evs.some(e=>e.status!=="cancel"&&(e.span==="full"||e.span===z||(!e.span&&e.time&&(z==="am"?hm2min(e.time)<720:hm2min(e.time)>=720))));
@@ -4270,7 +4347,7 @@ function ocsFileRun(inputEl){
   const file=inputEl&&inputEl.files&&inputEl.files[0];
   if(!file){return;}
   const st=document.getElementById("ocs-file-status");
-  if(typeof XLSX==="undefined"){if(st)st.innerHTML='<div class="warn-line">⚠ 엑셀 읽기 모듈이 로드되지 않았어요. 붙여넣기를 대신 써주세요.</div>';return;}
+  if(typeof XLSX==="undefined"){if(st)st.innerHTML='<div class="warn-line">⚠ 엑셀 읽기 모듈이 로드되지 않았어요. 페이지를 새로고침해 주세요.</div>';return;}
   if(st)st.innerHTML='<div class="ocs-note">📁 '+file.name+' 읽는 중…</div>';
   const rd=new FileReader();
   rd.onerror=()=>{if(st)st.innerHTML='<div class="warn-line">⚠ 파일을 읽지 못했어요. 다시 시도해주세요.</div>';};
@@ -4330,7 +4407,7 @@ function ocsDelDay(d){
 }
 function ocsStatusHtml(){
   const o=ocsStore();const ds=Object.keys(o.days).sort();
-  if(!ds.length&&!o.arch.length)return `<p class="hint" style="margin-top:6px">아직 저장된 OCS가 없어요 — 붙여넣으면 시작!</p>`;
+  if(!ds.length&&!o.arch.length)return `<p class="hint" style="margin-top:6px">아직 저장된 OCS가 없어요 — 위에서 엑셀 파일을 올려주세요!</p>`;
   return `<p class="hint" style="margin-top:6px">보유: ${ds.map(d=>`<b>${fmtD(d)}</b> ${(o.days[d]||[]).length}건 <a href="javascript:void 0" onclick="ocsDelDay('${d}')" style="color:var(--red);text-decoration:none;font-weight:800">✕</a>`).join(" · ")||"—"}${o.arch.length?` · 지난 매칭이력 ${o.arch.length}건`:""}</p>`;
 }
 function matchSet(){const s=new Set();(S.totals||[]).forEach(t=>{if(!t.done)upMatch(t).forEach(u=>s.add(u));});return s;}
@@ -4361,7 +4438,7 @@ function renderTotalFound(){
   const box=document.getElementById("total-ocs-found");const badge=document.getElementById("tot-match-badge");
   if(!box)return;
   const M=totalMatches();
-  if(badge)badge.textContent=M.length?`OCS에서 ${M.length}명 발견`:(UPCOMING.length?`예약 ${UPCOMING.length}건 스캔 — 매칭 0`:"OCS 붙여넣기 대기");
+  if(badge)badge.textContent=M.length?`OCS에서 ${M.length}명 발견`:(UPCOMING.length?`예약 ${UPCOMING.length}건 스캔 — 매칭 0`:"OCS 파일 올리기 대기");
   if(!M.length){box.innerHTML="";return;}
   box.innerHTML=notiCardHtml(M)+`<div class="found-card">
     <div class="found-hd"><span class="found-ic">◇</span><b>OCS에서 토탈 환자 ${M.length}명 발견</b></div>
@@ -4440,7 +4517,6 @@ function notiCardHtml(M){
   const badge=[todayN?`오늘 내원 · ${todayN}건`:null,laterN?`예정 ${laterN}건`:null].filter(Boolean).join(" · ");
   const lines=rows.map(({t,u})=>notiLineFor(t,u));
   window.__notiAll=lines.join("\n");
-  const fmts=[...new Set(rows.map(r=>r.t.dept))];
   return `<div class="noti-card">
     <div class="noti-top"><span class="noti-ic">📣</span><b class="noti-tt">토탈 노티</b><span class="noti-badge">${esc(badge)}</span></div>
     <p class="noti-desc">그대로 복사해 보내면 돼요 · 과별 형식 자동</p>
@@ -4458,12 +4534,8 @@ function notiCardHtml(M){
     <button class="noti-all" onclick="notiCopyAll()">📋 전체 복사</button>
     <div class="noti-me">
       <span>내 정보</span>
-      <input id="noti-me" value="${esc((S.me||"").trim())}" placeholder="예: 44,송주미" onchange="saveNotiMe(this.value)" onblur="saveNotiMe(this.value)">
+      <input id="noti-me" value="${esc((S.me||"").trim())}" placeholder="번호,이름 (예: 44,송주미)" onchange="saveNotiMe(this.value)" onblur="saveNotiMe(this.value)">
     </div>
-    <p class="hint noti-hint">${fmts.map(dp=>`<b>${esc(dp)}</b> ${esc(notiFmtLabel(dp))}`).join("<br>")}<br>
-      내 정보를 한 번 넣어두면 계속 자동으로 채워져요 · 전날 18:00~당일 08:00 토탈방 · 2명이면 각자!</p>
-    <div class="copybox noti-box2" onclick="copyTx(this)"><code>@케이스장, ${notiTime(rows[0].u.t)||"내원시간"}, ${esc(notiNo(rows[0].t.ptno||rows[0].u.no))}, ${esc(rows[0].t.pt)}, 들어가는 원내생</code><button class="btn small ghost">복사</button></div>
-    <p class="hint noti-hint">↑ 친환 노티 — 당일 <b>08:30까지</b> 과별 질문/잡담방</p>
   </div>`;
 }
 function ghostChip(u){
