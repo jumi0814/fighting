@@ -76,6 +76,20 @@ main{padding:14px 6px calc(86px + env(safe-area-inset-bottom));max-width:1100px;
 .ocs-legend[open]>summary::after{content:" ▴"}
 .ocs-legend .hint{padding:0 10px 8px;line-height:1.65}
 .otbl tr.lockrow .ocs-hi-btn{opacity:.3}
+.hi-sw-box{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.hi-sw{display:flex;align-items:center;gap:6px;border:2px solid;border-radius:11px;padding:11px 9px;
+  font-size:12.5px;font-weight:800;color:var(--ink);cursor:pointer;font-family:inherit;width:100%;box-sizing:border-box}
+.hi-sw-dot{width:12px;height:12px;border-radius:50%;flex:0 0 auto}
+.hi-sw-nm{flex:1;text-align:left}
+.hi-sw-ck{font-size:12px;font-weight:900}
+.tc-search{display:flex;align-items:center;gap:6px;border:1.5px solid var(--line);border-radius:11px;
+  padding:7px 10px;margin:0 0 8px;background:#FAFBFA}
+.tc-search .tc-si{font-size:13px;opacity:.7;flex:0 0 auto}
+.tc-search input{flex:1;min-width:0;border:none;background:none;font-size:13px;font-family:inherit;color:var(--ink);outline:none}
+.tc-sx{flex:0 0 auto;border:none;background:var(--line);color:var(--sub);border-radius:50%;width:19px;height:19px;
+  font-size:11px;font-weight:800;cursor:pointer;line-height:1}
+.drgrp{font-size:10.5px;font-weight:800;color:var(--sub);background:#F4F7F5;border-radius:6px;padding:3px 8px;margin:7px 0 2px;display:inline-block}
+.ocs-hi-btn{opacity:.3}
 .otbl tr.ocs-hi td{background:#FFF6D6}
 .otbl tr.ocs-hi td:nth-child(1){box-shadow:inset 3px 0 0 #F5B301}
 .hltbl{table-layout:fixed;width:100%}
@@ -85,8 +99,6 @@ main{padding:14px 6px calc(86px + env(safe-area-inset-bottom));max-width:1100px;
 .hltbl td:nth-child(3){width:60px;line-height:1.25;overflow:hidden}
 .hltbl td:nth-child(4){overflow-wrap:anywhere;word-break:break-word;line-height:1.3}
 .hltbl td:nth-child(5){width:48px;color:var(--sub);font-size:10.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.hltbl tr td{background:#FFF6D6}
-.hltbl tr td:nth-child(1){box-shadow:inset 3px 0 0 #F5B301}
 /* ═══ 토탈 발견 + 노티 카드 ═══ */
 .found-card{border:1.5px solid var(--purple);background:linear-gradient(180deg,#F7F3FF,var(--purple-soft));border-radius:13px;padding:11px 12px;margin-bottom:8px}
 .found-hd{display:flex;align-items:center;gap:6px;font-size:13.5px;color:var(--purple);margin-bottom:2px}
@@ -756,6 +768,15 @@ break;case"<bookViews":;case"<bookViews>":;case"</bookViews>":break;case"<workbo
   </div>
 </dialog>
 
+<dialog id="hi-dlg">
+  <div style="padding:16px 16px 14px">
+    <h3 style="font-size:15px;font-weight:800;margin-bottom:4px">🎨 하이라이트 색</h3>
+    <p class="hint" style="margin-bottom:10px">진료마다 색을 다르게 칠해 구분해보세요 (예: 어시 / 견학 / 내 환자)</p>
+    <div id="hi-sw" class="hi-sw-box"></div>
+    <button id="hi-off" class="btn ghost" style="width:100%;margin-top:9px" onclick="ocsHiSet(0)">하이라이트 지우기</button>
+    <button class="btn ghost" style="width:100%;margin-top:6px" onclick="(function(){var d=document.getElementById('hi-dlg');try{d.close()}catch(e){d.removeAttribute('open')}window.__hiKey=null;})()">닫기</button>
+  </div>
+</dialog>
 <dialog id="pw-dlg">
   <h3 style="font-size:15px;font-weight:800;margin-bottom:5px">🔐 엑셀 암호 입력</h3>
   <p class="hint" id="pw-hint" style="margin-bottom:9px">OCS에서 받은 암호를 입력해주세요 (보통 4자리)</p>
@@ -839,7 +860,7 @@ const BASE_SCHED={"v":2,"events":[]}; /* 공유판: 개인 일정 시드 없음 
 function txtOn(hex){try{const x=(hex||"").replace("#","");const r=parseInt(x.substr(0,2),16),g=parseInt(x.substr(2,2),16),b=parseInt(x.substr(4,2),16);return (0.299*r+0.587*g+0.114*b)/255>0.62?"#1E2823":"#fff";}catch(e){return "#fff";}}
 const DEPT_COLOR={"소치":"#EE7A1A","내과":"#C29B00","교정":"#2E9E44","치주":"#12A5B0","보존":"#3D7BE0","보철":"#23408F","외과":"#A8262A","영상":"#4F7FA8","병리":"#B0637C","원진실":"#9A5FD6","관악":"#6B2D8F","공통":"#5C6B73","기타":"#8A938D"};
 const KEY="wonnae-share-v1";
-const BUILD_ID="15";   /* 🎁 공유판(배포용) 빌드 — 새 파일마다 +1 */
+const BUILD_ID="16";   /* 🎁 공유판(배포용) 빌드 — 새 파일마다 +1 */
 function esc(s){return String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");}
 /* 저장 어댑터: 클로드 앱/웹에서 열면 계정 저장소(폰·PC 자동 동기화), 
    파일을 따로 브라우저로 열면 그 기기 localStorage(비동기화)로 폴백 */
@@ -2856,6 +2877,22 @@ let tcSortMode="deadline";   /* deadline=임박순 · item=항목별 */
 let tcItemFilter=null;       /* null=전체 · 선택된 항목명 */
 function setTcSort(m){tcSortMode=m;renderTotals();}
 function toggleTcShowDone(){window.tcShowDone=!window.tcShowDone;renderTotals();}
+let tcQuery="";   /* 토탈 검색어 (환자명·번호·항목·담당쌤·과) */
+function setTcQuery(v){
+  tcQuery=String(v||"").trim();
+  renderTotals();
+  /* 입력 중 포커스가 끊기지 않게 커서 복원 */
+  try{const el=document.getElementById("tc-q");if(el){el.focus();const n=el.value.length;el.setSelectionRange(n,n);}}catch(e){}
+}
+function tcMatch(t,q){
+  if(!q)return true;
+  const s=[t.pt,t.ptno,t.item,t.dept,t.dr,(t.memo||"")].map(x=>String(x||"").toLowerCase()).join(" ");
+  const num=String(t.ptno||"").replace(/\D/g,"").replace(/^0+/,"");
+  return q.toLowerCase().split(/\s+/).every(w=>{
+    const wn=w.replace(/\D/g,"");
+    return s.includes(w)||(wn&&num.includes(wn.replace(/^0+/,"")));
+  });
+}
 function setTcItem(it){tcItemFilter=(tcItemFilter===it)?null:it;renderTotals();}
 /* 남은 일수(작을수록 급함): 유폴/레포트 마감 우선 → 다음 내원 → 없으면 맨 뒤 */
 function tcUrgency(t){
@@ -2887,8 +2924,15 @@ function renderTotals(){
   if(tcItemFilter&&!itemList.includes(tcItemFilter))tcItemFilter=null;
   let filterHtml="";
   {
+    /* 🔍 검색 — 환자명·번호·항목·담당쌤으로 바로 찾기 (토탈이 3명 이상일 때만 표시) */
+    if(S.totals.length>=3||tcQuery)filterHtml+=`<div class="tc-search">
+      <span class="tc-si">🔍</span>
+      <input id="tc-q" value="${esc(tcQuery)}" placeholder="환자명·번호·항목·담당쌤 검색"
+        oninput="setTcQuery(this.value)" autocomplete="off">
+      ${tcQuery?`<button class="tc-sx" onclick="setTcQuery('')">✕</button>`:""}
+    </div>`;
     const active=tcDeptFilter&&tcDeptFilter.size>0;
-    filterHtml=`<div style="display:flex;gap:4px;flex-wrap:wrap;align-items:center;margin:0 0 7px">
+    filterHtml+=`<div style="display:flex;gap:4px;flex-wrap:wrap;align-items:center;margin:0 0 7px">
       <button onclick="clearTcDept()" style="border:1.5px solid ${active?"var(--line)":"var(--brand)"};background:${active?"transparent":"var(--brand)"};color:${active?"var(--sub)":"#fff"};border-radius:999px;padding:2px 11px;font-size:11px;font-weight:800;cursor:pointer">전체 ${S.totals.length}</button>
       ${deps.map(dep=>{const on=active&&tcDeptFilter.has(dep);const col=DEPT_COLOR[dep]||"#666";const n=S.totals.filter(t=>t.dept===dep).length;
         return `<button onclick="toggleTcDept('${dep}')" style="border:1.5px solid ${col};background:${on?col:col+"14"};color:${on?"#fff":col};border-radius:999px;padding:2px 11px;font-size:11px;font-weight:800;cursor:pointer">${dep} ${n}</button>`;}).join("")}
@@ -2911,6 +2955,7 @@ function renderTotals(){
     </div>`;
   }
   let shown=scoped;
+  if(tcQuery)shown=shown.filter(t=>tcMatch(t,tcQuery));
   if(tcItemFilter)shown=shown.filter(t=>(t.item||"").trim()===tcItemFilter);
   if(!window.tcShowDone)shown=shown.filter(t=>!t.done);
   /* 정렬: 완료는 항상 뒤로, 그 안에서 임박순 또는 항목별 */
@@ -2923,7 +2968,8 @@ function renderTotals(){
     }
     return tcUrgency(a)-tcUrgency(b);     /* 임박순 */
   });
-  if(!shown.length){box.innerHTML=filterHtml+`<div class="card"><div class="empty">${tcItemFilter?"이 항목의 토탈이 없어요":"선택한 과의 토탈이 없어요"}</div></div>`;return;}
+  if(!shown.length){box.innerHTML=filterHtml+`<div class="card"><div class="empty">${tcQuery?`‘${esc(tcQuery)}’ 검색 결과가 없어요`:(tcItemFilter?"이 항목의 토탈이 없어요":"선택한 과의 토탈이 없어요")}</div></div>`;return;}
+  if(tcQuery)filterHtml+=`<p class="hint" style="margin:-4px 0 8px 2px">🔍 <b>${esc(tcQuery)}</b> — ${shown.length}명</p>`;
   let _prevItem=null;
   box.innerHTML=filterHtml+shown.map(t=>{
     /* 항목별 정렬일 때 항목이 바뀌는 지점에 그룹 헤더 */
@@ -3030,12 +3076,61 @@ let ocsDate=null; /* null=오늘 */
 let ocsDeptFilter=null; /* null=전체, 아니면 특정 과만 */
 let ocsHideLocked=false; /* true=교수님·회색(🔒) 행 숨김 (뷰 옵션) */
 function ocsDeptPick(dep){ocsDeptFilter=(ocsDeptFilter===dep?null:dep);renderOcsDay();}
+let ocsByDr=false;   /* 과 안에서 쌤별로 묶어 보기 (기본: 시간순) */
+function ocsToggleByDr(){ocsByDr=!ocsByDr;renderOcsDay();}
 function ocsToggleLocked(){ocsHideLocked=!ocsHideLocked;renderOcsDay();}
 function ocsHiKey(u){return (u.d||"")+"|"+(u.t||"")+"|"+(u.no||"")+"|"+(u.dep||"");}
+/* 🖍️ 하이라이트 색 — 탭=다음 색 순환(노랑→분홍→파랑→초록→해제) · 길게=색 선택창 */
+const HI_COLORS=[null,
+  {bg:"#FFF6D6",bar:"#F5B301",nm:"노랑"},
+  {bg:"#FFE7EE",bar:"#F06E96",nm:"분홍"},
+  {bg:"#E4F0FF",bar:"#4C8DF6",nm:"파랑"},
+  {bg:"#E5F7EB",bar:"#3FA76A",nm:"초록"}];
+function hiLv(k){const v=(S.ocsHi||{})[k];const n=+v;return (n>=1&&n<=4)?n:(v?1:0);}
+function hiCol(k){return HI_COLORS[hiLv(k)]||null;}
+function ocsHiPick(key){
+  const dlg=document.getElementById("hi-dlg");if(!dlg)return;
+  window.__hiKey=key;
+  const cur=hiLv(key);
+  document.getElementById("hi-sw").innerHTML=HI_COLORS.map((c,i)=>i===0?"":
+    `<button class="hi-sw${cur===i?" on":""}" style="background:${c.bg};border-color:${c.bar}" onclick="ocsHiSet(${i})">
+      <span class="hi-sw-dot" style="background:${c.bar}"></span><span class="hi-sw-nm">${c.nm}</span>${cur===i?'<span class="hi-sw-ck">✓</span>':""}</button>`).join("");
+  const off=document.getElementById("hi-off");if(off)off.style.display=cur?"block":"none";
+  try{dlg.showModal();}catch(e){dlg.setAttribute("open","");}
+}
+function ocsHiSet(lv){
+  const key=window.__hiKey;if(!key)return;
+  S.ocsHi=S.ocsHi||{};
+  if(lv)S.ocsHi[key]=lv;else delete S.ocsHi[key];
+  save(1);
+  const dlg=document.getElementById("hi-dlg");try{dlg.close();}catch(e){dlg.removeAttribute("open");}
+  window.__hiKey=null;
+  try{const pill=document.querySelector("#ocs-pills button.on");
+    if(pill&&pill.dataset.o==="hl"){renderOcsHl();return;}}catch(e){}
+  try{renderOcsDay();}catch(e){}
+}
+/* 길게 누르기(모바일)·우클릭(PC) → 색 선택창 */
+function bindHiHold(){
+  document.querySelectorAll(".ocs-hi-btn[data-k]").forEach(el=>{
+    if(el.dataset.hb)return;el.dataset.hb="1";
+    const key=el.getAttribute("data-k");let tm=null,moved=false;
+    const start=()=>{moved=false;tm=setTimeout(()=>{if(!moved){el.dataset.held="1";ocsHiPick(key);}},450);};
+    const cancel=()=>clearTimeout(tm);
+    el.addEventListener("touchstart",start,{passive:true});
+    el.addEventListener("touchmove",()=>{moved=true;cancel();},{passive:true});
+    el.addEventListener("touchend",cancel);
+    el.addEventListener("mousedown",start);el.addEventListener("mouseup",cancel);el.addEventListener("mouseleave",cancel);
+    el.addEventListener("contextmenu",e=>{e.preventDefault();ocsHiPick(key);});
+  });
+}
 function ocsHiToggle(key){
   S.ocsHi=S.ocsHi||{};
-  const on=!S.ocsHi[key];
-  if(on)S.ocsHi[key]=1;else delete S.ocsHi[key];
+  /* 길게 눌러 선택창이 떴던 경우엔 탭 동작 무시 */
+  try{const b=document.querySelector('.ocs-hi-btn[data-k="'+((window.CSS&&CSS.escape)?CSS.escape(key):key)+'"]');
+    if(b&&b.dataset.held){delete b.dataset.held;return;}}catch(e){}
+  const next=(hiLv(key)+1)%HI_COLORS.length;
+  const on=!!next;const C=HI_COLORS[next]||HI_COLORS[1];
+  if(next)S.ocsHi[key]=next;else delete S.ocsHi[key];
   save(1);
   /* 하이라이트 탭이 열려 있으면 목록 자체가 바뀌므로 그때만 전체 갱신 */
   try{const pill=document.querySelector("#ocs-pills button.on");
@@ -3052,9 +3147,11 @@ function ocsHiToggle(key){
       if(tr){
         tr.classList.toggle("ocs-hi",on);
         /* border-collapse에서 tr 배경이 무시될 수 있어 각 td에도 직접 지정 */
-        const HL="#FFF6D6";
-        tr.querySelectorAll("td").forEach(td=>{td.style.background=on?HL:"";});
-        if(on)tr.style.opacity="1";else tr.style.opacity="";
+        tr.querySelectorAll("td").forEach((td,ti)=>{
+          td.style.background=on?C.bg:"";
+          if(ti===0)td.style.boxShadow=on?("inset 3px 0 0 "+C.bar):"";});
+        if(on){tr.style.opacity="1";btn.style.color=C.bar;btn.title="하이라이트: "+C.nm+" (탭=다음 색 · 길게=색 고르기)";}
+        else{tr.style.opacity="";btn.style.color="";btn.title="이 줄 하이라이트";}
       }
     });
   }catch(e){}
@@ -3603,14 +3700,17 @@ function renderOcsHl(){
     <table class="rtable hltbl" style="font-size:11.5px;margin-top:4px">${L.map(u=>{
       const k=ocsHiKey(u);const mine=MS.has(k);
       const col=DEPT_COLOR[u.dep]||"#666";
-      return `<tr class="ocs-hi"><td style="white-space:nowrap">${u.t||"?"}</td>
+      const C=hiCol(k)||HI_COLORS[1];
+      return `<tr class="ocs-hi" style="background:${C.bg}"><td style="white-space:nowrap;box-shadow:inset 3px 0 0 ${C.bar}">${u.t||"?"}</td>
       <td><span class="dept-tag" style="background:${col};color:${txtOn(col)};font-size:9.5px">${esc(u.dep||"")}</span></td>
       <td><b>${esc(u.pt||"")}</b>${mine?" <b style='color:var(--purple)'>◇</b>":""}<span class="ptno">${esc(u.no||"")}</span></td>
       <td>${u._gone?'<span style="color:var(--sub)">— 원본 정리됨</span>':esc(u.cat||"—")}</td>
       <td style="color:var(--sub)">${esc(u.dr||"")}</td>
-      <td style="padding:1px 2px;width:22px"><button class="ocs-hi-btn on" data-k="${esc(k)}" onclick="ocsHiToggle('${k.replace(/'/g,"\\'")}')" title="하이라이트 해제">🖍️</button></td></tr>`;
+      <td style="padding:1px 2px;width:22px"><button class="ocs-hi-btn on" data-k="${esc(k)}" style="color:${C.bar}" onclick="ocsHiToggle('${k.replace(/'/g,"\\'")}')" title="${C.nm} · 탭=다음 색 · 길게=색 고르기">🖍️</button></td></tr>`;
     }).join("")}</table></details>`;
   }).join("");
+
+  try{bindHiHold();}catch(e){}
 }
 /* ═════════ 골든타임: 잠깐 빈 시간 과 추천 엔진 ═════════ */
 /* 일정이 바뀌면(추가·삭제·이동·확정 등) 달력·상세·오늘뿐 아니라
@@ -3652,12 +3752,14 @@ function renderOcsDay(){
       const on=ocsDeptFilter===dp;const col=DEPT_COLOR[dp]||"#666";
       return `<button class="ocs-chip${on?" on":""}" style="${on?`background:${col};color:${txtOn(col)};border-color:${col}`:`color:${col};border-color:${col}`}" onclick="ocsDeptPick('${dp}')">${dp} ${cnt}</button>`;};
     const chips=`<button class="ocs-chip${ocsDeptFilter?"":" on"}" style="${ocsDeptFilter?"":"background:var(--brand);color:#fff;border-color:var(--brand)"}" onclick="ocsDeptPick(null)">전체 ${raw.length}</button>`+allDeps.map(chip).join("");
-    const row=u=>{const acc=accessOf(u);const mine=MSg.has(u);const hk=ocsHiKey(u);const hi=!!(S.ocsHi&&S.ocsHi[hk]);
-      const hiBtn=`<button class="ocs-hi-btn${hi?" on":""}" data-k="${esc(hk)}" onclick="ocsHiToggle('${hk.replace(/'/g,"\\'")}')" title="이 줄 하이라이트">🖍️</button>`;
+    const row=u=>{const acc=accessOf(u);const mine=MSg.has(u);const hk=ocsHiKey(u);
+      const C=hiCol(hk);const hi=!!C;
+      const hiSty=hi?`background:${C.bg}`:"";const hiSty1=hi?`background:${C.bg};box-shadow:inset 3px 0 0 ${C.bar}`:"";
+      const hiBtn=`<button class="ocs-hi-btn${hi?" on":""}" data-k="${esc(hk)}"${hi?` style="color:${C.bar}"`:""} onclick="ocsHiToggle('${hk.replace(/'/g,"\\'")}')" title="${hi?"하이라이트: "+C.nm+" (탭=다음 색 · 길게=색 고르기)":"이 줄 하이라이트"}">🖍️</button>`;
       if(acc==="resv"&&!mine){
-        return `<tr class="lockrow ${hi?"ocs-hi":""}" style="${hi?"":"opacity:.42;"}font-size:10.5px;color:var(--sub);line-height:1.15"><td style="padding:1px 4px">${u.t||"?"}</td><td style="padding:1px 4px">${esc(u.pt)}<span class="ptno">${esc(u.no||"")}</span></td><td style="padding:1px 4px">🔒 ${esc(u.cat||"—")}</td><td style="padding:1px 4px">${esc(u.dr||"")}</td><td style="padding:1px 2px;width:22px">${hiBtn}</td></tr>`;
+        return `<tr class="lockrow ${hi?"ocs-hi":""}" style="${hi?"":"opacity:.42;"}font-size:10.5px;color:var(--sub);line-height:1.15"><td style="padding:1px 4px;${hiSty1}">${u.t||"?"}</td><td style="padding:1px 4px;${hiSty}">${esc(u.pt)}<span class="ptno">${esc(u.no||"")}</span></td><td style="padding:1px 4px">🔒 ${esc(u.cat||"—")}</td><td style="padding:1px 4px">${esc(u.dr||"")}</td><td style="padding:1px 2px;width:22px">${hiBtn}</td></tr>`;
       }
-      return `<tr class="${hi?"ocs-hi":""}" style="${!hi&&mine?"background:var(--purple-soft)":""}"><td>${u.t||"?"}</td><td><b>${esc(u.pt)}</b><span class="ptno">${esc(u.no||"")}</span>${mine?" <b style=\'color:var(--purple)\'>◇</b>":""}</td><td>${esc(u.cat||"—")}</td><td style="color:var(--sub)">${esc(u.dr||"")}</td><td style="padding:1px 2px;width:22px">${hiBtn}</td></tr>`;};
+      return `<tr class="${hi?"ocs-hi":""}" style="${!hi&&mine?"background:var(--purple-soft)":""}"><td style="${hiSty1}">${u.t||"?"}</td><td style="${hiSty}"><b>${esc(u.pt)}</b><span class="ptno">${esc(u.no||"")}</span>${mine?" <b style=\'color:var(--purple)\'>◇</b>":""}</td><td>${esc(u.cat||"—")}</td><td style="color:var(--sub)">${esc(u.dr||"")}</td><td style="padding:1px 2px;width:22px">${hiBtn}</td></tr>`;};
     bd=`<div class="card"><h2>🗂 과별 진료 목록 <span class="badge">${ocsDeptFilter?`${ocsDeptFilter} ${shownCnt}건`:`전체 ${raw.length}건`}</span></h2>
       <details class="ocs-legend"><summary>ℹ️ 보는 법</summary>
       <p class="hint" style="margin-top:5px">각 줄: <b>시간 · 환자(번호) · 진료내역 · 담당쌤</b><br>
@@ -3665,7 +3767,7 @@ function renderOcsDay(){
       🔒흐린 줄 = 지정 교수님·원스톱·임플센터·달신 (카운트 제외)<br>
       <span style="background:var(--purple-soft);padding:0 4px;border-radius:4px">보라 ◇</span> = 내 토탈 환자 · 🖍️ 탭 = 관심 진료 표시</p></details>
       <div class="ocs-chips">${chips}</div>
-      <div class="ocs-view-opts"><button class="ocs-toggle${ocsHideLocked?" on":""}" onclick="ocsToggleLocked()">${ocsHideLocked?"🔒 교수님·회색 숨김 ON":"👁 교수님·회색 표시 중"}</button></div>
+      <div class="ocs-view-opts"><button class="ocs-toggle${ocsHideLocked?" on":""}" onclick="ocsToggleLocked()">${ocsHideLocked?"🔒 교수님·회색 숨김 ON":"👁 교수님·회색 표시 중"}</button><button class="ocs-toggle${ocsByDr?" on":""}" onclick="ocsToggleByDr()">${ocsByDr?"👨‍⚕️ 쌤별 정렬 ON":"🕘 시간순 정렬"}</button></div>
       ${shownDeps.map(dep=>{const L=GA[dep].sort((a,b)=>(a.t||"99")<(b.t||"99")?-1:1);
         const okL=L.filter(u=>accessOf(u)==="resi");
         const cnt=dep==="교정"?L.length:okL.length;
@@ -3679,7 +3781,15 @@ function renderOcsDay(){
         /* 과가 많으면 기본 접힘(스크롤 절약) — 내 토탈 환자가 있는 과·필터로 한 과만 볼 땐 자동 펼침 */
         const autoOpen=(mineN>0)||shownDeps.length<=2;
         return `<details id="obk-${dep}"${autoOpen?" open":""} style="margin-top:6px"><summary style="font-size:12.5px;font-weight:800;cursor:pointer"><span class="dept-tag" style="background:${DEPT_COLOR[dep]||"#666"};color:${txtOn(DEPT_COLOR[dep]||"#666")}">${dep}</span> <b style="font-size:14.5px">${cnt}건</b>${dep==="교정"?` <span style="font-size:10px;color:var(--brand)">⭐교수포함</span>`:""} <span style="font-weight:600;color:var(--sub)">(오전 ${am} · 오후 ${pm})</span>${lockN&&dep!=="교정"?` <span style="color:var(--sub);font-size:10.5px">🔒${lockN}</span>`:""}${mineN?` · <b style="color:var(--purple)">◇${mineN}</b>`:""}</summary>
-        <div style="max-height:340px;overflow-y:auto;-webkit-overflow-scrolling:touch"><table class="rtable otbl" style="font-size:11.5px">${Lshown.map(row).join("")}</table></div></details>`;}).join("")}
+        <div style="max-height:340px;overflow-y:auto;-webkit-overflow-scrolling:touch">${(()=>{
+          if(!ocsByDr)return `<table class="rtable otbl" style="font-size:11.5px">${Lshown.map(row).join("")}</table>`;
+          /* 👨‍⚕️ 쌤별: 담당쌤으로 묶고 이름 가나다순 · 묶음 안은 시간순 (건수 표시 없음) */
+          const G={};
+          Lshown.forEach(u=>{const nm=((u.dr||"").trim())||"담당 미지정";(G[nm]=G[nm]||[]).push(u);});
+          return Object.keys(G).sort((a,b)=>a==="담당 미지정"?1:b==="담당 미지정"?-1:a.localeCompare(b,"ko"))
+            .map(nm=>`<div class="drgrp">${esc(nm)}</div><table class="rtable otbl" style="font-size:11.5px">${
+              G[nm].sort((x,y)=>(x.t||"99")<(y.t||"99")?-1:1).map(row).join("")}</table>`).join("");
+        })()}</div></details>`;}).join("")}
     </div>`;
   }else{
     bd=`<div class="card"><h2>이 날 OCS</h2><p class="hint">이 날짜 데이터가 없어요 — 위 <b>📥 OCS 붙여넣기</b>에 그날 OCS 행들을 넣어주세요.</p></div>`;
@@ -3695,6 +3805,8 @@ function renderOcsDay(){
   if(raw.length&&raw[0].hist)bd=`<p class="hint" style="margin:0 0 6px">📜 <b>지난 날짜</b> — 내 토탈과 매칭됐던 행만 보관돼 있어요</p>`+bd;
   document.getElementById("ocs-booked").innerHTML=bd;
   document.getElementById("ocs-myday").innerHTML="";
+
+  try{bindHiHold();}catch(e){}
 }
 function copyTx(el){const t=el.querySelector("code").textContent;navigator.clipboard?.writeText(t).then(()=>toast("복사됨")).catch(()=>toast("복사 실패"));}
 let toastT=null;
@@ -4440,4 +4552,3 @@ function rescanTotals(scope){
 </script>
 </body>
 </html>
-
