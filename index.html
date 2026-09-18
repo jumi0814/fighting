@@ -448,7 +448,8 @@ header .hdr-left{flex:1;min-width:0}
 .odt-bar{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:2px 1px 8px;margin:6px -2px 0;scrollbar-width:none}
 .odt-bar::-webkit-scrollbar{display:none}
 .odt{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;min-width:50px;min-height:40px;padding:6px 12px 5px;border-radius:12px;border:1.5px solid var(--c);background:#fff;color:var(--c);cursor:pointer;font-family:inherit;line-height:1.1}
-.odt .odt-nm{font-size:13px;font-weight:900;letter-spacing:-.01em}
+.odt .odt-nm{font-size:12px;font-weight:800}
+.odt .odt-n{font-size:15px;font-weight:900;letter-spacing:-.02em}
 .odt.lk{opacity:.6}
 .odt .odt-mine{font-size:9px;font-weight:800;color:var(--purple)}
 .odt.on{background:var(--c);color:var(--t);box-shadow:0 3px 10px rgba(0,0,0,.16)}
@@ -668,7 +669,7 @@ table.ocl tr.ocl-div span{font-size:10.5px;font-weight:800;color:var(--sub);lett
         <button class="btn small" id="ocs-nav-title" onclick="ocsReset()">오늘</button>
         <button class="btn small ghost" onclick="ocsMove(1)">›</button>
       </div>
-      <p class="hint" style="margin-top:6px">과를 고르면 그 과 진료가 <b>시간순</b>으로 쭉 펼쳐져요 · 오늘이면 <b>⏰ NEXT</b>로 다음 진료 시간 표시 · <span style="color:var(--purple)">◇</span>=내 토탈 · 🖍️ 칠한 진료는 <b>하이라이트 탭</b>에</p>
+      <p class="hint" style="margin-top:6px">과 버튼 숫자·요약은 <b>교수님 제외 건수</b>(⭐교정은 교수님 포함) · 과를 고르면 그 과 진료가 <b>시간순</b>으로 펼쳐져요 · 오늘이면 <b>⏰ NEXT</b>로 다음 진료 시간 표시 · <span style="color:var(--purple)">◇</span>=내 토탈 · 🖍️ 칠한 진료는 <b>하이라이트 탭</b>에</p>
     </div>
     <div id="ocs-booked"></div>
     <div id="ocs-myday"></div>
@@ -933,7 +934,7 @@ const DEP1R={j:"치주",b:"보존",c:"보철",k:"교정",s:"소치",n:"내과",o
 function txtOn(hex){try{const x=(hex||"").replace("#","");const r=parseInt(x.substr(0,2),16),g=parseInt(x.substr(2,2),16),b=parseInt(x.substr(4,2),16);return (0.299*r+0.587*g+0.114*b)/255>0.62?"#1E2823":"#fff";}catch(e){return "#fff";}}
 const DEPT_COLOR={"소치":"#EE7A1A","내과":"#C29B00","교정":"#2E9E44","치주":"#12A5B0","보존":"#3D7BE0","보철":"#23408F","외과":"#A8262A","영상":"#4F7FA8","병리":"#B0637C","원진실":"#9A5FD6","관악":"#6B2D8F","공통":"#5C6B73","기타":"#8A938D"};
 const KEY="wonnae-share-v1";
-const BUILD_ID="20";   /* 🎁 공유판(배포용) 빌드 — 새 파일마다 +1 */
+const BUILD_ID="21";   /* 🎁 공유판(배포용) 빌드 — 새 파일마다 +1 */
 function esc(s){return String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");}
 /* 저장 어댑터: 클로드 앱/웹에서 열면 계정 저장소(폰·PC 자동 동기화),
    파일을 따로 브라우저로 열면 그 기기 localStorage(비동기화)로 폴백 */
@@ -5468,7 +5469,7 @@ function renderOcsDay(){
   const dows=["일","월","화","수","목","금","토"];
   document.getElementById("ocs-nav-title").textContent=ocsDate?`${d.getMonth()+1}/${d.getDate()} (${dows[day]})`:"오늘";
   {const o=ocsStore();const nd=Object.keys(o.days).length;
-   document.getElementById("ocs-day-meta").textContent=nd?`보유 ${nd}일`:"OCS 파일 올리기 대기";}
+   document.getElementById("ocs-day-meta").textContent=nd?`보유 ${nd}일 · 예약 ${UPCOMING.length}건`:"OCS 파일 올리기 대기";}
   const st=document.getElementById("ocs-paste-status");if(st)st.innerHTML=ocsStatusHtml();
   const raw=upOn(ds);
   const MSg=matchSet();
@@ -5487,7 +5488,7 @@ function renderOcsDay(){
     const sel=ocsDeptSel;
     /* ① 과 선택 버튼 */
     const tab=(dp,lbl,n,col,mine,lock)=>{const on=sel===dp;
-      return `<button class="odt${on?" on":""}${lock?" lk":""}" style="--c:${col};--t:${txtOn(col)}" onclick="ocsDeptPick('${dp}')"><span class="odt-nm">${lock?"🔒":""}${lbl}</span>${mine?`<span class="odt-mine">◇${mine}</span>`:""}</button>`;};
+      return `<button class="odt${on?" on":""}${lock?" lk":""}" style="--c:${col};--t:${txtOn(col)}" onclick="ocsDeptPick('${dp}')"><span class="odt-nm">${lbl}</span><span class="odt-n">${lock?"🔒":""}${n}</span>${mine?`<span class="odt-mine">◇${mine}</span>`:""}</button>`;};
     const tabs=deps.map(dp=>{const L=GA[dp];const ok=okOf(L).length;
       return tab(dp,dp,ok||L.length,DEPT_COLOR[dp]||"#666",mineOf(L),!ok);}).join("")
       +tab("__all","전체",raw.length,"#5C6B73",mineOf(raw),false);
@@ -5518,10 +5519,10 @@ function renderOcsDay(){
     if(!L.length){
       list=`<p class="ocl-empty">${allLock?"🔒 이 과는 모두 예약제(교수님·달신)예요 — 🔒 숨김을 끄면 볼 수 있어요.":"표시할 진료가 없어요."}</p>`;
     }else if(ocsByDr){
-      /* 👨‍⚕️ 쌤별: 담당쌤 가나다순 묶음 · 묶음 안은 시간순 */
+      /* 쌤별: 담당쌤 가나다순 묶음 · 묶음 안은 시간순 */
       const G={};L.forEach(u=>{const nm=(drLabel(u)||"").trim()||"담당 미지정";(G[nm]=G[nm]||[]).push(u);});
       list=`<table class="ocl bydr"><colgroup><col class="c-hi"><col class="c-t"><col class="c-p"><col></colgroup>`+Object.keys(G).sort((a,b)=>a==="담당 미지정"?1:b==="담당 미지정"?-1:a.localeCompare(b,"ko"))
-        .map(nm=>`<tr class="ocl-h"><td colspan="4"><span class="ocl-pill dr">👨‍⚕️ ${esc(nm)}</span></td></tr>`+G[nm].map(u=>row(u,true)).join("")).join("")+`</table>`;
+        .map(nm=>`<tr class="ocl-h"><td colspan="4"><span class="ocl-pill dr">${esc(nm)}</span></td></tr>`+G[nm].map(u=>row(u,true)).join("")).join("")+`</table>`;
     }else{
       /* 🕘 시간순: 같은 시각끼리 묶어 시각은 한 번만 */
       const T={};const ks=[];L.forEach(u=>{const t=u.t||"시간?";if(!T[t]){T[t]=[];ks.push(t);}T[t].push(u);});
@@ -5538,11 +5539,12 @@ function renderOcsDay(){
     bd=`<div class="card ocl-card" id="ocl-top"><h2>🗂 과별 진료 목록</h2>
       <div class="odt-bar">${tabs}</div>
       <div class="ocl-sum">${sel==="__all"?"<b>전체</b>":`<span class="dept-tag" style="background:${DEPT_COLOR[sel]||"#666"};color:${txtOn(DEPT_COLOR[sel]||"#666")}">${sel}</span>`}
-        ${allLock?`<span class="ocl-sum-tag">🔒 참여불가 · 참고용</span>`:""}${mineN?`<span class="ocl-sum-mine">◇내 토탈 ${mineN}</span>`:""}${tag?`<span class="ocl-sum-tag">${tag}</span>`:""}
+        <b class="ocl-sum-n">${allLock?L0.length:okL.length}건</b>
+        <span>${allLock?"참여불가":`오전 ${am} · 오후 ${pm}`}</span>${lockN&&!allLock?`<span>🔒${lockN}</span>`:""}${mineN?`<span class="ocl-sum-mine">◇내 토탈 ${mineN}</span>`:""}${tag?`<span class="ocl-sum-tag">${tag}</span>`:""}
         ${!ocsByDr&&L.length?`<span class="ocl-jump">${isToday&&nextT?`<button class="now" onclick="ocsJump('oclt-${nextT.replace(":","")}')">⏰ 지금</button>`:""}<button onclick="ocsJump('ocl-top')">☀️ 오전</button>${pm&&L.some(u=>slotM(u.t||"")>=750)?`<button onclick="ocsJump('ocl-pm')">🌙 오후</button>`:""}</span>`:""}</div>
       <div class="ocl-tools">
         <div class="hi-pen"></div>
-        <div class="ocl-seg"><button class="${ocsByDr?"":"on"}" onclick="ocsSetSort(false)">🕘 시간</button><button class="${ocsByDr?"on":""}" onclick="ocsSetSort(true)">👨‍⚕️ 쌤별</button></div>
+        <div class="ocl-seg"><button class="${ocsByDr?"":"on"}" onclick="ocsSetSort(false)">시간순</button><button class="${ocsByDr?"on":""}" onclick="ocsSetSort(true)">쌤별</button></div>
         <button class="ocl-lock${ocsHideResv?" on":""}" onclick="ocsToggleResv()">🔒 교수님 ${ocsHideResv?"숨김":"표시"}</button>
       </div>
       ${list}
