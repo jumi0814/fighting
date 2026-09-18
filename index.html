@@ -447,9 +447,9 @@ header .hdr-left{flex:1;min-width:0}
 .ocl-card{padding:12px 11px}
 .odt-bar{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:2px 1px 8px;margin:6px -2px 0;scrollbar-width:none}
 .odt-bar::-webkit-scrollbar{display:none}
-.odt{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:1px;min-width:52px;padding:6px 10px 5px;border-radius:12px;border:1.5px solid var(--c);background:#fff;color:var(--c);cursor:pointer;font-family:inherit;line-height:1.1}
-.odt .odt-nm{font-size:12px;font-weight:800}
-.odt .odt-n{font-size:15px;font-weight:900;letter-spacing:-.02em}
+.odt{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;min-width:50px;min-height:40px;padding:6px 12px 5px;border-radius:12px;border:1.5px solid var(--c);background:#fff;color:var(--c);cursor:pointer;font-family:inherit;line-height:1.1}
+.odt .odt-nm{font-size:13px;font-weight:900;letter-spacing:-.01em}
+.odt.lk{opacity:.6}
 .odt .odt-mine{font-size:9px;font-weight:800;color:var(--purple)}
 .odt.on{background:var(--c);color:var(--t);box-shadow:0 3px 10px rgba(0,0,0,.16)}
 .odt.on .odt-mine{color:inherit;opacity:.9}
@@ -487,6 +487,19 @@ table.ocl tr.lock .ocl-p b{font-size:11.5px}
 .ocl-hi{border:none;background:transparent;cursor:pointer;font-size:13px;padding:4px 2px;line-height:1}
 .ocl-new{display:inline-block;background:#2E7D32;color:#fff;border-radius:5px;padding:0 4px;font-size:9px;font-weight:800;margin-right:4px;vertical-align:1px}
 .ocl-dep{display:inline-block;border-radius:5px;padding:0 5px;font-size:9px;font-weight:800;margin-right:4px;vertical-align:1px}
+.ocl-pill{display:inline-block;font-size:12px;font-weight:900;color:var(--ink,#1E2823);background:#EEF2EF;border-radius:99px;padding:2px 10px;letter-spacing:.01em}
+.ocl-pill.dr{background:#F1EFF7;color:#4A3F6B}
+table.ocl tr.ocl-h td{position:relative}
+table.ocl tr.ocl-h.next .ocl-pill{background:var(--coral);color:#fff;box-shadow:0 2px 8px rgba(255,107,90,.35)}
+.ocl-next{font-size:9px;font-weight:900;color:var(--coral);margin-left:6px;letter-spacing:.08em;vertical-align:1px}
+.ocl-past{font-size:9.5px;font-weight:700;color:var(--sub);margin-left:6px;opacity:.7}
+table.ocl tr.ocl-h.past .ocl-pill{background:#F3F4F3;color:#9AA3A0}
+table.ocl tr.ocl-r.was td{opacity:.5}
+table.ocl tr.ocl-div td{padding:12px 4px 2px;border-bottom:none;background:transparent!important}
+table.ocl tr.ocl-div span{font-size:10.5px;font-weight:800;color:var(--sub);letter-spacing:.04em}
+.ocl-jump{margin-left:auto;display:inline-flex;gap:4px}
+.ocl-jump button{border:1px solid var(--line);background:#fff;color:var(--sub);font-size:10.5px;font-weight:800;padding:3px 8px;border-radius:99px;cursor:pointer;font-family:inherit}
+.ocl-jump button.now{border-color:var(--coral);color:var(--coral)}
 .ocl-empty{font-size:12px;color:var(--sub);padding:10px 2px}
 </style>
 </head>
@@ -655,7 +668,7 @@ table.ocl tr.lock .ocl-p b{font-size:11.5px}
         <button class="btn small" id="ocs-nav-title" onclick="ocsReset()">오늘</button>
         <button class="btn small ghost" onclick="ocsMove(1)">›</button>
       </div>
-      <p class="hint" style="margin-top:6px">과별 · 시간순 — 과 이름 옆 숫자는 <b>교수님 제외 건수</b>(⭐교정은 교수님 포함) · <span style="color:var(--purple)">◇</span>=내 토탈 · 🖍️ 표시는 <b>하이라이트 탭</b>에 모여요</p>
+      <p class="hint" style="margin-top:6px">과를 고르면 그 과 진료가 <b>시간순</b>으로 쭉 펼쳐져요 · 오늘이면 <b>⏰ NEXT</b>로 다음 진료 시간 표시 · <span style="color:var(--purple)">◇</span>=내 토탈 · 🖍️ 칠한 진료는 <b>하이라이트 탭</b>에</p>
     </div>
     <div id="ocs-booked"></div>
     <div id="ocs-myday"></div>
@@ -920,7 +933,7 @@ const DEP1R={j:"치주",b:"보존",c:"보철",k:"교정",s:"소치",n:"내과",o
 function txtOn(hex){try{const x=(hex||"").replace("#","");const r=parseInt(x.substr(0,2),16),g=parseInt(x.substr(2,2),16),b=parseInt(x.substr(4,2),16);return (0.299*r+0.587*g+0.114*b)/255>0.62?"#1E2823":"#fff";}catch(e){return "#fff";}}
 const DEPT_COLOR={"소치":"#EE7A1A","내과":"#C29B00","교정":"#2E9E44","치주":"#12A5B0","보존":"#3D7BE0","보철":"#23408F","외과":"#A8262A","영상":"#4F7FA8","병리":"#B0637C","원진실":"#9A5FD6","관악":"#6B2D8F","공통":"#5C6B73","기타":"#8A938D"};
 const KEY="wonnae-share-v1";
-const BUILD_ID="19";   /* 🎁 공유판(배포용) 빌드 — 새 파일마다 +1 */
+const BUILD_ID="20";   /* 🎁 공유판(배포용) 빌드 — 새 파일마다 +1 */
 function esc(s){return String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");}
 /* 저장 어댑터: 클로드 앱/웹에서 열면 계정 저장소(폰·PC 자동 동기화),
    파일을 따로 브라우저로 열면 그 기기 localStorage(비동기화)로 폴백 */
@@ -5455,7 +5468,7 @@ function renderOcsDay(){
   const dows=["일","월","화","수","목","금","토"];
   document.getElementById("ocs-nav-title").textContent=ocsDate?`${d.getMonth()+1}/${d.getDate()} (${dows[day]})`:"오늘";
   {const o=ocsStore();const nd=Object.keys(o.days).length;
-   document.getElementById("ocs-day-meta").textContent=nd?`보유 ${nd}일 · 예약 ${UPCOMING.length}건`:"OCS 파일 올리기 대기";}
+   document.getElementById("ocs-day-meta").textContent=nd?`보유 ${nd}일`:"OCS 파일 올리기 대기";}
   const st=document.getElementById("ocs-paste-status");if(st)st.innerHTML=ocsStatusHtml();
   const raw=upOn(ds);
   const MSg=matchSet();
@@ -5474,7 +5487,7 @@ function renderOcsDay(){
     const sel=ocsDeptSel;
     /* ① 과 선택 버튼 */
     const tab=(dp,lbl,n,col,mine,lock)=>{const on=sel===dp;
-      return `<button class="odt${on?" on":""}" style="--c:${col};--t:${txtOn(col)}" onclick="ocsDeptPick('${dp}')"><span class="odt-nm">${lbl}</span><span class="odt-n">${lock?"🔒":""}${n}</span>${mine?`<span class="odt-mine">◇${mine}</span>`:""}</button>`;};
+      return `<button class="odt${on?" on":""}${lock?" lk":""}" style="--c:${col};--t:${txtOn(col)}" onclick="ocsDeptPick('${dp}')"><span class="odt-nm">${lock?"🔒":""}${lbl}</span>${mine?`<span class="odt-mine">◇${mine}</span>`:""}</button>`;};
     const tabs=deps.map(dp=>{const L=GA[dp];const ok=okOf(L).length;
       return tab(dp,dp,ok||L.length,DEPT_COLOR[dp]||"#666",mineOf(L),!ok);}).join("")
       +tab("__all","전체",raw.length,"#5C6B73",mineOf(raw),false);
@@ -5496,6 +5509,11 @@ function renderOcsDay(){
         +`<td class="ocl-p"><b>${esc(u.pt)}</b><span>${esc(u.no||"")}</span>${mine?`<i>◇내 토탈</i>`:""}</td>`
         +`<td class="ocl-c">${dp}${nb}${lock?"🔒 ":""}${esc(u.cat||"—")}</td>`
         +(withTime?"":`<td class="ocl-d">${esc(drLabel(u))}</td>`)+`</tr>`;};
+    /* 오늘이면 지금 시각 기준: 30분 넘게 지난 시간대=흐리게, 다음 시간대=NEXT */
+    const isToday=ds===ymd(new Date());
+    const nowM=(()=>{const n=new Date();return n.getHours()*60+n.getMinutes();})();
+    const slotM=t=>/^\d{1,2}:\d{2}$/.test(t)?hm2min(t):-1;
+    let nextT=null;
     let list="";
     if(!L.length){
       list=`<p class="ocl-empty">${allLock?"🔒 이 과는 모두 예약제(교수님·달신)예요 — 🔒 숨김을 끄면 볼 수 있어요.":"표시할 진료가 없어요."}</p>`;
@@ -5503,22 +5521,29 @@ function renderOcsDay(){
       /* 👨‍⚕️ 쌤별: 담당쌤 가나다순 묶음 · 묶음 안은 시간순 */
       const G={};L.forEach(u=>{const nm=(drLabel(u)||"").trim()||"담당 미지정";(G[nm]=G[nm]||[]).push(u);});
       list=`<table class="ocl bydr"><colgroup><col class="c-hi"><col class="c-t"><col class="c-p"><col></colgroup>`+Object.keys(G).sort((a,b)=>a==="담당 미지정"?1:b==="담당 미지정"?-1:a.localeCompare(b,"ko"))
-        .map(nm=>`<tr class="ocl-h"><td colspan="4"><b>${esc(nm)}</b><span>${G[nm].length}건</span></td></tr>`+G[nm].map(u=>row(u,true)).join("")).join("")+`</table>`;
+        .map(nm=>`<tr class="ocl-h"><td colspan="4"><span class="ocl-pill dr">👨‍⚕️ ${esc(nm)}</span></td></tr>`+G[nm].map(u=>row(u,true)).join("")).join("")+`</table>`;
     }else{
       /* 🕘 시간순: 같은 시각끼리 묶어 시각은 한 번만 */
       const T={};const ks=[];L.forEach(u=>{const t=u.t||"시간?";if(!T[t]){T[t]=[];ks.push(t);}T[t].push(u);});
-      list=`<table class="ocl"><colgroup><col class="c-hi"><col class="c-p"><col><col class="c-d"></colgroup>`+ks.map(t=>`<tr class="ocl-h"><td colspan="4"><b>${t}</b><span>${T[t].length}건</span></td></tr>`+T[t].map(u=>row(u,false)).join("")).join("")+`</table>`;
+      if(isToday)nextT=ks.find(t=>slotM(t)>=nowM)||null;
+      let pmMark=false;
+      list=`<table class="ocl"><colgroup><col class="c-hi"><col class="c-p"><col><col class="c-d"></colgroup>`+ks.map(t=>{
+        const m=slotM(t);const past=isToday&&m>=0&&m<nowM-30;const nx=t===nextT;
+        let div="";if(!pmMark&&m>=750){pmMark=true;div=`<tr class="ocl-div" id="ocl-pm"><td colspan="4"><span>🌙 오후</span></td></tr>`;}
+        return div+`<tr class="ocl-h${past?" past":""}${nx?" next":""}" id="oclt-${t.replace(":","")}"><td colspan="4"><span class="ocl-pill">${t}</span>${nx?`<span class="ocl-next">NEXT</span>`:""}${past?`<span class="ocl-past">지남</span>`:""}</td></tr>`
+          +T[t].map(u=>row(u,false).replace('class="ocl-r',past?'class="ocl-r was':'class="ocl-r')).join("");
+      }).join("")+`</table>`;
     }
     const tag=sel==="외과"?"달신 — 참고만":sel==="원진실"?"동기 프랙 — 참고":sel==="기타"?"원스톱·임플센터 예약제":sel==="교정"?"⭐교수님 진료 포함":"";
-    bd=`<div class="card ocl-card"><h2>🗂 과별 진료 목록</h2>
+    bd=`<div class="card ocl-card" id="ocl-top"><h2>🗂 과별 진료 목록</h2>
       <div class="odt-bar">${tabs}</div>
       <div class="ocl-sum">${sel==="__all"?"<b>전체</b>":`<span class="dept-tag" style="background:${DEPT_COLOR[sel]||"#666"};color:${txtOn(DEPT_COLOR[sel]||"#666")}">${sel}</span>`}
-        <b class="ocl-sum-n">${allLock?L0.length:okL.length}건</b>
-        <span>${allLock?"참여불가":`오전 ${am} · 오후 ${pm}`}</span>${lockN&&!allLock?`<span>🔒${lockN}</span>`:""}${mineN?`<span class="ocl-sum-mine">◇내 토탈 ${mineN}</span>`:""}${tag?`<span class="ocl-sum-tag">${tag}</span>`:""}</div>
+        ${allLock?`<span class="ocl-sum-tag">🔒 참여불가 · 참고용</span>`:""}${mineN?`<span class="ocl-sum-mine">◇내 토탈 ${mineN}</span>`:""}${tag?`<span class="ocl-sum-tag">${tag}</span>`:""}
+        ${!ocsByDr&&L.length?`<span class="ocl-jump">${isToday&&nextT?`<button class="now" onclick="ocsJump('oclt-${nextT.replace(":","")}')">⏰ 지금</button>`:""}<button onclick="ocsJump('ocl-top')">☀️ 오전</button>${pm&&L.some(u=>slotM(u.t||"")>=750)?`<button onclick="ocsJump('ocl-pm')">🌙 오후</button>`:""}</span>`:""}</div>
       <div class="ocl-tools">
         <div class="hi-pen"></div>
         <div class="ocl-seg"><button class="${ocsByDr?"":"on"}" onclick="ocsSetSort(false)">🕘 시간</button><button class="${ocsByDr?"on":""}" onclick="ocsSetSort(true)">👨‍⚕️ 쌤별</button></div>
-        <button class="ocl-lock${ocsHideResv?" on":""}" onclick="ocsToggleResv()">🔒 교수님 ${ocsHideResv?"숨김":"표시"}${ocsHideResv&&hidN?` <span>(${hidN})</span>`:""}</button>
+        <button class="ocl-lock${ocsHideResv?" on":""}" onclick="ocsToggleResv()">🔒 교수님 ${ocsHideResv?"숨김":"표시"}</button>
       </div>
       ${list}
     </div>`;
@@ -5546,6 +5571,7 @@ let ocsDeptSel=null;      /* 과별 목록에서 선택한 과 ("__all"=전체) 
 let ocsByDr=false;        /* false=시간순 · true=쌤별 */
 function ocsDeptPick(dep){ocsDeptSel=dep;window.__oclKeepY=1;renderOcsDay();}
 function ocsSetSort(byDr){ocsByDr=!!byDr;window.__oclKeepY=1;renderOcsDay();}
+function ocsJump(id){const el=document.getElementById(id);if(!el)return;const y=el.getBoundingClientRect().top+window.scrollY-10;window.scrollTo({top:y,behavior:"smooth"});}
 
 /* 통계 기간: sem=학기(9월~) · vac=방학(7~8월) · all=전체
    방학과 학기는 진료량 차이가 커서 평균이 왜곡되므로 기본은 '학기'만 본다. */
@@ -6290,7 +6316,7 @@ function renderOcsHl(){
   html+=`<div class="card ocl-card"><table class="ocl bydr"><colgroup><col class="c-hi"><col class="c-t"><col class="c-p"><col></colgroup>`+ds.map(d=>{
     const L=byD[d].sort((a,b)=>(a.t||"")<(b.t||"")?-1:1);
     const lbl=d===today?"오늘 · "+fmtD(d):fmtD(d)+(d<today?" · 지난 날짜":"");
-    return `<tr class="ocl-h"><td colspan="4"><b>${lbl}</b><span>${L.length}건</span></td></tr>`+L.map(u=>{
+    return `<tr class="ocl-h"><td colspan="4"><span class="ocl-pill">${lbl}</span></td></tr>`+L.map(u=>{
       const k=ocsKey(u);const col=DEPT_COLOR[u.dep]||"#666";const mine=MS.has(k);
       return `<tr class="ocl-r${mine?" mine":""}" style="${hiStyle(k)}"><td><button type="button" class="ocl-hi" data-k="${k}" onclick="event.stopPropagation();ocsHiByKey('${k}')" title="탭=고른 색으로 칠하기 · 길게=색 선택">${hiIcon(k)}</button></td>
       <td class="ocl-t">${u.t||"?"}</td>
