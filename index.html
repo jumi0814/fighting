@@ -442,6 +442,52 @@ header .hdr-left{flex:1;min-width:0}
 #pw-dlg{border:none;border-radius:16px;padding:18px;max-width:340px;width:88vw;box-shadow:0 18px 50px rgba(0,0,0,.28)}
 #pw-dlg::backdrop{background:rgba(20,28,24,.45)}
 .hl-empty{font-size:12.5px;color:var(--sub);line-height:1.6}
+
+/* ═ OCS 과별 진료 목록 (과 선택 → 그 과 전체 펼침) ═ */
+.ocl-card{padding:12px 11px}
+.odt-bar{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:2px 1px 8px;margin:6px -2px 0;scrollbar-width:none}
+.odt-bar::-webkit-scrollbar{display:none}
+.odt{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:1px;min-width:52px;padding:6px 10px 5px;border-radius:12px;border:1.5px solid var(--c);background:#fff;color:var(--c);cursor:pointer;font-family:inherit;line-height:1.1}
+.odt .odt-nm{font-size:12px;font-weight:800}
+.odt .odt-n{font-size:15px;font-weight:900;letter-spacing:-.02em}
+.odt .odt-mine{font-size:9px;font-weight:800;color:var(--purple)}
+.odt.on{background:var(--c);color:var(--t);box-shadow:0 3px 10px rgba(0,0,0,.16)}
+.odt.on .odt-mine{color:inherit;opacity:.9}
+.ocl-sum{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:11.5px;color:var(--sub);font-weight:700;padding:8px 2px 6px;border-top:1px solid var(--line)}
+.ocl-sum .ocl-sum-n{font-size:16px;color:var(--ink);font-weight:900}
+.ocl-sum .ocl-sum-mine{color:var(--purple);font-weight:800}
+.ocl-sum .ocl-sum-tag{background:#F2F4F3;border-radius:6px;padding:1px 6px;font-size:10.5px}
+.ocl-tools{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin:0 0 6px}
+.hi-pen{display:flex;gap:4px;align-items:center;padding:3px 6px;border:1px solid var(--line);border-radius:99px;background:#fff}
+.hi-pen:empty{display:none}
+.ocl-seg{display:flex;border:1px solid var(--line);border-radius:99px;overflow:hidden;background:#fff}
+.ocl-seg button{border:none;background:transparent;color:var(--sub);font-size:10.5px;font-weight:800;padding:5px 9px;cursor:pointer;font-family:inherit}
+.ocl-seg button.on{background:var(--ink,#1E2823);color:#fff}
+.ocl-lock{border:1px solid var(--line);background:#fff;color:var(--sub);font-size:10.5px;font-weight:800;padding:5px 9px;border-radius:99px;cursor:pointer;font-family:inherit}
+.ocl-lock.on{background:#EEF1EF;color:var(--ink,#1E2823)}
+.ocl-lock span{font-weight:600;opacity:.7}
+table.ocl{width:100%;border-collapse:collapse;table-layout:fixed;font-size:12px}
+table.ocl td{padding:6px 4px;vertical-align:middle;line-height:1.3;border-bottom:1px solid #EEF2EF}
+table.ocl col.c-hi{width:26px}table.ocl col.c-t{width:40px}table.ocl col.c-p{width:68px}table.ocl col.c-d{width:50px}
+table.ocl tr.ocl-h td{text-align:left;padding:9px 4px 3px;border-bottom:1.5px solid var(--line);background:transparent!important}
+table.ocl tr.ocl-h b{font-size:13px;font-weight:900;color:var(--ink,#1E2823);letter-spacing:-.01em}
+table.ocl tr.ocl-h span{font-size:10px;color:var(--sub);font-weight:700;margin-left:6px}
+table.ocl tr.ocl-r td:nth-child(1){text-align:center;padding-left:0;padding-right:0}
+table.ocl .ocl-p{width:64px;overflow:hidden}
+table.ocl .ocl-p b{display:block;font-size:12.5px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+table.ocl .ocl-p span{display:block;font-size:9px;font-weight:600;color:var(--sub);letter-spacing:-.2px;white-space:nowrap}
+table.ocl .ocl-p i{display:block;font-style:normal;font-size:9px;font-weight:800;color:var(--purple)}
+table.ocl .ocl-c{overflow-wrap:anywhere;word-break:break-word;color:var(--ink,#1E2823)}
+table.ocl .ocl-d{width:46px;font-size:10.5px;color:var(--sub);font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right}
+table.ocl.bydr .ocl-t{width:38px;font-weight:800;font-size:11px;color:var(--sub);white-space:nowrap}
+table.ocl tr.mine td:nth-child(1){box-shadow:inset 3px 0 0 var(--purple)}
+table.ocl tr.mine{background:var(--purple-soft)}
+table.ocl tr.lock td{color:var(--sub);opacity:.55;font-size:11px}
+table.ocl tr.lock .ocl-p b{font-size:11.5px}
+.ocl-hi{border:none;background:transparent;cursor:pointer;font-size:13px;padding:4px 2px;line-height:1}
+.ocl-new{display:inline-block;background:#2E7D32;color:#fff;border-radius:5px;padding:0 4px;font-size:9px;font-weight:800;margin-right:4px;vertical-align:1px}
+.ocl-dep{display:inline-block;border-radius:5px;padding:0 5px;font-size:9px;font-weight:800;margin-right:4px;vertical-align:1px}
+.ocl-empty{font-size:12px;color:var(--sub);padding:10px 2px}
 </style>
 </head>
 <body>
@@ -573,8 +619,6 @@ header .hdr-left{flex:1;min-width:0}
     <button data-o="hl">🖍️ 하이라이트</button>
     <button data-o="total">토탈</button>
   </div>
-  <!-- 🖍️ 칠할 색 고르기 — 여기서 고른 색으로 진료 옆 🖍️를 탭하면 바로 칠해짐 -->
-  <div id="hi-pen" style="display:flex;gap:4px;align-items:center;margin:0 0 6px;flex-wrap:wrap"></div>
 
   <div class="osec" id="o-hl" style="display:none"><div id="ocs-hl-body"></div></div>
   <div class="osec" id="o-total" style="display:none">
@@ -876,7 +920,7 @@ const DEP1R={j:"치주",b:"보존",c:"보철",k:"교정",s:"소치",n:"내과",o
 function txtOn(hex){try{const x=(hex||"").replace("#","");const r=parseInt(x.substr(0,2),16),g=parseInt(x.substr(2,2),16),b=parseInt(x.substr(4,2),16);return (0.299*r+0.587*g+0.114*b)/255>0.62?"#1E2823":"#fff";}catch(e){return "#fff";}}
 const DEPT_COLOR={"소치":"#EE7A1A","내과":"#C29B00","교정":"#2E9E44","치주":"#12A5B0","보존":"#3D7BE0","보철":"#23408F","외과":"#A8262A","영상":"#4F7FA8","병리":"#B0637C","원진실":"#9A5FD6","관악":"#6B2D8F","공통":"#5C6B73","기타":"#8A938D"};
 const KEY="wonnae-share-v1";
-const BUILD_ID="18";   /* 🎁 공유판(배포용) 빌드 — 새 파일마다 +1 */
+const BUILD_ID="19";   /* 🎁 공유판(배포용) 빌드 — 새 파일마다 +1 */
 function esc(s){return String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");}
 /* 저장 어댑터: 클로드 앱/웹에서 열면 계정 저장소(폰·PC 자동 동기화),
    파일을 따로 브라우저로 열면 그 기기 localStorage(비동기화)로 폴백 */
@@ -5134,7 +5178,7 @@ function ocsRefreshAll(){
   try{if(window.hlTabMode)renderOcsHl();}catch(e){}
   try{_openSlots.forEach(id=>{const el=document.getElementById(id);if(el)el.open=true;});}catch(e){}
 }
-function ocsToggleResv(){ocsHideResv=!ocsHideResv;renderOcsDay();}
+
 /* 이벤트 위임용: 버튼 클릭 → 키로 원본 u 찾아 토글 */
 /* ── 하이라이트 3색 ──
    1=노랑(중요) · 2=빨강(급함) · 3=회색(비중요·가림) · 없음=해제
@@ -5156,17 +5200,7 @@ function hiSetPen(n){
   window.penColor=n||1;                          /* 항상 색 하나가 선택된 상태 */
   renderHiPen();
 }
-function renderHiPen(){
-  const el=document.getElementById("hi-pen");if(!el)return;
-  if(window.penColor===undefined)window.penColor=0;
-  const items=[[1,"노랑","#FFF3B0"],[2,"🟥 빨강","#FFD8D2"],[3,"⬜ 회색","#ECEEF1"]];
-  if(!window.penColor)window.penColor=1;          /* 순환 없음 — 기본 노랑 */
-  /* 작고 단정하게 — 색은 동그란 점, 선택된 것만 코럴 링 */
-  el.innerHTML=`<span style="font-size:10px;font-weight:800;color:var(--sub);opacity:.8">🖍️</span>`
-    +items.map(([n,lb,c])=>{const on=window.penColor===n;
-      return `<button onclick="hiSetPen(${n})" title="${lb}" style="width:17px;height:17px;padding:0;border-radius:50%;cursor:pointer;background:${c};border:${on?"2px solid var(--coral)":"1px solid rgba(0,0,0,.13)"};box-shadow:${on?"0 0 0 2px rgba(255,107,90,.18)":"none"}"></button>`;
-    }).join("");
-}
+
 /* 하이라이트 탭 — 색별 보기 전환 */
 function hlSetColor(k){window.hlColor=k;renderOcsHl();}
 function ocsHiSet(k,n){
@@ -5428,46 +5462,65 @@ function renderOcsDay(){
   let bd="";
   if(raw.length){
     const order=["소치","내과","교정","치주","보존","보철","영상","병리","원진실","외과","기타"];
-    const GAall={};raw.forEach(u=>{(GAall[u.dep]=GAall[u.dep]||[]).push(u);});
-    const allDeps=order.concat(Object.keys(GAall).filter(dp=>!order.includes(dp))).filter(dp=>GAall[dp]);
-    if(ocsDeptFilter&&!GAall[ocsDeptFilter])ocsDeptFilter=null;
-    const shownDeps=ocsDeptFilter?[ocsDeptFilter]:allDeps;
+    const GA={};raw.forEach(u=>{(GA[u.dep]=GA[u.dep]||[]).push(u);});
+    const deps=order.concat(Object.keys(GA).filter(dp=>!order.includes(dp))).filter(dp=>GA[dp]);
     const okOf=L=>L.filter(u=>accessOf(u)==="resi");
-    const chip=dp=>{const L=GAall[dp];const n=okOf(L).length;const on=ocsDeptFilter===dp;const col=DEPT_COLOR[dp]||"#666";
-      return `<button class="ocs-chip${on?" on":""}" style="${on?`background:${col};color:${txtOn(col)};border-color:${col}`:`color:${col};border-color:${col}`}" onclick="ocsDeptPick('${dp}')">${dp} ${n||(L.length?"🔒"+L.length:0)}</button>`;};
-    const chips=`<button class="ocs-chip${ocsDeptFilter?"":" on"}" style="${ocsDeptFilter?"":"background:var(--brand);color:#fff;border-color:var(--brand)"}" onclick="ocsDeptPick(null)">전체 ${raw.length}</button>`+allDeps.map(chip).join("");
-    const row=u=>{const acc=accessOf(u);const mine=MSg.has(u);
+    const mineOf=L=>L.filter(u=>MSg.has(u)).length;
+    /* 선택된 과: 없거나 이 날짜에 없으면 → 내 토탈 있는 과 → 참여 가능 건수 많은 과 */
+    if(ocsDeptSel!=="__all"&&!GA[ocsDeptSel]){
+      const byMine=deps.filter(dp=>mineOf(GA[dp])>0);
+      ocsDeptSel=byMine[0]||deps.slice().sort((a,b)=>okOf(GA[b]).length-okOf(GA[a]).length)[0];
+    }
+    const sel=ocsDeptSel;
+    /* ① 과 선택 버튼 */
+    const tab=(dp,lbl,n,col,mine,lock)=>{const on=sel===dp;
+      return `<button class="odt${on?" on":""}" style="--c:${col};--t:${txtOn(col)}" onclick="ocsDeptPick('${dp}')"><span class="odt-nm">${lbl}</span><span class="odt-n">${lock?"🔒":""}${n}</span>${mine?`<span class="odt-mine">◇${mine}</span>`:""}</button>`;};
+    const tabs=deps.map(dp=>{const L=GA[dp];const ok=okOf(L).length;
+      return tab(dp,dp,ok||L.length,DEPT_COLOR[dp]||"#666",mineOf(L),!ok);}).join("")
+      +tab("__all","전체",raw.length,"#5C6B73",mineOf(raw),false);
+    /* ② 선택한 과의 진료 목록 */
+    const L0=(sel==="__all"?raw:GA[sel]).slice().sort((a,b)=>((a.t||"99")+a.dep)<((b.t||"99")+b.dep)?-1:1);
+    const okL=okOf(L0),lockN=L0.length-okL.length,mineN=mineOf(L0);
+    const am=okL.filter(u=>(u.t||"")<"12:30").length,pm=okL.length-am;
+    const allLock=!okL.length;
+    const L=ocsHideResv?L0.filter(u=>accessOf(u)==="resi"||MSg.has(u)||hiOf(ocsKey(u))>0):L0;
+    const hidN=L0.length-L.length;
+    const showDep=sel==="__all";
+    const row=(u,withTime)=>{const acc=accessOf(u);const mine=MSg.has(u);const lock=acc==="resv"&&!mine;
       const k=ocsKey(u);const hi=hiOf(k)>0;
-      const hiBtn=`<button type="button" data-k="${k}" onclick="event.stopPropagation();ocsHiByKey('${k}')" title="탭=위에서 고른 색으로 칠하기 · 길게 누르면 색 선택" style="border:none;background:transparent;cursor:pointer;font-size:12px;padding:0 2px;opacity:${hi?"1":".35"}">${hiIcon(k)}</button>`;
-      const nb=isNewPt(u)?`<span style="display:inline-block;background:#2E7D32;color:#fff;border-radius:5px;padding:0 4px;font-size:9px;font-weight:800;margin-right:3px;vertical-align:1px">🌱신환</span>`:"";
-      const noH=u.no?`<span class="no">#${esc(u.no)}</span>`:"";
-      if(acc==="resv"&&!mine){
-        const bg=hi?(hiStyle(k)+"color:var(--ink)"):"opacity:.4;color:var(--sub)";
-        return `<tr style="${bg};font-size:10px"><td>${hiBtn}</td><td>${u.t||"?"}</td><td><span class="nm">${esc(u.pt)}</span>${noH}</td><td>🔒 ${nb}${esc(u.cat||"—")}</td><td>${esc(drLabel(u))}</td></tr>`;
-      }
-      const rowBg=hiStyle(k)||(mine?"background:var(--purple-soft)":"");
-      return `<tr style="${rowBg}"><td>${hiBtn}</td><td>${u.t||"?"}</td><td><span class="nm">${esc(u.pt)}</span>${noH}${mine?`<b style="color:var(--purple);font-size:9px;display:block">◇내토탈</b>`:""}</td><td>${nb}${esc(u.cat||"—")}</td><td>${esc(drLabel(u))}</td></tr>`;};
-    const tbl=L=>`<table class="rtable otbl5" style="font-size:11px">${L.map(row).join("")}</table>`;
-    bd=`<div class="card"><h2>🗂 과별 진료 목록 <span class="badge">${ocsDeptFilter?`${ocsDeptFilter} ${GAall[ocsDeptFilter].length}건`:`전체 ${raw.length}건`}</span></h2>
-      <div class="ocs-chips">${chips}</div>
-      <div class="ocs-view-opts"><button class="ocs-toggle${ocsHideResv?" on":""}" onclick="ocsToggleResv()">${ocsHideResv?"🔒 교수님·회색 숨김 ON":"👁 교수님·회색 표시 중"}</button><button class="ocs-toggle${ocsByDr?" on":""}" onclick="ocsToggleByDr()">${ocsByDr?"👨‍⚕️ 쌤별 정렬 ON":"🕘 시간순 정렬"}</button></div>
-      <p class="hint" style="margin-top:4px">숫자=<b>교수님 제외 건수</b>(⭐교정은 교수님 포함) · 🔒흐림=지정 교수님·외과(달신)·원스톱·임플센터 <b>예약제</b> · <span style="background:var(--purple-soft);padding:0 4px;border-radius:4px">보라</span>=내 토탈</p>
-      ${shownDeps.map(dep=>{const L=GAall[dep].slice().sort((a,b)=>(a.t||"99")<(b.t||"99")?-1:1);
-        const okL=okOf(L);const lockN=L.length-okL.length;
-        const am=okL.filter(u=>(u.t||"")<"12:30").length,pm=okL.length-am;
-        const mineN=L.filter(u=>MSg.has(u)).length;
-        const Lshown=ocsHideResv?L.filter(u=>accessOf(u)==="resi"||MSg.has(u)||hiOf(ocsKey(u))>0):L;
-        if(!Lshown.length)return "";
-        const allLock=!okL.length;
-        const tag=dep==="외과"?` · <b style="color:var(--red)">달신 — 참고만</b>`:dep==="원진실"?` · <b style="color:var(--purple)">동기 프랙 — 참고</b>`:dep==="기타"?` · <b style="color:var(--red)">🔒예약제</b>`:"";
-        const open=(mineN>0)||shownDeps.length<=2;
-        return `<details id="obk-${dep}"${open?" open":""} style="margin-top:6px"><summary style="font-size:12.5px;font-weight:800;cursor:pointer"><span class="dept-tag" style="background:${DEPT_COLOR[dep]||"#666"};color:${txtOn(DEPT_COLOR[dep]||"#666")}">${dep}</span> <b style="font-size:14px">${allLock?L.length:okL.length}건</b>${dep==="교정"?` <span style="font-size:10px;color:var(--brand)">⭐교수포함</span>`:""} <span style="font-weight:600;color:var(--sub)">${allLock?"(참여불가)":`(오전 ${am} · 오후 ${pm})`}</span>${lockN&&!allLock?` <span style="color:var(--sub);font-size:10.5px">🔒${lockN}</span>`:""}${tag}${mineN?` · <b style="color:var(--purple)">◇${mineN}</b>`:""}</summary>
-        <div style="max-height:340px;overflow-y:auto;-webkit-overflow-scrolling:touch">${(()=>{
-          if(!ocsByDr)return tbl(Lshown);
-          const G={};Lshown.forEach(u=>{const nm=(drLabel(u)||"").trim()||"담당 미지정";(G[nm]=G[nm]||[]).push(u);});
-          return Object.keys(G).sort((a,b)=>a==="담당 미지정"?1:b==="담당 미지정"?-1:a.localeCompare(b,"ko"))
-            .map(nm=>`<div class="drgrp">${esc(nm)}</div>${tbl(G[nm])}`).join("");
-        })()}</div></details>`;}).join("")}
+      const nb=isNewPt(u)?`<span class="ocl-new">신환</span>`:"";
+      const dp=showDep?`<span class="ocl-dep" style="background:${DEPT_COLOR[u.dep]||"#666"};color:${txtOn(DEPT_COLOR[u.dep]||"#666")}">${esc(u.dep)}</span>`:"";
+      const cls="ocl-r"+(lock?" lock":"")+(mine?" mine":"");
+      return `<tr class="${cls}" style="${hiStyle(k)}"><td><button type="button" class="ocl-hi" data-k="${k}" onclick="event.stopPropagation();ocsHiByKey('${k}')" title="탭=고른 색으로 칠하기 · 길게=색 선택" style="opacity:${hi?"1":".3"}">${hiIcon(k)}</button></td>`
+        +(withTime?`<td class="ocl-t">${u.t||"?"}</td>`:"")
+        +`<td class="ocl-p"><b>${esc(u.pt)}</b><span>${esc(u.no||"")}</span>${mine?`<i>◇내 토탈</i>`:""}</td>`
+        +`<td class="ocl-c">${dp}${nb}${lock?"🔒 ":""}${esc(u.cat||"—")}</td>`
+        +(withTime?"":`<td class="ocl-d">${esc(drLabel(u))}</td>`)+`</tr>`;};
+    let list="";
+    if(!L.length){
+      list=`<p class="ocl-empty">${allLock?"🔒 이 과는 모두 예약제(교수님·달신)예요 — 🔒 숨김을 끄면 볼 수 있어요.":"표시할 진료가 없어요."}</p>`;
+    }else if(ocsByDr){
+      /* 👨‍⚕️ 쌤별: 담당쌤 가나다순 묶음 · 묶음 안은 시간순 */
+      const G={};L.forEach(u=>{const nm=(drLabel(u)||"").trim()||"담당 미지정";(G[nm]=G[nm]||[]).push(u);});
+      list=`<table class="ocl bydr"><colgroup><col class="c-hi"><col class="c-t"><col class="c-p"><col></colgroup>`+Object.keys(G).sort((a,b)=>a==="담당 미지정"?1:b==="담당 미지정"?-1:a.localeCompare(b,"ko"))
+        .map(nm=>`<tr class="ocl-h"><td colspan="4"><b>${esc(nm)}</b><span>${G[nm].length}건</span></td></tr>`+G[nm].map(u=>row(u,true)).join("")).join("")+`</table>`;
+    }else{
+      /* 🕘 시간순: 같은 시각끼리 묶어 시각은 한 번만 */
+      const T={};const ks=[];L.forEach(u=>{const t=u.t||"시간?";if(!T[t]){T[t]=[];ks.push(t);}T[t].push(u);});
+      list=`<table class="ocl"><colgroup><col class="c-hi"><col class="c-p"><col><col class="c-d"></colgroup>`+ks.map(t=>`<tr class="ocl-h"><td colspan="4"><b>${t}</b><span>${T[t].length}건</span></td></tr>`+T[t].map(u=>row(u,false)).join("")).join("")+`</table>`;
+    }
+    const tag=sel==="외과"?"달신 — 참고만":sel==="원진실"?"동기 프랙 — 참고":sel==="기타"?"원스톱·임플센터 예약제":sel==="교정"?"⭐교수님 진료 포함":"";
+    bd=`<div class="card ocl-card"><h2>🗂 과별 진료 목록</h2>
+      <div class="odt-bar">${tabs}</div>
+      <div class="ocl-sum">${sel==="__all"?"<b>전체</b>":`<span class="dept-tag" style="background:${DEPT_COLOR[sel]||"#666"};color:${txtOn(DEPT_COLOR[sel]||"#666")}">${sel}</span>`}
+        <b class="ocl-sum-n">${allLock?L0.length:okL.length}건</b>
+        <span>${allLock?"참여불가":`오전 ${am} · 오후 ${pm}`}</span>${lockN&&!allLock?`<span>🔒${lockN}</span>`:""}${mineN?`<span class="ocl-sum-mine">◇내 토탈 ${mineN}</span>`:""}${tag?`<span class="ocl-sum-tag">${tag}</span>`:""}</div>
+      <div class="ocl-tools">
+        <div class="hi-pen"></div>
+        <div class="ocl-seg"><button class="${ocsByDr?"":"on"}" onclick="ocsSetSort(false)">🕘 시간</button><button class="${ocsByDr?"on":""}" onclick="ocsSetSort(true)">👨‍⚕️ 쌤별</button></div>
+        <button class="ocl-lock${ocsHideResv?" on":""}" onclick="ocsToggleResv()">🔒 교수님 ${ocsHideResv?"숨김":"표시"}${ocsHideResv&&hidN?` <span>(${hidN})</span>`:""}</button>
+      </div>
+      ${list}
     </div>`;
   }else{
     bd=`<div class="card"><h2>이 날 OCS</h2><p class="hint">이 날짜 데이터가 없어요 — 위 <b>📁 OCS 엑셀 올리기</b>로 그날 파일을 올려주세요.</p></div>`;
@@ -5481,14 +5534,19 @@ function renderOcsDay(){
       <div style="flex:1;border:1.5px solid var(--line);border-radius:11px;padding:9px 11px;background:${pmB?"#F4F7F5":"#EAF5EE"}"><b>오후</b> — ${pmB?esc(evs.filter(e=>e.span==="full"||e.span==="pm"||(!e.span&&e.time&&hm2min(e.time)>=720)).map(e=>e.title).join(", ")||"일정"):"<b style=color:var(--brand)>비어있음</b>"}</div>
     </div></div>`;
   if(raw.length&&raw[0].hist)bd=`<p class="hint" style="margin:0 0 6px">📜 <b>지난 날짜</b> — 내 토탈과 매칭됐던 행만 보관돼 있어요</p>`+bd;
+  const sy=window.scrollY;
   document.getElementById("ocs-booked").innerHTML=bd;
   document.getElementById("ocs-myday").innerHTML="";
-  obkLazyApply();
+  try{renderHiPen();}catch(e){}
+  setTimeout(hiBindLong,0);
+  {const bar=document.querySelector("#ocs-booked .odt-bar .odt.on");if(bar&&bar.scrollIntoView&&bar.parentElement){const p=bar.parentElement;p.scrollLeft=Math.max(0,bar.offsetLeft-p.clientWidth/2+bar.offsetWidth/2);}}
+  if(window.__oclKeepY){window.scrollTo(0,sy);window.__oclKeepY=0;}
 }
-let ocsDeptFilter=null;   /* 과 칩으로 한 과만 보기 */
-let ocsByDr=false;        /* 과 안에서 쌤별로 묶어 보기 (기본: 시간순) */
-function ocsDeptPick(dep){ocsDeptFilter=(ocsDeptFilter===dep?null:dep);renderOcsDay();}
-function ocsToggleByDr(){ocsByDr=!ocsByDr;renderOcsDay();}
+let ocsDeptSel=null;      /* 과별 목록에서 선택한 과 ("__all"=전체) */
+let ocsByDr=false;        /* false=시간순 · true=쌤별 */
+function ocsDeptPick(dep){ocsDeptSel=dep;window.__oclKeepY=1;renderOcsDay();}
+function ocsSetSort(byDr){ocsByDr=!!byDr;window.__oclKeepY=1;renderOcsDay();}
+
 /* 통계 기간: sem=학기(9월~) · vac=방학(7~8월) · all=전체
    방학과 학기는 진료량 차이가 커서 평균이 왜곡되므로 기본은 '학기'만 본다. */
 
@@ -6187,6 +6245,15 @@ function rescanTotals(scope){
 }
 
 
+/* 🖍️ 칠할 색 고르기 — 진료 목록 바로 위 작은 팔레트 (노랑·빨강·회색). 같은 색을 다시 탭하면 해제 */
+function renderHiPen(){
+  if(!window.penColor)window.penColor=1;
+  const items=[[1,"노랑","#FFF3B0"],[2,"빨강","#FFD8D2"],[3,"회색","#ECEEF1"]];
+  const html=`<span style="font-size:11px;line-height:1">🖍️</span>`+items.map(([n,lb,c])=>{const on=window.penColor===n;
+    return `<button type="button" onclick="hiSetPen(${n})" title="${lb}으로 칠하기" aria-label="${lb}" style="width:18px;height:18px;padding:0;border-radius:50%;cursor:pointer;background:${c};border:${on?"2px solid var(--coral)":"1px solid rgba(0,0,0,.15)"};box-shadow:${on?"0 0 0 2px rgba(255,107,90,.2)":"none"}"></button>`;}).join("");
+  document.querySelectorAll(".hi-pen").forEach(el=>{el.innerHTML=html;});
+}
+
 /* ═══ 🖍️ 하이라이트 탭 — 보유 중인 모든 날짜에서 칠한 진료만 · 색별 필터(기본=노랑+빨강, 회색 제외) ═══ */
 function renderOcsHl(){
   const body=document.getElementById("ocs-hl-body");if(!body)return;
@@ -6209,28 +6276,30 @@ function renderOcsHl(){
       ${chips.map(([k,lb,n])=>{const on=f===k;
         return `<button onclick="hlSetColor('${k}')" ${n?"":"disabled"} style="border:1.5px solid ${on?"var(--coral)":"var(--line)"};background:${on?"var(--coral)":(k==="1"?"#FFF3B0":k==="2"?"#FFD8D2":k==="3"?"#ECEEF1":"#fff")};color:${on?"#fff":(n?"var(--ink)":"#CCC")};border-radius:999px;padding:3px 11px;font-size:11.5px;font-weight:800;cursor:${n?"pointer":"default"}">${lb} ${n}</button>`;}).join("")}
       <span class="hint" style="font-size:10.5px">회색은 기본에서 제외</span>
-    </div></div>`;
+    </div>
+    <div class="ocl-tools" style="margin:8px 0 0"><div class="hi-pen"></div><span class="hint" style="font-size:10.5px">🖍️ 탭=이 색으로 칠하기 · 같은 색 다시 탭=해제</span></div></div>`;
   const list=all.filter(u=>pass(hiOf(ocsKey(u))));
   if(!list.length){
     html+=`<div class="card"><p class="hl-empty">${all.length?"이 색으로 칠한 진료가 없어요 — 위 색 칩을 바꿔보세요.":"아직 칠한 진료가 없어요 — <b>당일 뷰</b>에서 진료 줄 왼쪽 <b>🖍️</b>를 탭해보세요. 위 🖍️ 동그라미로 칠할 색을 고를 수 있어요."}</p></div>`;
-    body.innerHTML=html;return;
+    body.innerHTML=html;renderHiPen();return;
   }
   let MS=new Set();try{matchSet().forEach(u=>MS.add(ocsKey(u)));}catch(e){}
   const today=ymd(new Date());
   const byD={};list.forEach(r=>{(byD[r.d]=byD[r.d]||[]).push(r);});
   const ds=Object.keys(byD).sort((a,b)=>{const pa=a<today,pb=b<today;if(pa!==pb)return pa?1:-1;return pa?(a<b?1:-1):(a<b?-1:1);});
-  html+=ds.map(d=>{
+  html+=`<div class="card ocl-card"><table class="ocl bydr"><colgroup><col class="c-hi"><col class="c-t"><col class="c-p"><col></colgroup>`+ds.map(d=>{
     const L=byD[d].sort((a,b)=>(a.t||"")<(b.t||"")?-1:1);
-    const lbl=d===today?"오늘":fmtD(d)+(d<today?" · 지난 날짜":"");
-    return `<div class="card"><div style="font-size:12.5px;font-weight:800;margin-bottom:4px">${lbl} <span class="badge pu">${L.length}건</span></div>
-    <table class="rtable otbl5" style="font-size:11px">${L.map(u=>{
+    const lbl=d===today?"오늘 · "+fmtD(d):fmtD(d)+(d<today?" · 지난 날짜":"");
+    return `<tr class="ocl-h"><td colspan="4"><b>${lbl}</b><span>${L.length}건</span></td></tr>`+L.map(u=>{
       const k=ocsKey(u);const col=DEPT_COLOR[u.dep]||"#666";const mine=MS.has(k);
-      const hiBtn=`<button type="button" data-k="${k}" onclick="event.stopPropagation();ocsHiByKey('${k}')" title="탭=위에서 고른 색으로 칠하기 · 길게 누르면 색 선택" style="border:none;background:transparent;cursor:pointer;font-size:12px;padding:0 2px">${hiIcon(k)}</button>`;
-      return `<tr style="${hiStyle(k)}"><td>${hiBtn}</td><td>${u.t||"?"}</td><td><span class="nm">${esc(u.pt||"")}</span>${u.no?`<span class="no">#${esc(u.no)}</span>`:""}${mine?`<b style="color:var(--purple);font-size:9px;display:block">◇내토탈</b>`:""}</td>
-      <td><span class="dept-tag" style="background:${col};color:${txtOn(col)};font-size:9px;margin-right:3px">${esc(u.dep||"")}</span>${u._gone?'<span style="color:var(--sub)">원본 정리됨</span>':esc(u.cat||"—")}</td><td>${esc(drLabel(u))}</td></tr>`;
-    }).join("")}</table></div>`;
-  }).join("");
+      return `<tr class="ocl-r${mine?" mine":""}" style="${hiStyle(k)}"><td><button type="button" class="ocl-hi" data-k="${k}" onclick="event.stopPropagation();ocsHiByKey('${k}')" title="탭=고른 색으로 칠하기 · 길게=색 선택">${hiIcon(k)}</button></td>
+      <td class="ocl-t">${u.t||"?"}</td>
+      <td class="ocl-p"><b>${esc(u.pt||"")}</b><span>${esc(u.no||"")}</span>${mine?`<i>◇내 토탈</i>`:""}</td>
+      <td class="ocl-c"><span class="ocl-dep" style="background:${col};color:${txtOn(col)}">${esc(u.dep||"")}</span>${u._gone?'<span style="color:var(--sub)">원본 정리됨</span>':esc(u.cat||"—")}${u.dr?` <span style="color:var(--sub);font-size:10.5px;font-weight:700">· ${esc(drLabel(u))}</span>`:""}</td></tr>`;
+    }).join("");
+  }).join("")+`</table></div>`;
   body.innerHTML=html;
+  renderHiPen();
   setTimeout(hiBindLong,0);
 }
 
