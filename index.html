@@ -22,7 +22,7 @@
   --r:16px;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html{scroll-behavior:smooth}
+html{scroll-behavior:auto}   /* 전역 부드러운 스크롤 끔 — 화면 높이가 크게 바뀌는 중 iOS 고정 탭바가 뜨는 원인 */
 body{font-family:"Apple SD Gothic Neo","Noto Sans KR","Pretendard",system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:15px;line-height:1.55;padding-bottom:78px}
 /* ── 상단 히어로 ──
    슬레이트 딥톤 위에 코럴 글로우를 얹어 깊이를 준다. (초록 잔재 제거) */
@@ -40,6 +40,21 @@ body{font-family:"Apple SD Gothic Neo","Noto Sans KR","Pretendard",system-ui,san
 body.share-mode .personal-only{display:none !important}
 .share-only{display:none !important}
 body.share-mode .share-only{display:flex !important}
+/* 배포용 화면을 공유판처럼: 블록/인라인 전용 표시 도우미 */
+.share-blk,.share-inl{display:none !important}
+body.share-mode .share-blk{display:block !important}
+body.share-mode .share-inl{display:inline !important}
+body.share-mode .personal-inl{display:none !important}
+body.share-mode #view-tag{display:none}
+body.share-mode #guide-pills{display:none}
+
+body.share-mode #ocs-pills .pill-br{display:none}
+body.share-mode .oddrs{display:none}   /* 배포용: 쌤별 칩 숨김 — 목록은 쌤별 묶음으로 전체 표시 */
+.hdr-right{display:contents}
+.hdr-right #sv-dot-slot{order:2}
+body.share-mode .hdr-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;margin-left:auto;flex:0 0 auto}
+body.share-mode .hdr-right .made-by{order:0}body.share-mode .hdr-right #sv-dot-slot{order:1}body.share-mode .hdr-right #sem-btn{order:2}
+.made-by{font-size:10.5px;font-weight:700;opacity:.82;letter-spacing:.01em;white-space:nowrap;color:#fff}
 header{cursor:pointer;-webkit-user-select:none;user-select:none}
 #view-tag{display:inline-block;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.45);border-radius:99px;padding:1px 8px;font-size:10px;font-weight:800;margin-left:4px;cursor:pointer;-webkit-tap-highlight-color:rgba(255,255,255,.3)}
 body.share-mode #view-tag{background:rgba(120,200,160,.28);border-color:rgba(160,230,190,.5)}
@@ -91,7 +106,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none}
 .btn.ghost{background:var(--line2);color:var(--brand-2);border:1px solid var(--line)}
 .btn.small{padding:6px 11px;font-size:12px;border-radius:9px;white-space:nowrap}
 .btn.danger{background:var(--red-soft);color:var(--red)}
-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border-top:1px solid var(--line);display:flex;z-index:50;padding-bottom:env(safe-area-inset-bottom)}
+nav{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.985);border-top:1px solid var(--line);display:flex;z-index:50;padding-bottom:env(safe-area-inset-bottom);transform:translate3d(0,0,0);-webkit-transform:translate3d(0,0,0);will-change:transform;-webkit-backface-visibility:hidden;backface-visibility:hidden}
 nav button{flex:1;padding:8px 0 7px;font-size:10.5px;color:var(--sub);display:flex;flex-direction:column;align-items:center;gap:2px;font-weight:700;position:relative}
 nav button .ic{font-size:17px;line-height:1.1}
 nav button.on{color:var(--coral)}
@@ -323,6 +338,136 @@ td.fullcell.is-holi{background:#2E3A34}
 .otbl td:nth-child(1){width:40px}
 .otbl td:nth-child(2){width:58px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .otbl td:nth-child(4){width:50px;color:var(--sub);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* OCS 상단 탭: 윗줄 = 오늘·고밸류·신환·하이라이트 / 아랫줄 = 토탈·통계 */
+#ocs-pills{gap:2px 5px}
+#ocs-pills button{padding:5px 10px;font-size:12px;white-space:nowrap}
+#ocs-pills .pill-br{flex-basis:100%;height:0}
+/* 쌤별·시간대 공용 행: 시간 | 이름(번호) | 진료내역 | (담당쌤) | 🖍️ */
+.odtbl td.t{font-weight:800;font-size:10.5px;white-space:nowrap;color:var(--ink);font-variant-numeric:tabular-nums}
+.odtbl tr.g td{padding-left:2px}
+.oddr{display:inline-grid;grid-template-columns:auto auto;column-gap:4px;row-gap:1px;align-items:baseline;line-height:1.3;padding:5px 13px 4px;font-size:12px}
+.oddr .nm2{grid-column:1;grid-row:1;white-space:nowrap}
+.oddr .n1{grid-column:2;grid-row:1;font-size:11px;color:var(--sub);font-weight:700;text-align:left;white-space:nowrap}
+.oddr .dm{grid-column:1;grid-row:2;justify-self:end;font-size:8.5px;line-height:1.1}
+.oddr .n2{grid-column:2;grid-row:2;font-size:10px;font-weight:800;color:var(--amber);text-align:left;white-space:nowrap}
+.oddr .z{color:var(--sub);opacity:.5}
+.oddr.on .n1,.oddr.on .n2{color:#fff;opacity:.95}
+.tvsum{display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding:6px 2px;cursor:pointer;list-style:none}
+.tvsum::-webkit-details-marker{display:none}
+.tvsum .tm{font-size:13px;font-weight:900;width:44px;flex:0 0 auto}
+.tvsum .cnt{font-size:12px;font-weight:900;flex:0 0 auto}
+.tvchips{display:flex;flex-wrap:nowrap;gap:3px;width:100%;min-width:0}
+.tvchip{flex:0 0 auto;display:inline-flex;align-items:baseline;white-space:nowrap;border:1.5px solid var(--c);color:var(--c);background:#fff;border-radius:9px;padding:0 4.5px;font-size:11.5px;font-weight:800;line-height:1.7}
+.tvchip i{font-style:normal;font-size:10.5px;margin-left:3px}
+.tvchip i b{font-size:8px;font-weight:400;vertical-align:1px}
+.tvcard{margin-left:-6px !important;margin-right:-6px !important;padding-left:8px !important;padding-right:8px !important}
+.tvchips{margin:0 -4px;width:calc(100% + 8px)}
+.tvchips.tight{gap:2px}.tvchips.tight .tvchip{padding:0 3px}
+.tvchips.tighter .tvchip{padding:0 2px}.tvchips.tighter .tvchip i{margin-left:1.5px}
+.tvchips.fit1 .tvchip{font-size:11px}.tvchips.fit1 .tvchip i{font-size:10px}
+.tvchips.fit2 .tvchip{font-size:10.5px}.tvchips.fit2 .tvchip i{font-size:9.5px}
+.tvsum .my{font-size:10.5px;font-weight:700;color:var(--sub);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1 1 0}
+.tvdep{margin:3px 0 5px 2px}
+.tvdep>summary{font-size:12px;font-weight:800;cursor:pointer;padding:2px 0}
+/* 묶음 제목: 건수는 살짝 띄우고 진하게 · 지금/지난 표시 · 오후 구분 · 이동 버튼 */
+.odtbl tr.g td small{margin-left:9px !important;color:var(--ink) !important;font-size:10.5px !important;font-weight:700 !important}
+.odtbl tr.g .gnx{font-size:9px;font-weight:900;color:var(--coral);margin-left:6px;letter-spacing:.08em;vertical-align:1px}
+.odtbl tr.g .gps{font-size:9.5px;font-weight:700;color:var(--sub);margin-left:6px;opacity:.7}
+.odtbl tr.g.past .gl{color:#9AA3A0}
+.odtbl tr.g.next .gl{color:var(--coral)}
+.odtbl tr.was td{opacity:.5}
+.odtbl tr.gdiv td{padding:11px 2px 1px;border-bottom:none;font-size:10.5px;font-weight:800;color:var(--sub);letter-spacing:.04em}
+.odjump{margin-left:auto;display:inline-flex;gap:3px}
+.odjump button{border:1px solid var(--line);background:#fff;color:var(--sub);font-size:10.5px;font-weight:800;padding:3px 7px;white-space:nowrap;border-radius:99px;cursor:pointer;font-family:inherit}
+.odjump button.now{border-color:var(--coral);color:var(--coral)}
+.odctl .lock{padding:4px 11px;font-size:14px;flex:0 0 auto}
+.odctl .odjump{flex-basis:100%;margin-left:0;justify-content:flex-end;margin-top:1px}   /* 지금·오전·오후는 아랫줄 오른쪽 */
+/* 배포용 = 공유판 모양: 묶음 제목은 알약, 건수 숫자 없음 */
+body.share-mode .odtbl tr.g td small{display:none}
+body.share-mode .odtbl tr.g .gl{display:inline-block;font-size:12px;font-weight:900;color:var(--ink);background:#EEF2EF;border-radius:99px;padding:2px 10px;letter-spacing:.01em}
+body.share-mode .odtbl tr.g .gl.dr{background:#F1EFF7;color:#4A3F6B}
+body.share-mode .odtbl tr.g.next .gl{background:var(--coral);color:#fff;box-shadow:0 2px 8px rgba(255,107,90,.35)}
+body.share-mode .odtbl tr.g.past .gl{background:#F3F4F3;color:#9AA3A0}
+body.share-mode .odtbl tr.g td{padding-top:9px}
+body.share-mode .odtbl.bydr td.r{visibility:hidden}   /* 공유판처럼 쌤별 줄엔 담당쌤 반복 없음 */
+/* 오늘 뭐 열리나 글씨체 (기기별 선택 · 기본 Pretendard) */
+body.odf-pre #o-day,body.odf-pre .odprobe{font-family:Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif}
+/* 프리텐다드는 같은 굵기여도 진해 보여서 한 단계(100)씩 가볍게 — 오늘 뭐 열리나 안에서만 */
+body.odf-pre #o-day b,body.odf-pre #o-day strong{font-weight:600}
+body.odf-pre #o-day h2{font-weight:700}
+body.odf-pre #o-day [style*="font-weight:900"]{font-weight:800 !important}
+body.odf-pre #o-day [style*="font-weight:800"]{font-weight:700 !important}
+body.odf-pre #o-day [style*="font-weight:700"]{font-weight:600 !important}
+body.odf-pre #o-day .odtbl td.t,body.odf-pre #o-day .oddep b,body.odf-pre #o-day .odxdep,body.odf-pre #o-day .tvchip,body.odf-pre #o-day .odseg button,body.odf-pre #o-day .odnav button,body.odf-pre #o-day .odctl .seg button,body.odf-pre #o-day .odctl .lock,body.odf-pre #o-day .oddr .n2{font-weight:700}
+body.odf-pre #o-day .odhead .n,body.odf-pre #o-day .oddep i,body.odf-pre #o-day .tvsum .tm,body.odf-pre #o-day .tvsum .cnt,body.odf-pre #o-day .odtbl tr.g td{font-weight:800}
+body.odf-pre #o-day .odtbl td.p .nm,body.odf-pre #o-day .oddr,body.odf-pre #o-day .oddr .n1,body.odf-pre #o-day .odhead .s,body.odf-pre #o-day .odtbl td.p .no{font-weight:600}
+body.odf-pre #o-day .odtbl td.p .no{font-weight:500}
+body.odf-pre #o-day .odtbl td.r{font-weight:500}
+body.odf-pre #o-day .dept-tag{font-weight:700}
+body.odf-nsr #o-day,body.odf-nsr .odprobe{font-family:"NanumSquareRound","Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif}
+body.odf-pre #o-day button,body.odf-nsr #o-day button{font-family:inherit}
+.odpen{flex:0 0 auto;display:flex;align-items:center;gap:2px;border:1.5px solid var(--line);border-radius:999px;padding:2px 5px;background:#fff}
+.odpen:empty{display:none}
+.odpen button{width:15px !important;height:15px !important}
+.odpen button:first-of-type{width:17px !important;font-size:9.5px !important}
+@media (max-width:430px){.odseg .lg{display:none}}
+.odbar{flex-wrap:nowrap}
+.odseg{flex:1 1 0}
+.odpen>span{display:none}   /* 날짜 옆에서는 🖍️ 아이콘 없이 색 점만 */
+@media (max-width:385px){.odpen{gap:1px !important;padding:2px 3px !important}.odpen button{width:14px !important;height:14px !important}.odpen button:first-of-type{width:16px !important}.odbar{gap:3px}.odseg button{padding:4px 2px !important}.odfont{padding:3px 5px !important}}
+@media (max-width:385px){.odbar{gap:3px}.odnav button{padding:3px 6px}.odnav button:first-child,.odnav button:last-child{padding:1px 6px}.odfont{padding:3px 6px}.odseg button{padding:4px 3px;font-size:11px}.odpen{padding:2px 4px}}
+.odfont{flex:0 0 auto;border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:3px 8px;font-size:11.5px;font-weight:800;color:var(--sub);cursor:pointer;line-height:1.3}
+.odfont-pop{position:fixed;z-index:9999;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 6px 22px rgba(35,42,51,.22);padding:5px;display:flex;flex-direction:column;gap:3px;min-width:170px}
+.odfont-pop button{border:1.5px solid transparent;background:transparent;border-radius:9px;padding:7px 10px;text-align:left;cursor:pointer;font-size:13.5px;color:var(--ink)}
+.odfont-pop button.on{border-color:var(--coral);background:#FFF4F2}
+.odfont-pop small{display:block;font-size:10.5px;color:var(--sub);margin-top:1px}
+/* OCS 탭: 연속 탭(더블탭) 확대 방지 — 핀치 확대는 그대로 */
+html,body,button,a,input,select,textarea,summary,label{touch-action:manipulation}   /* 앱 전체: 더블탭 확대 방지(핀치 확대는 유지) */
+/* ── OCS '오늘 뭐 열리나' 상단 바 · 과별 목록 ── */
+.odbar{display:flex;align-items:center;gap:6px;margin:0 0 7px;flex-wrap:wrap}
+.odnav{display:flex;align-items:center;border:1.5px solid var(--line);border-radius:999px;background:#fff;overflow:hidden;flex:0 0 auto}
+.odnav button{border:none;background:transparent;cursor:pointer;font-weight:800;color:var(--ink);padding:3px 9px;font-size:12px;line-height:1.3}
+.odnav button:first-child,.odnav button:last-child{color:var(--sub);font-size:14px;padding:1px 9px}
+.odseg{display:flex;flex:1 1 auto;min-width:0;max-width:400px;border:1.5px solid var(--line);border-radius:999px;background:#fff;overflow:hidden}
+.odseg button{flex:1 1 0;min-width:0;border:none;background:transparent;cursor:pointer;font-weight:800;color:var(--sub);padding:4px 6px;font-size:11.5px;white-space:nowrap}
+.odseg button.on{background:var(--ink);color:#fff}
+.oddeps{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:5px;margin:2px 0 0}
+.oddep{border:1.8px solid var(--c);color:var(--c);background:#fff;border-radius:11px;padding:3px 0 2px;cursor:pointer;text-align:center;line-height:1.1;min-width:0}
+.oddep b{display:block;font-size:11px;font-weight:800}
+.oddep i{display:block;font-style:normal;font-size:13.5px;font-weight:900;margin-top:1px;letter-spacing:-.3px;white-space:nowrap}
+.oddep.on{background:var(--c);color:#fff;box-shadow:0 2px 7px rgba(0,0,0,.14)}
+.oddep.zero{opacity:.4}
+.odxdeps{display:flex;gap:4px;flex-wrap:wrap;margin:5px 0 0}
+.odxdep{border:1.5px solid var(--c);color:var(--c);background:#fff;border-radius:999px;padding:1px 8px;font-size:10.5px;font-weight:800;cursor:pointer}
+.odxdep.on{background:var(--c);color:#fff}
+.odhead{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap;margin:9px 0 5px;padding-top:8px;border-top:1.5px solid var(--line)}
+.odhead .dept-tag{font-size:12px}
+.odhead .n{font-size:17px;font-weight:900}
+.odhead .s{font-size:11.5px;color:var(--sub);font-weight:700}
+.odctl{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin:0 0 10px}
+.odctl .pen{display:flex;align-items:center;gap:3px;border:1.5px solid var(--line);border-radius:999px;padding:2px 6px;background:#fff}
+.odctl .seg{display:flex;border:1.5px solid var(--line);border-radius:999px;overflow:hidden;background:#fff;flex:0 1 230px;min-width:0}   /* 예전 폭의 약 2배 */
+.odctl .seg button{border:none;background:transparent;cursor:pointer;font-size:12.5px;font-weight:800;color:var(--sub);padding:5px 10px;flex:1 1 0;white-space:nowrap}
+.odctl .seg button.on{background:var(--ink);color:#fff}
+.odctl .lock{border:1.5px solid var(--line);background:#fff;color:var(--sub);border-radius:999px;padding:3px 9px;font-size:11px;font-weight:800;cursor:pointer}
+.odctl .lock.on{background:#EEF1F0;color:var(--ink)}
+.oddrs{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 9px}
+.oddr{border:1.3px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:2px 8px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap}
+.oddr small{font-size:10px;color:var(--sub);font-weight:700;margin-left:3px}
+.oddr.on{background:var(--c);border-color:var(--c);color:#fff}
+.oddr.on small{color:#fff}
+.oddr.prof{opacity:.55}
+.odtbl{width:100%;border-collapse:collapse;table-layout:fixed;font-size:11px}
+.odtbl td{padding:3px 0;border-bottom:1px solid var(--line);vertical-align:middle;line-height:1.375;overflow-wrap:anywhere;word-break:break-word}
+.odtbl td.h{text-align:center;white-space:nowrap}
+.odtbl td.p{white-space:nowrap;line-height:1.23;overflow:hidden}
+.odtbl td.p .nm{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11.5px;font-weight:700;color:#5E6B66}
+.odtbl td.p .no{display:block;font-size:8.5px;font-weight:600;color:#9AA5A0;letter-spacing:-.3px;white-space:nowrap;overflow:hidden;font-variant-numeric:tabular-nums}
+.odtbl td.r{white-space:nowrap;text-align:right;color:var(--ink);font-weight:600;font-size:10.5px;overflow:hidden;text-overflow:ellipsis}
+.odtbl tr.g td{border-bottom:1.5px solid var(--line);padding:6px 3px 2px;font-size:11.5px;font-weight:900;color:var(--ink);background:transparent}
+.odtbl tr.g td small{font-size:10px;color:var(--sub);font-weight:700;margin-left:4px}
+.odtbl tr.lk td{font-size:10px;color:var(--sub)}
+.odtbl tr.lk td.p .nm{font-size:10.5px}
 .otbl5{table-layout:fixed}
 .otbl5 td{padding:2.5px 3px;vertical-align:middle;line-height:1.25}
 .otbl5 td:nth-child(1){width:18px;text-align:center;padding-left:0;padding-right:0}
@@ -395,13 +540,114 @@ dialog::backdrop{background:rgba(12,40,30,.5)}
 .toast.show{opacity:1}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 
-#mff-filter button{border:1.5px solid var(--line);background:transparent;color:var(--ink);border-radius:999px;padding:3px 12px;font-size:12px;font-weight:800;cursor:pointer}
-#mff-filter button.on{background:var(--coral);border-color:var(--coral);color:#fff;box-shadow:0 2px 8px rgba(255,107,90,.25)}
+#mff-filter button,#mff-basis button{border:1.5px solid var(--line);background:transparent;color:var(--ink);border-radius:999px;padding:3px 12px;font-size:12px;font-weight:800;cursor:pointer}
+#mff-filter button.on,#mff-basis button.on{background:var(--coral);border-color:var(--coral);color:#fff;box-shadow:0 2px 8px rgba(255,107,90,.25)}
 
 /* iOS는 입력창 글씨가 16px 미만이면 포커스 시 화면을 확대함 → 전체 입력 16px로 통일해 확대 방지
    (체크박스·라디오·버튼형은 제외 — 레이아웃에 영향 없음) */
 input:not([type=checkbox]):not([type=radio]):not([type=button]):not([type=submit]),
 select,textarea{font-size:16px !important}
+
+/* ═══ OCS 탭 정돈 (#302) — 구조는 그대로, 높이·모서리·간격을 통일해 덜 복잡하게 ═══ */
+#ocs-pills{display:flex;flex-wrap:wrap;gap:6px;margin:2px 0 12px}
+#ocs-pills button{flex:1 1 auto;padding:8px 9px;font-size:13.5px;font-weight:800;border-radius:12px;text-align:center;white-space:nowrap}
+#ocs-pills .pill-br{flex-basis:100%;height:0}
+@media (max-width:400px){#ocs-pills button{font-size:13px;padding:8px 6px}}
+@media (max-width:380px){#ocs-pills button{font-size:12.5px;padding:8px 4px}}
+/* 도구줄: 1행 = 날짜·Aa·색 / 2행 = 보기 전환(가득) — 모두 같은 높이·같은 모서리 */
+.odbar{flex-wrap:wrap !important;gap:6px;margin:0 0 10px}
+.odnav,.odfont,.odpen{height:32px;box-sizing:border-box;border-radius:10px !important}
+.odnav{flex:1 1 auto;justify-content:space-between}
+.odfont{padding:0 11px !important}
+.odpen{padding:0 7px !important;gap:3px !important}
+.odseg{flex:1 1 100% !important;max-width:none !important;height:34px;border-radius:10px}
+.odseg button{font-size:13px !important;padding:0 6px !important}
+.odseg .lg{display:inline !important}
+/* 과 선택·요약·정렬 */
+.oddeps{gap:6px}
+.oddep{border-width:1.5px;border-radius:12px;padding:6px 0 5px}
+.oddep b{font-size:11.5px;opacity:.9}
+.oddep i{font-size:14px;margin-top:2px}
+.odxdeps{margin-top:8px;gap:5px;align-items:center}
+.odxdep{font-size:10.5px;padding:2px 9px;border-width:1.2px;border-radius:8px;opacity:.85}
+.odhead{margin:12px 0 9px;padding-top:11px}
+.odctl{gap:6px;margin:0 0 11px}
+.odctl .seg{height:34px;border-radius:10px}
+.odctl .seg button{font-size:13px;padding:0 10px}
+.odctl .lock{height:34px;border-radius:10px;padding:0 12px !important;display:inline-flex;align-items:center}
+.odjump{gap:5px}
+.odjump button{height:28px;border-radius:9px;padding:0 10px}
+/* 쌤 칩: 테두리 얇게·배경 은은하게 */
+.oddrs{gap:6px;margin:0 0 11px}
+.oddr{border-radius:12px;border-width:1px;background:#FAFBFA}
+.oddr.on{background:var(--c)}
+
+/* ═══ #303 정돈 2 ═══ */
+/* 상단 6개 탭: 두 줄 간격 좁게 · 아랫줄은 토탈을 더 넓게 */
+#ocs-pills{row-gap:4px !important;margin-bottom:10px}
+#ocs-pills button[data-o="total"]{flex:1.35 1 0}
+#ocs-pills button[data-o="stats"]{flex:1 1 0}
+/* 날짜·Aa·색: 작게 — 보기 전환 위 왼쪽에 붙은 작은 줄 */
+.odbar{row-gap:4px !important;gap:4px !important}
+.odnav,.odfont,.odpen{height:25px !important;border-radius:8px !important;border-width:1px !important}
+.odnav{flex:0 0 auto !important}
+.odnav button{font-size:11.5px !important;padding:0 5px !important}
+.odnav button:first-child,.odnav button:last-child{font-size:12.5px !important;padding:0 6px !important}
+.odfont{font-size:10.5px !important;padding:0 8px !important}
+.odpen{padding:0 5px !important}
+.odpen button{width:13px !important;height:13px !important}
+.odpen button:first-of-type{width:15px !important;font-size:8.5px !important}
+/* 시간/쌤별: 반반으로 가득 */
+.odctl .seg{flex:1 1 100% !important}
+/* 요약줄의 🔒 = 교수님 보기/숨김 토글 */
+.odlk{border:1px solid var(--line);background:#F4F6F5;border-radius:7px;padding:0 5px;font-size:11px;font-weight:800;color:var(--ink);cursor:pointer;line-height:1.5;margin:0 1px}
+.odlk:not(.on){background:#fff;border-color:var(--coral);color:var(--coral)}
+/* 쌤 칩: 한 줄 5개로 가득 */
+.oddrs{display:grid !important;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px !important}
+.oddr{padding:4px 2px 3px !important;justify-content:center;font-size:11px !important;min-width:0;column-gap:3px !important;letter-spacing:-.3px}
+.oddr .n1{font-size:9.5px !important}
+.oddr .n2{font-size:9px !important}
+.oddr .dm{font-size:7.5px !important}
+@media (max-width:359px){.oddrs{grid-template-columns:repeat(4,minmax(0,1fr))}}
+
+/* #304 과 요약줄: 과 이름 크게 · 총 건수 대신 오전/오후를 크게 */
+.odhead{align-items:center !important;column-gap:8px !important}
+.odhead .odh-dep{font-size:17px !important;font-weight:900;padding:2px 9px;border-radius:7px;line-height:1.3}
+.odhead .odh-n{font-size:19px;font-weight:900;color:var(--ink);letter-spacing:-.2px;font-variant-numeric:tabular-nums}
+.odhead .odh-n small{font-size:11.5px;font-weight:700;color:var(--sub);margin-right:3px;letter-spacing:0}
+.odhead .odh-dot{font-size:15px;font-weight:700;color:var(--sub);margin:0 -3px}
+body.odf-pre #o-day .odhead .odh-n{font-weight:800}
+body.odf-pre #o-day .odhead .odh-dep{font-weight:800}
+
+/* 미니 현황 (#306) */
+.mdept{border:1px solid var(--line);border-radius:12px;margin:0 0 8px;padding:0 10px;background:#fff}
+.mdept>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:7px;padding:9px 0;font-size:14px}
+.mdept>summary::-webkit-details-marker{display:none}
+.mdot{width:8px;height:8px;border-radius:3px;flex:0 0 auto}
+.mcnt{font-size:11.5px;font-weight:800;color:var(--red);font-variant-numeric:tabular-nums}
+.mcnt.ok{color:#2F8F5B}
+.mmini{flex:1;height:4px;background:var(--line);border-radius:2px;overflow:hidden;margin-left:4px;max-width:120px}
+.mmini span{display:block;height:100%;border-radius:2px}
+.mrow{padding:6px 0 5px;border-top:1px solid var(--line)}
+.mline{display:flex;align-items:baseline;gap:6px}
+.mlbl{flex:1;min-width:0;font-size:12.5px;font-weight:600;color:var(--ink)}
+.mval{flex:0 0 auto;font-variant-numeric:tabular-nums;white-space:nowrap}
+.mval b{font-size:14px;font-weight:900;color:var(--red)}
+.mval i{font-style:normal;font-size:11px;color:var(--sub);margin-left:2px}
+.mval em{font-style:normal;font-size:11px;font-weight:800;color:var(--red);margin-left:6px}
+.mval em.ok{color:#2F8F5B}
+.mrow.ok .mval b{color:#2F8F5B}
+.mrow.ok .mlbl{color:var(--sub)}
+.mbar{height:4px;background:var(--line);border-radius:2px;margin-top:4px;overflow:hidden}
+.mbar span{display:block;height:100%;background:var(--amber);border-radius:2px}
+.mrow.ok .mbar span{background:#5DB07F}
+.msub{font-size:10.5px;color:var(--sub);margin-top:3px}
+.mst{font-variant-numeric:tabular-nums}
+.mst b{color:var(--ink);font-weight:800}
+.mlink{color:var(--sub);text-decoration:underline dotted;cursor:pointer}
+.mtag{display:inline-block;font-size:9.5px;font-weight:800;color:#6B5BA8;background:#F1EFF7;border-radius:5px;padding:0 5px;margin-left:5px;vertical-align:1px}
+.mnote{display:inline-block;font-size:10px;font-weight:700;color:var(--sub);margin-left:5px}
+.mnote.warn{color:var(--red)}
 
 /* ═ 공유판 전용 요소 (OCS 엑셀 업로드·과 칩·보기 토글·노티 내 정보·저장 탭·헤더 우측) ═ */
 header .hdr-left{flex:1;min-width:0}
@@ -505,6 +751,22 @@ table.ocl tr.ocl-div span{font-size:10.5px;font-weight:800;color:var(--sub);lett
 .ocl-jump{display:flex;gap:5px;margin:0 0 6px}
 .ocl-jump button{flex:0 0 28%;text-align:center;border:1px solid var(--line);background:#fff;color:var(--sub);font-size:10px;font-weight:800;padding:2px 7px;white-space:nowrap;border-radius:99px;cursor:pointer;font-family:inherit}
 .ocl-jump button.now{border-color:var(--coral);color:var(--coral)}
+
+/* 교수님 진료 보기/숨김 — 요약줄 🔒N 탭 */
+.ocl-lk{border:1px solid var(--line);background:#fff;color:var(--sub);font-size:11px;font-weight:800;padding:1px 7px;border-radius:99px;cursor:pointer;font-family:inherit;line-height:1.4}
+.ocl-lk.open{background:#EEF1EF;color:var(--ink,#1E2823)}
+/* 담당쌤 강조 · 환자 이름·번호는 회색조 */
+table.ocl .ocl-p b{color:#66706B;font-weight:700}
+table.ocl .ocl-p span{color:#9AA3A0}
+table.ocl .ocl-d{color:var(--ink,#1E2823)!important;font-weight:600!important;font-size:10.5px}
+table.ocl.bydr .ocl-t{color:var(--ink,#1E2823)}
+table.ocl tr.mine .ocl-p b{color:var(--ink,#1E2823)}
+/* OCS 탭 정돈 — 도구 높이·모서리 통일 */
+#ocs-pills button{min-height:36px}
+.ocl-tools .hi-pen,.ocl-tools .ocl-seg{height:30px;box-sizing:border-box}
+.ocl-seg button{height:100%}
+.ocl-card .odt-bar{margin-top:4px}
+#o-day .today-nav .odfont{margin-left:auto}
 .ocl-empty{font-size:12px;color:var(--sub);padding:10px 2px}
 </style>
 </head>
@@ -629,6 +891,28 @@ table.ocl tr.ocl-div span{font-size:10.5px;font-weight:800;color:var(--sub);lett
   </div>
 </section>
 
+<!-- ══ 미니 현황 (유폴리오) ══ -->
+<section class="tabpage" id="page-mini">
+    <p class="hint" style="margin-bottom:10px"><b>과별 미니 현황</b> — <b>점</b>이 붙은 건 유폴리오 <b>점수</b>, 숫자만 있는 건 <b>승인 개수</b> 기준이에요. <span class="mtag">연간</span>은 학년 기준.</p>
+    <div class="card">
+      <h2>🦷 유폴리오 미니 현황 <span class="badge" id="mff-badge"></span></h2>
+      <p class="hint" style="margin:2px 0 8px"><b id="mff-upd"></b></p>
+      <div id="mff-filter" style="display:flex;gap:5px;margin:0 0 8px;flex-wrap:wrap">
+        <button type="button" data-mf="miss" onclick="mffFilter('miss')" class="on">미달만</button>
+        <button type="button" data-mf="mini" onclick="mffFilter('mini')">전체</button>
+        <button type="button" data-mf="all" onclick="mffFilter('all')">+ 기타 항목</button>
+      </div>
+      <div id="mini-off-list"></div>
+      <div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap">
+        <button class="btn small" style="background:var(--brand);color:#fff" onclick="ufolioImportOpen()">📥 유폴리오에서 가져오기</button>
+        <button class="btn small ghost" onclick="ufolioBookmarklet()">🔖 북마클릿 복사</button>
+        <button class="btn small ghost" onclick="window.open(UF_SUMMARY_URL,'_blank')">↗ 유폴리오 요약표</button>
+        <button class="btn small ghost" onclick="ufolioDebug()">🔍 항목명 확인</button>
+      </div>
+    </div>
+  
+</section>
+
 <!-- ══ 토탈 ══ -->
 <!-- ══ OCS ══ -->
 <section class="tabpage" id="page-ocs">
@@ -652,7 +936,7 @@ table.ocl tr.ocl-div span{font-size:10.5px;font-weight:800;color:var(--sub);lett
           <button class="btn small" style="background:var(--purple);color:#fff;padding:3px 10px;font-size:11px;font-weight:800" onclick="rescanTotals()">🔄 예약</button>
           <button class="btn small" style="background:var(--brand);color:#fff;padding:3px 10px;font-size:11px;font-weight:800" onclick="rescanTotals('all')">🗂 전체 이력</button>
         </span></h2>
-      <p class="hint">환자 <b>이름+번호</b>로 등록해두면 <b>새 OCS가 올 때마다 그 환자 예약을 자동으로 찾아 알려드려요</b> — 캘린더 ◇칩, 전날 노티 할 일, 당일 준비까지 자동 연결. visit 탭=날짜 기록 · 마지막 visit 후 레포트 D-7/유폴 D-14. <b>🔄 예약</b>=오늘 이후 예약 스캔 · <b>🗂 전체 이력</b>=쌓인 OCS 전체에서 이 환자 내원기록을 찾아 자동 정리. 이력마다 <b>✅봤음/✖못봄</b> 체크 — ✅는 visit에 자동 기록! <span id="tot-scan-at" style="color:var(--purple);font-weight:700"></span></p>
+      <p class="hint">환자 <b>이름+번호</b>로 등록해두면 <b>새 OCS가 올 때마다 그 환자 예약을 자동으로 찾아 알려드려요</b> — 캘린더 ◇칩, 전날 노티 할 일, 당일 준비까지 자동 연결. visit 탭=날짜 기록 · visit 다 채운 날 기준 레포트 D-7/유폴 D-14. <b>🔄 예약</b>=오늘 이후 예약 스캔 · <b>🗂 전체 이력</b>=쌓인 OCS 전체에서 이 환자 내원기록을 찾아 자동 정리. 이력마다 <b>✅봤음/✖못봄</b> 체크 — ✅는 visit에 자동 기록! <span id="tot-scan-at" style="color:var(--purple);font-weight:700"></span></p>
     </div>
     <div id="total-ocs-found"></div>
     <div id="total-list"></div>
@@ -672,8 +956,9 @@ table.ocl tr.ocl-div span{font-size:10.5px;font-weight:800;color:var(--sub);lett
         <button class="btn small ghost" onclick="ocsMove(-1)">‹</button>
         <button class="btn small" id="ocs-nav-title" onclick="ocsReset()">오늘</button>
         <button class="btn small ghost" onclick="ocsMove(1)">›</button>
+        <button class="btn small ghost odfont" onclick="odFontMenu(this)" title="글씨체 바꾸기 (이 기기에 저장)">Aa</button>
       </div>
-      <p class="hint" style="margin-top:6px">과 버튼 숫자·요약은 <b>교수님 제외 건수</b>(⭐교정은 교수님 포함) · 과를 고르면 그 과 진료가 <b>시간순</b>으로 펼쳐져요 · 오늘이면 <b>⏰ NEXT</b>로 다음 진료 시간 표시 · <span style="color:var(--purple)">◇</span>=내 토탈 · 🖍️ 칠한 진료는 <b>하이라이트 탭</b>에</p>
+      <p class="hint" style="margin-top:6px">과 버튼 숫자·요약은 <b>교수님 제외 건수</b>(⭐교정은 교수님 포함) · 과를 고르면 그 과 진료가 <b>시간순</b>으로 펼쳐져요 · <b>🔒숫자</b>를 탭하면 교수님 진료 보기/숨김 · 오늘이면 <b>⏰ NEXT</b>로 다음 진료 시간 표시 · <span style="color:var(--purple)">◇</span>=내 토탈 · 🖍️ 칠한 진료는 <b>하이라이트 탭</b>에</p>
     </div>
     <div id="ocs-booked"></div>
     <div id="ocs-myday"></div>
@@ -694,6 +979,12 @@ table.ocl tr.ocl-div span{font-size:10.5px;font-weight:800;color:var(--sub);lett
     <p class="hint">↑ 영상 본인환자 촬영 — 잡담방</p>
   </div>
   <div class="gsec" id="g-flow" style="display:block">
+    <div class="card share-blk"><h2>📋 노티 양식 <span class="badge pu">탭해서 복사</span></h2>
+      <div class="copybox" onclick="copyTx(this)"><code>@케이스장, 내원시간, 환자번호, 이름, 들어가는 원내생</code><button class="btn small ghost">복사</button></div>
+      <p class="hint">↑ 친환 노티 — 당일 <b>08:30까지</b> 과별 질문/잡담방</p>
+      <div class="copybox" onclick="copyTx(this)"><code>선생님,날짜,시간,항목(가/고/임),환자명,환자번호,번호,이름</code><button class="btn small ghost">복사</button></div>
+      <p class="hint">↑ 보철 토탈 노티 — 전날 18:00~당일 08:00 토탈방 · 2명이면 각자!</p>
+    </div>
     <div class="card"><h2>케이스별 절차 체크리스트</h2>
     <p class="hint">사인·유폴 순서 복잡한 케이스 단계별 (체크 저장 안 됨 — 케이스마다 재사용)</p></div>
     <p class="hint" style="margin-bottom:6px">처음이면 <b>⓪ 공통 3개</b>부터! 제목 탭=단계 펼치기 · 과 칩 탭=그 과만 보기 · <span style="background:#DFF0E7;border-radius:4px;padding:0 4px">✍초록</span>=유폴·사인 단계 · <span style="background:#FBEAEA;border-radius:4px;padding:0 4px">⚠빨강</span>=실수 주의</p>
@@ -800,6 +1091,7 @@ table.ocl tr.ocl-div span{font-size:10.5px;font-weight:800;color:var(--sub);lett
   <button class="on" data-tab="sched"><span class="ic">▦</span>일정</button>
   <button data-tab="today"><span class="ic">☀︎</span>오늘</button>
   <button data-tab="ocs"><span class="ic">◫</span>OCS</button>
+  <button data-tab="mini"><span class="ic">◆</span>미니</button>
   <button data-tab="rules"><span class="ic">✔</span>가이드</button>
   <button data-tab="save"><span class="ic">☁</span>저장</button>
 </nav>
@@ -938,7 +1230,7 @@ const DEP1R={j:"치주",b:"보존",c:"보철",k:"교정",s:"소치",n:"내과",o
 function txtOn(hex){try{const x=(hex||"").replace("#","");const r=parseInt(x.substr(0,2),16),g=parseInt(x.substr(2,2),16),b=parseInt(x.substr(4,2),16);return (0.299*r+0.587*g+0.114*b)/255>0.62?"#1E2823":"#fff";}catch(e){return "#fff";}}
 const DEPT_COLOR={"소치":"#EE7A1A","내과":"#C29B00","교정":"#2E9E44","치주":"#12A5B0","보존":"#3D7BE0","보철":"#23408F","외과":"#A8262A","영상":"#4F7FA8","병리":"#B0637C","원진실":"#9A5FD6","관악":"#6B2D8F","공통":"#5C6B73","기타":"#8A938D"};
 const KEY="wonnae-share-v1";
-const BUILD_ID="25";   /* 🎁 공유판(배포용) 빌드 — 새 파일마다 +1 */
+const BUILD_ID="27";   /* 🎁 공유판(배포용) 빌드 — 새 파일마다 +1 */
 function esc(s){return String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");}
 /* 저장 어댑터: 클로드 앱/웹에서 열면 계정 저장소(폰·PC 자동 동기화),
    파일을 따로 브라우저로 열면 그 기기 localStorage(비동기화)로 폴백 */
@@ -1131,7 +1423,7 @@ function officialMini(){return [
 const UF_DEPT={"구강내과":"내과","구강악안면외과":"외과","구강병리과":"병리","영상치의학과":"영상",
   "치과보철과":"보철","보철과":"보철","보존과":"보존","치과보존과":"보존","치주과":"치주","교정과":"교정",
   "소아치과":"소치","원내생 진료센터":"원진실","원내생진료센터":"원진실","치과마취과":"기타","보라매/관악/분당":"기타"};
-
+function ufDept(s){const t=String(s||"").trim();return UF_DEPT[t]||t;}
 
 /* 항목명 정규화 — 공백·대소문자·구두점 차이 흡수 */
 function ufNorm(s){return String(s||"").toLowerCase()
@@ -1150,9 +1442,7 @@ function normOrthoKinds(){
 }
 function ensureMiniOff(){
   if(S.miniOff&&Array.isArray(S.miniOff)&&S.miniOff.length)return;
-  const SEED={"교정|Total Case(구환)":0.0,"교정|Total Case(신환)":0.0,"교정|Active plate":0.0,"교정|Fixed retainer":0.0,"교정|Removable retainer":0.0,"교정|Removable space maintainer":0.0,"교정|Analysis & Diagnosis Case":1.0,"교정|Assist case - Bonding":233.0,"교정|Assist case - Etc.":0.0,"교정|Assist case - Finishing":0.0,"교정|Assist case - Leveling and alignment":228.0,"교정|Assist case - Space closure":0.0,"내과|Soft tissue lesion total case":0.0,"내과|TMD total case":0.0,"내과|Impression taking & Model fabrication":3.0,"내과|Splint fabrication":0.0,"내과|Charting":1.0,"내과|Halitosis observation":1.0,"내과|Lab reading & Report":0.0,"내과|Medical certificate":0.0,"내과|Orofacial pain & TMD observation":0.0,"내과|Others (REPORTS etc.)":0.0,"내과|Physical therapy":0.0,"내과|Snoring & sleep apnea observation":0.0,"내과|Soft tissue lesion observation":0.0,"내과|Splint delivery observation":0.0,"내과|TMD Charting":0.0,"병리|육안 검사 및 진단 준비 참여":0.0,"보존|Observation (Endodontics) case":2.5,"보존|Observation (Operative) case":4.25,"보존|Observation (Surgery) case":0.0,"보철|Charting and Treatment planning evaluation":0.0,"보철|Total case evaluation (Implant)":0.0,"보철|Total case evaluation (가철성)":0.0,"보철|Total case evaluation (고정성)":0.0,"보철|[가철성]Laboratory case evaluation":0.0,"보철|[고정성]Laboratory case evaluation":0.0,"보철|[임플란트]Laboratory case evaluation":0.0,"보철|Delivery (Pre Practice observation case)":0.0,"보철|Impression (Pre Practice observation case)":0.0,"보철|Prep & Temp (Pre Practice observation case)":0.0,"보철|01. Student evaluation":38.0,"보철|02. observation (교수님)":18.0,"보철|03. Implant assist":0.0,"보철|22. Charting":4.0,"보철|26. 초진 및 임시관 Evaluation":0.0,"보철|27. 지대치 형성 Evaluation":0.0,"보철|28. 인상 Evaluation":0.0,"보철|29. 시적 및 합착 Evaluation":0.0,"보철|30. Crown Practice기공 Evaluation":0.0,"영상|판독 토론 및 평가":1.0,"영상|Sialography":0.0,"영상|구내 촬영 및 판독":0.0,"치주|advanced periodontal therapy portfolio":0.0,"치주|basic therapy (total) portfolio":0.0,"치주|Root planing":0.0,"치주|Flap Assist":2.0,"치주|Implant Assist":2.0};
-  S.miniOff=officialMini().map(d=>({dept:d.dept,items:d.items.map(it=>({n:it.n,cat:it.cat,mini:it.mini,max:it.max,c:(SEED[d.dept+"|"+it.n]||0)}))}));
-  if(!S.miniOffUpd)S.miniOffUpd="2026-08-10";
+  S.miniOff=officialMini().map(d=>({dept:d.dept,items:d.items.map(it=>({n:it.n,cat:it.cat,mini:it.mini,max:it.max,c:0}))}));
 }
 
 const ROUTINE=[
@@ -1354,6 +1644,20 @@ async function load(){
 const GH_KEY=KEY+"-gh";
 let ghCfg=null;try{ghCfg=JSON.parse(localStorage.getItem(GH_KEY)||"null");}catch(e){}
 let ghBusy=false,ghPushTimer=null,ghLastSha=null,ghLast={pull:0,push:0,err:""};
+/* ── 동기화 내용 지문 ──
+   savedAt(저장 시각)만 바뀐 '빈 커밋'이 기기끼리 핑퐁되면 커밋이 30초마다 쌓이고,
+   커밋마다 GitHub Pages 빌드가 새로 시작돼 앞선 배포 빌드를 계속 취소함(= 배포가 사이트에 안 올라감).
+   → savedAt을 뺀 내용을 키 정렬로 지문화해서, 원격과 같으면 커밋 자체를 안 한다. */
+let ghRemoteSig=null;
+function canonJSON(v){
+  if(v===null||typeof v!=="object")return JSON.stringify(v);
+  if(Array.isArray(v))return "["+v.map(canonJSON).join(",")+"]";
+  return "{"+Object.keys(v).sort().map(k=>JSON.stringify(k)+":"+canonJSON(v[k])).join(",")+"}";
+}
+function ghSig(o){
+  try{const c=JSON.parse(JSON.stringify(o));if(c&&typeof c==="object")delete c.savedAt;return canonJSON(c);}
+  catch(e){return null;}
+}
 function ghOn(){return !!(ghCfg&&ghCfg.repo&&ghCfg.token);}
 function ghHdr(){return {"Authorization":"Bearer "+ghCfg.token,"Accept":"application/vnd.github+json","X-GitHub-Api-Version":"2022-11-28"};}
 function ghUrl(){return "https://api.github.com/repos/"+ghCfg.repo+"/contents/wonnae-data.json";}
@@ -1447,8 +1751,25 @@ async function gitCommitFiles(files, message, onStep){
   return commit.sha;
 }
 
-async function ghFetch(){
+let ghEtag=null,ghEtagSha=null,ghCondN=0;
+async function ghFetch(opt){
   if(!ghOn())return null;
+  /* ── 주기 확인(poll) 전용 가벼운 경로: ETag가 같으면 304 → 본문을 안 받음.
+     매 10번째마다(약 5분)는 조건 없이 전체를 받아 이중 확인. 실패하면 아래 기존 경로로. ── */
+  if(opt&&opt.cond&&ghEtag&&ghEtagSha&&ghEtagSha===ghLastSha&&(++ghCondN%10)!==0){
+    const ctl=new AbortController();const to=setTimeout(()=>ctl.abort(),20000);
+    try{
+      const r=await fetch(ghUrl()+"?ref="+(ghCfg.branch||"main"),{headers:Object.assign({},ghHdr(),{"If-None-Match":ghEtag}),signal:ctl.signal,cache:"no-store"});
+      clearTimeout(to);
+      if(r.status===304){ghLast.err="";return {txt:null,sha:ghLastSha,notModified:true};}
+      if(r.ok){
+        const j=await r.json();
+        const et=r.headers.get("ETag");
+        if(j&&j.content&&j.encoding!=="none"&&j.sha){ghLast.err="";if(et){ghEtag=et;ghEtagSha=j.sha;}return {txt:b64d(j.content),sha:j.sha};}
+      }
+    }catch(e){clearTimeout(to);}
+    /* 조건부가 애매하면 아래 전체 경로로 진행 */
+  }
   /* 백그라운드 복귀·느린 모바일 대응: 타임아웃 45초 + 2회 재시도. 1MB 초과 데이터는 raw로 폴백
      (데이터가 수 MB로 커지면서 15초로는 모바일에서 자주 끊겼음) */
   const once=async()=>{
@@ -1459,6 +1780,7 @@ async function ghFetch(){
       if(r.status===404)return {txt:null,sha:null};
       if(!r.ok)throw new Error("GET "+r.status);
       const j=await r.json();
+      try{const et=r.headers.get("ETag");if(et&&j&&j.sha){ghEtag=et;ghEtagSha=j.sha;}}catch(e){}
       /* 1MB 초과 시 content가 비고 encoding=none → raw 미디어 타입으로 본문 재요청 (sha는 유지) */
       if((!j.content||j.encoding==="none")&&j.sha){
         const ctl2=new AbortController();const to2=setTimeout(()=>ctl2.abort(),45000);
@@ -1483,11 +1805,18 @@ async function ghFetch(){
 async function ghPushNow(){
   if(!ghOn()||!loadDone||!S||!Array.isArray(S.events))return false;
   if(dataOrigin==="fresh"&&!userTouched)return false;
+  /* 🚀 배포 중·직후(90초)엔 데이터 커밋을 잠시 미룸 — 새 커밋이 배포 빌드를 취소시키지 않게.
+     (로컬 저장은 이미 끝났으므로 데이터는 안전하고, 보류가 끝나면 자동으로 올라감) */
+  {const hold=Math.max(window.__deployBusy?Date.now()+15000:0,window.__dataHoldUntil||0);
+   if(hold>Date.now()){clearTimeout(ghPushTimer);ghPushTimer=setTimeout(ghPushNow,hold-Date.now()+800);return false;}}
+  const sigNow=ghSig(S);
+  if(sigNow&&ghRemoteSig&&sigNow===ghRemoteSig){svlog("gh↑생략(변경없음)");return true;}   /* 내용 동일 → 커밋 안 함 */
   if(ghBusy)return false;ghBusy=true;
   try{
     /* 데이터도 Git Data API로 커밋 — 1MB 초과·백그라운드 복귀에도 안전(재시도 내장) */
     const payload=JSON.stringify(S);
-    await gitCommitFiles([{path:"wonnae-data.json",text:payload}],"wonnae sync "+new Date().toISOString().slice(5,16).replace("T"," "));
+    await gitCommitFiles([{path:"wonnae-data.json",text:payload}],"wonnae sync "+new Date().toISOString().slice(5,16).replace("T"," ")+" [skip ci]");
+    ghRemoteSig=ghSig(JSON.parse(payload));
     ghLastSha=null;
     ghLast.push=Date.now();ghLast.err="";svlog("gh↑");ghStatus();return true;
   }catch(e){ghLast.err=String(e&&e.message||e);svlog("gh↑실패");ghStatus();return false;}
@@ -1511,7 +1840,7 @@ function ghStatus(){
 async function ghTest(){
   const repo=(val("gh-repo")||"").trim(),tok=(val("gh-token")||"").trim(),br=((val("gh-branch")||"").trim())||"main";
   if(!repo.includes("/")||!tok){toast("owner/repo 형식과 토큰을 확인해주세요");return;}
-  ghCfg={repo,branch:br,token:tok};ghLast.err="";
+  ghCfg={repo,branch:br,token:tok};ghLast.err="";ghEtag=null;ghEtagSha=null;
   const r=await ghFetch();
   if(r===null){const e=ghLast.err;ghCfg=null;ghStatus();toast("연결 실패 — "+(e||"네트워크/토큰 확인"));return;}
   try{localStorage.setItem(GH_KEY,JSON.stringify(ghCfg));}catch(e){}
@@ -1522,14 +1851,29 @@ async function ghTest(){
 function ghDisconnect(){ghCfg=null;try{localStorage.removeItem(GH_KEY);}catch(e){}ghStatus();toast("동기화 해제됨 (데이터는 그대로)");}
 /* ═══ 🆕 새 버전 감지 — 배포 후 캐시(Pages 10분·홈화면 앱) 때문에 옛 화면에 갇히는 문제 해결.
    자기 자신을 캐시 우회로 다시 읽어 BUILD_ID가 다르면 배너 → 탭 한 번에 ?v= 쿼리로 캐시 관통 로드 ═══ */
-async function freshCheck(){
+/* 사이트 빌드 번호 읽기 — 배포 때 함께 올리는 version.json(수십 바이트)을 먼저 보고,
+   없거나(옛 배포) 확실히 확인해야 할 때만 index.html 전체를 읽는다. */
+function siteBase(){return location.pathname.replace(/[^/]*$/,"");}
+async function siteBuild(strict){
+  if(!/^https?:/.test(location.protocol))return null;
+  let vb=null;
   try{
-    if(!/^https?:/.test(location.protocol))return false;
+    const r=await fetch(siteBase()+"version.json?v="+Date.now(),{cache:"no-store"});
+    if(r.ok){const j=await r.json();if(j&&/^[0-9-]+$/.test(j.b||""))vb=j.b;}
+  }catch(e){}
+  if(vb&&!strict)return vb;
+  try{
     const r=await fetch(location.pathname+"?fresh="+Date.now(),{cache:"no-store"});
-    if(!r.ok)return false;
+    if(!r.ok)return vb;
     const t=await r.text();
     const mm=t.match(/BUILD_ID="([0-9-]+)"/);
-    if(mm&&mm[1]!==BUILD_ID){showFreshBanner(mm[1]);return true;}
+    return mm?mm[1]:vb;
+  }catch(e){return vb;}
+}
+async function freshCheck(){
+  try{
+    const b=await siteBuild(false);
+    if(b&&b!==BUILD_ID&&((/^\d+$/.test(b)&&/^\d+$/.test(BUILD_ID))?(+b>+BUILD_ID):(b>BUILD_ID))){showFreshBanner(b);return true;}
   }catch(e){}
   return false;
 }
@@ -1602,19 +1946,15 @@ async function checkLive(){
   }
   say("⏳ 사이트 확인 중…");
   try{
-    const r=await fetch(location.pathname+"?live="+Date.now(),{cache:"no-store"});
-    if(!r.ok)throw new Error("HTTP "+r.status);
-    const t=await r.text();
-    const mm=t.match(/BUILD_ID="([0-9-]+)"/);
-    const live=mm?mm[1]:null;
+    const ld=lastDeploy();
+    const target=(ld&&ld.b&&ld.b>BUILD_ID)?ld.b:BUILD_ID;     /* 방금 올린 빌드가 있으면 그게 기준 */
+    const live=await liveBuild(target);
     if(!live){say('<span style="color:var(--red)">버전을 못 읽었어요 — 잠시 후 다시 시도</span>');return;}
-    const liveN=live.slice(-3), myN=BUILD_ID.slice(-3);
-    if(live===BUILD_ID){
-      say(`✅ <b>사이트 = 지금 이 버전 (#${myN})</b> — 배포 정상이에요. 실패 메일이 왔어도 이미 반영됐어요.`);
-    }else if(live<BUILD_ID){
-      say(`⚠ 사이트는 <b>#${liveN}</b>, 이 화면은 <b>#${myN}</b> — 아직 반영 전이에요.<br>1~2분 뒤 다시 확인하거나 🚀 배포를 한 번 더 눌러주세요.`);
+    if(live>=target){
+      if(live===BUILD_ID)say(`✅ <b>사이트 = 지금 이 화면 (#${bnum(live)})</b> — 최신이에요.`);
+      else{say(`✅ 사이트는 <b>#${bnum(live)}</b> — 이 화면(#${bnum(BUILD_ID)})보다 새 버전이에요. 🆕 배너를 탭하세요.`);freshCheck();}
     }else{
-      say(`ℹ 사이트가 <b>#${liveN}</b>로 더 최신이에요 — 🆕 배너를 탭해 새로고침하세요.`);
+      say(`⚠ 올린 빌드 <b>#${bnum(target)}</b>가 아직 사이트에 없어요 (사이트 #${bnum(live)}).<br>GitHub가 1~2분 더 걸릴 수 있어요 — 다른 기기에서 대시보드를 잠시 닫고 다시 확인해 주세요.`);
     }
   }catch(e){
     say(`<span style="color:var(--red)">확인 실패 — ${esc(String(e&&e.message||e))}</span>`);
@@ -1624,7 +1964,7 @@ function showFreshBanner(nb){
   if(document.getElementById("fresh-banner"))return;
   const b=document.createElement("div");
   b.id="fresh-banner";
-  b.innerHTML=`🆕 새 버전 <b>#${String(nb||"").slice(-2)}</b> 배포됨 — <b>탭해서 열기</b>`;
+  b.innerHTML=`🆕 새 버전 <b>#${String(nb||"").split("-").pop()}</b> 배포됨 — <b>탭해서 열기</b>`;
   b.style.cssText="position:fixed;left:50%;transform:translateX(-50%);bottom:calc(96px + env(safe-area-inset-bottom));z-index:9999;background:var(--brand);color:#fff;font-weight:800;font-size:12.5px;padding:10px 16px;border-radius:999px;box-shadow:0 10px 30px rgba(0,0,0,.35);cursor:pointer";
   b.onclick=freshReload;
   document.body.appendChild(b);
@@ -1657,7 +1997,7 @@ async function deployOnFile(ev){
   const same=pb&&pb===cur;
   const older=pb&&(/^\d+$/.test(pb)&&/^\d+$/.test(cur))&&(+pb< +cur);
   const kb=(file.size/1024).toFixed(0);
-  askConfirm(`선택 파일: build #${pb||"(번호 없음)"} · ${kb}KB — 지금 화면은 build #${cur}. ${same?"⚠ 같은 빌드예요(이미 반영됨) — 새 파일을 받았는지 확인!":older?"⚠ 지금 화면보다 옛 빌드예요!":"✅ 새 빌드 맞아요."} 배포할까요?`,()=>{deployCommit(txt);},"🚀 배포");
+  askConfirm(`선택 파일: build #${pb||"(번호 없음)"} · ${kb}KB — 지금 화면은 build #${cur}. ${same?"⚠ 같은 빌드예요(이미 반영됨) — 새 파일을 받았는지 확인!":older?"⚠ 지금 화면보다 옛 빌드예요!":"✅ 새 빌드 맞아요."} 배포할까요?`,()=>{deployCommit(txt,pb);},"🚀 배포");
 }
 /* ══ 📅 아이폰 캘린더 구독용 ICS 만들기 ══
    · 전체 목록을 통째로 갱신하는 방식 — 수정하면 바뀌고, 지우면 사라짐(쌓이지 않음)
@@ -1818,52 +2158,74 @@ function buildICS(){
   L.push("END:VCALENDAR");
   return L.join("\r\n");
 }
-async function deployCommit(txt){
+/* 배포한 빌드 기억 — 사이트 확인은 '지금 보고 있는 화면'이 아니라 '방금 올린 빌드' 기준이어야 함 */
+const DEPLOY_KEY="wonnae_lastDeploy";
+function lastDeploy(){try{return JSON.parse(localStorage.getItem(DEPLOY_KEY)||"null");}catch(e){return null;}}
+function bnum(b){return String(b||"").split("-").pop()||"?";}
+async function liveBuild(target){
+  /* 배포 확인은 정확해야 하므로: version.json이 목표 빌드에 못 미치면 index.html로 한 번 더 확인 */
+  let b=await siteBuild(false);
+  if(!b||(target&&b<target))b=await siteBuild(true);
+  if(!b)throw new Error("사이트를 읽지 못했어요");
+  return b;
+}
+async function deployCommit(txt,pb){
   const st=document.getElementById("gh-deploy-status");
   const say=s=>{if(st)st.innerHTML=s;};
-  /* ── 중복 배포 방지 ──
-     커밋이 연달아 들어가면 GitHub Pages 워크플로가 겹쳐 "Run failed at startup / No jobs were run"이 남.
-     ① 진행 중이면 재실행 차단 ② 직전 배포 후 40초는 쿨다운 */
+  /* ── 중복 배포 방지: 진행 중이면 차단 · 직전 배포 후 40초 쿨다운 ── */
   if(window.__deployBusy){ say("⏳ 이미 배포 중이에요 — 끝날 때까지 기다려 주세요"); return; }
   {const last=window.__deployAt||0, gap=Math.round((Date.now()-last)/1000);
-   if(last && gap<40){ say(`⏳ 방금 배포했어요 — <b>${40-gap}초 뒤</b> 다시 눌러주세요 (연속 배포는 GitHub에서 실패해요)`); return; }}
+   if(last && gap<40){ say(`⏳ 방금 배포했어요 — <b>${40-gap}초 뒤</b> 다시 눌러주세요`); return; }}
+  pb=pb||((txt.match(/BUILD_ID="([0-9-]+)"/)||[])[1]||"");
   window.__deployBusy=true;
-  const steps={ref:"⏳ 배포 중… (준비)",tree:"⏳ 배포 중… (2/3 트리 만드는 중)","ref-update":"⏳ 배포 중… (3/3 반영 중)"};
+  clearTimeout(ghPushTimer);                 /* 대기 중인 데이터 커밋이 배포 빌드를 끊지 않게 잠시 보류 */
+  const steps={ref:"⏳ 배포 중… (준비)",tree:"⏳ 배포 중… (2/3 트리 만드는 중)","ref-update":"⏳ 배포 중… (3/3 반영 중)",retry:"⏳ 다른 기기 저장과 겹쳐 다시 반영 중…"};
   say("⏳ 배포 중…");
   const t0=Date.now();
   try{
-    /* 공용 Git Data API 헬퍼로 index.html 커밋 (.nojekyll 자동 포함) */
-    /* index.html + 캘린더 구독 파일(wonnae.ics)을 함께 커밋 */
     let icsTxt="";try{icsTxt=buildICS();}catch(e){}
     const files=[{path:"index.html",text:txt}];
+    if(pb)files.push({path:"version.json",text:JSON.stringify({b:pb,at:new Date().toISOString()})});   /* 새 버전 감지용 작은 파일 */
     if(icsTxt)files.push({path:"wonnae.ics",text:icsTxt});
-    await gitCommitFiles(files,"deploy "+new Date().toISOString().slice(5,16).replace("T"," "),(k,info)=>{
+    await gitCommitFiles(files,"deploy #"+bnum(pb)+" "+new Date().toISOString().slice(5,16).replace("T"," "),(k,info)=>{
       if(k==="blobs")say(`⏳ 배포 중… (1/3 업로드 <b>${info&&info.mb}MB</b> — 통신 상태에 따라 30초~2분)`);
       else if(k==="blob-done")say(`✔ 업로드 완료 (${info&&info.sec}초) — 다음 단계…`);
       else if(steps[k])say(steps[k]);
     });
-    say(`✅ 커밋 완료 ${new Date().toTimeString().slice(0,5)} (${Math.round((Date.now()-t0)/1000)}초) — GitHub이 배포 중… <b>30초 뒤 자동 확인</b>할게요`);
-    /* GitHub Pages 배포는 커밋 후 별도로 진행됨 → 실제 반영 여부를 자동 확인 */
-    setTimeout(async()=>{
-      try{
-        if(!/^https?:/.test(location.protocol))return;
-        const r2=await fetch(location.pathname+"?dc="+Date.now(),{cache:"no-store"});
-        const t2=await r2.text();
-        const mm=t2.match(/BUILD_ID="([0-9-]+)"/);
-        if(mm&&mm[1]===BUILD_ID){
-          say(`✅ <b>배포 확인 완료</b> — 사이트가 이 버전(#${BUILD_ID.slice(-3)})이에요. 실패 메일이 와도 무시하세요.`);
-        }else{
-          say(`⏳ 아직 반영 전이에요 (사이트 #${mm?mm[1].slice(-3):"?"}). GitHub Pages가 1~2분 더 걸릴 수 있어요.<br>
-            <b>계속 안 되면</b> ① 🚀 배포 한 번 더 ② Settings → Pages에서 Source를 바꿨다 <b>main/(root)</b>로 되돌리기`);
-        }
-      }catch(e){}
-    },30000);
-    toast("🚀 배포 완료! 🆕 배너를 기다려주세요");svlog("deploy↑");
-    let _n=0;const _tm=setInterval(async()=>{_n++;if(await freshCheck()||_n>=18)clearInterval(_tm);},15000);
+    window.__dataHoldUntil=Date.now()+90000;   /* 배포 빌드가 끝날 동안 데이터 커밋 보류 */
+    try{localStorage.setItem(DEPLOY_KEY,JSON.stringify({b:pb,at:Date.now()}));}catch(e){}
+    say(`✅ 커밋 완료 (${Math.round((Date.now()-t0)/1000)}초) — GitHub이 사이트에 올리는 중… <b>#${bnum(pb)}</b> 반영을 자동 확인할게요`);
+    toast("🚀 배포 커밋 완료 — 사이트 반영을 확인할게요");svlog("deploy↑");
+    deployWatch(pb,say);
   }catch(e){
     say(`<span style="color:var(--red)">⚠ 배포 실패 — ${esc(String(e&&e.message||e))} (토큰 권한·repo·브랜치 확인)</span>`);
     toast("배포 실패 — 상태줄을 확인해주세요");
   }finally{ window.__deployBusy=false; window.__deployAt=Date.now(); }
+}
+/* 배포 반영 감시: 30초·75초·150초… 확인. 2분 반이 지나도 안 올라오면(= Pages 빌드가 취소된 경우)
+   작은 표시 파일을 한 번 커밋해 빌드를 다시 일으킨다. 최대 약 6분. */
+async function deployWatch(pb,say){
+  if(!/^https?:/.test(location.protocol)){say(`✅ 커밋 완료 — 사이트 주소에서 열면 반영 여부를 확인할 수 있어요`);return;}
+  const waits=[30,45,75,60,60,60];let kicked=false,elapsed=0;
+  for(const w of waits){
+    await new Promise(r=>setTimeout(r,w*1000));elapsed+=w;
+    let live=null;try{live=await liveBuild(pb);}catch(e){}
+    if(live&&pb&&live>=pb){
+      say(`✅ <b>배포 확인 완료</b> — 사이트가 <b>#${bnum(live)}</b>이에요.${live!==BUILD_ID?" 🆕 배너를 탭하면 새 버전으로 열려요.":""}`);
+      freshCheck();return;
+    }
+    if(elapsed>=150&&!kicked&&ghOn()){
+      kicked=true;
+      say(`⏳ GitHub 빌드가 밀렸어요 — 다시 올리는 중… (사이트 #${bnum(live)})`);
+      try{
+        window.__dataHoldUntil=Date.now()+90000;
+        await gitCommitFiles([{path:".deploy-stamp",text:"#"+bnum(pb)+" "+new Date().toISOString()}],"redeploy #"+bnum(pb));
+      }catch(e){}
+    }else{
+      say(`⏳ 사이트 반영 대기 중… (지금 사이트 #${bnum(live)} → 올린 빌드 #${bnum(pb)}, ${elapsed}초 경과)`);
+    }
+  }
+  say(`⚠ 커밋은 됐는데 사이트가 아직 <b>#${bnum(pb)}</b>로 안 바뀌었어요.<br>다른 기기(PC 등)에서 대시보드를 잠시 닫고 1~2분 뒤 🔎 확인해 주세요. 그래도 그대로면 🚀 배포를 한 번 더 눌러주세요.`);
 }
 
 
@@ -2004,11 +2366,12 @@ async function pullLatest(reason){
     /* ☁️ GitHub: sha(내용 지문)가 지난 확인과 다를 때만 병합 — 기기별 savedAt 경쟁과 무관하게 확실히 감지 */
     if(ghOn()&&(reason!=="poll"||Date.now()-ghLast.pull>25000)){
       try{
-        const g=await ghFetch();
+        const g=await ghFetch({cond:reason==="poll"});
         if(g){ghLast.pull=Date.now();ghStatus();
           if(g.txt&&g.sha&&g.sha!==ghLastSha){
             const o=JSON.parse(g.txt);
             if(o&&o.events!==undefined){
+              ghRemoteSig=ghSig(o);                          /* 원격 내용 지문 — 같은 내용 재커밋 방지 */
               const gsig=x=>{try{return JSON.stringify((x.events||[]).map(e=>[e.id,e.status||"",e.time||"",e.title||"",e.span||"",e.date||"",e.memo||"",e.dept||""]).sort())+"#"+JSON.stringify((x.totals||[]).map(t=>[t.id,(t.visits||[]).length,t.done?1:0,t.next||"",t.nextT||"",t.nextHidden?1:0,JSON.stringify(t.vmeta||{})]).sort())+"#"+JSON.stringify((x.mini||[]).map(d=>(d.items||[]).map(i=>i.c||0)))+"#"+JSON.stringify(Object.entries(x.ocsHi||{}).sort())+"#"+JSON.stringify(Object.entries((x.ocs&&x.ocs.days)||{}).map(([d,r])=>[d,(r||[]).length]).sort())+"#"+((x.ocs&&x.ocs.arch)||[]).length+"#"+(x.me||"")+"#"+JSON.stringify(x.callDone||{});}catch(e){return Math.random()+"";}};
               const merged=mergeStates(o,S);
               const changedLocal=gsig(merged)!==gsig(S);
@@ -2090,12 +2453,39 @@ function seedJuly(){return [];}
 function applySeedV2(){/* v4: 시드를 seedJuly로 완전 재구성, 델타 없음 */}
 
 /* ═════════ nav / pills / timeline ═════════ */
+/* ═══ 토탈 환자 OCS ↔ 내 일정 연결 (1:1 · 누락·덮어쓰기 없음) ═══
+   ① 토탈에서 만든 일정(fromTotal)은 그 토탈의 OCS 진료를 직접 연결
+   ② 나머지는 일정 메모의 환자번호 → 환자 이름 → 같은 시각+담당쌤 → 같은 시각(비어 있는 손 일정) 순
+   ③ 끝까지 짝이 없는 토탈 OCS는 rest (별도 표시)  */
+function totLink(evList,day){
+  const byEv=new Map(),used=new Set();
+  const MS=matchSet();
+  const tRows=upOn(day).filter(u=>MS.has(u));
+  const nNo=v=>String(v||"").replace(/\D/g,"").replace(/^0+/,"");
+  const add=(e,u)=>{if(!byEv.has(e))byEv.set(e,[]);byEv.get(e).push(u);used.add(u);};
+  evList.forEach(e=>{(e.fromTotal||[]).forEach(f=>{
+    const t=(S.totals||[]).find(x=>x&&x.id===f.id);if(!t)return;
+    const cand=upMatch(t).filter(u=>u.d===day&&!used.has(u)&&tRows.includes(u));
+    if(!cand.length)return;add(e,cand.find(x=>x.t===e.time)||cand[0]);});});
+  const free=e=>!byEv.has(e);
+  const tryM=(u,test)=>{const e=evList.find(x=>free(x)&&test(x));if(e){add(e,u);return true;}return false;};
+  tRows.filter(u=>!used.has(u)).forEach(u=>{
+    const no=nNo(u.no),memo=e=>String(e.memo||"");
+    if(no&&tryM(u,e=>memo(e).replace(/\D+/g," ").split(" ").some(x=>x&&nNo(x)===no)))return;
+    if(u.pt&&u.pt.length>=2&&tryM(u,e=>memo(e).includes(u.pt)||String(e.title||"").includes(u.pt)))return;
+    const drn=String(u.dr||"").replace(/[AB]$/,"").trim();
+    if(u.t&&drn.length>=2&&tryM(u,e=>e.time===u.t&&String(e.title||"").includes(drn)))return;
+    if(u.t)tryM(u,e=>e.time===u.t&&!(e.fromTotal&&e.fromTotal.length));
+  });
+  return {byEv,rest:tRows.filter(u=>!used.has(u))};
+}
 document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{
   document.querySelectorAll("nav button").forEach(x=>x.classList.remove("on"));b.classList.add("on");
   document.querySelectorAll(".tabpage").forEach(p=>p.classList.remove("active"));
   document.getElementById("page-"+b.dataset.tab).classList.add("active");
   if(b.dataset.tab==="ocs")renderOcs();
   if(b.dataset.tab==="today"){try{renderToday();}catch(e){}}
+  if(b.dataset.tab==="mini"){try{renderMini();}catch(e){}}
   if(b.dataset.tab==="sched"){renderCalendar();setTimeout(()=>{applyCalZoom&&applyCalZoom();},0);}
   if(b.dataset.tab==="rules"&&!window._flowRendered){window._flowRendered=1;renderFlows();}
   if(b.dataset.tab==="save"){try{renderIcsUrl();ghStatus();updateBackupTxt();}catch(e){}}
@@ -2119,22 +2509,12 @@ function timelineItems(){
   const evList=(S.events||[]).filter(e=>e.date===today&&e.status!=="cancel");
   evList.forEach(e=>{
     items.push({t:e.time||(e.span==="full"?"하루":e.span==="am"?"오전":e.span==="pm"?"오후":"시간?"),sk:skOf(e.time,e.span),l:e.title.slice(0,14),c:DEPT_COLOR[e.dept]||"#888",un:!e.time&&!e.span,_ev:e});});
-  const _MS=matchSet();
-  upOn(today).filter(u=>_MS.has(u)).forEach(u=>{
-    /* ── 같은 진료 중복 방지 ──
-       환자명이 같거나, 같은 시각(±0분)에 이미 일정이 있으면 그 칩에 토탈 정보를 얹어 하나로 합침 */
-    const sameName=evList.find(e=>e.title.includes(u.pt));
-    const sameTime=u.t?evList.find(e=>e.time===u.t):null;
-    const host=sameName||sameTime;
-    if(host){
-      const it=items.find(x=>x._ev===host);
-      if(it){                       /* 일정 제목은 그대로 두고, 토탈 정보는 아랫줄에 덧붙임 */
-        it.sub="◇"+u.pt+(u.no?" #"+String(u.no).slice(-4):"")+(u.cat?" "+u.cat:"");
-        it.c=DEPT_COLOR[u.dep]||it.c;
-        it.tot=1;
-      }
-      return;
-    }
+  /* 토탈 환자 OCS ↔ 내 일정 연결 (공용 totLink) */
+  const _TL=totLink(evList,today);
+  evList.forEach(e=>{const L=_TL.byEv.get(e);if(!L||!L.length)return;const it=items.find(x=>x._ev===e);if(!it)return;
+    it.sub=L.map(u=>"◇"+u.pt+(u.no?" #"+String(u.no).slice(-4):"")+(u.cat?" "+u.cat:"")+(u.t&&e.time&&u.t!==e.time?` (${u.t})`:"")).join(" / ");
+    it.c=DEPT_COLOR[L[0].dep]||it.c;it.tot=1;});
+  _TL.rest.forEach(u=>{
     items.push({t:u.t||"시간?",sk:skOf(u.t,null),l:"◇"+u.pt+(u.no?" #"+String(u.no).slice(-4):"")+(u.cat?" "+u.cat:""),c:DEPT_COLOR[u.dep]||"#888",un:!u.t,tot:1});});
   /* 내일 기반 오늘 할 일 */
   const tmrEv=(S.events||[]).filter(e=>e.date===tmrs&&e.status!=="cancel");
@@ -2164,6 +2544,30 @@ function tick(){
   }
 }
 setInterval(tick,1000);
+/* ═══ 하단 탭바 제자리 보정 (iOS) ═══
+   키보드가 닫히거나 스크롤 중 화면 크기가 바뀐 직후, iOS가 고정(fixed) 탭바를 옛 위치에 그린 채
+   화면 중간에 떠 있게 두는 경우가 있음 → 스크롤이 멈출 때·화면 크기 변화·입력창 닫힘·앱 복귀 때
+   탭바 레이아웃을 한 프레임 안에서 다시 잡아 제자리로 붙인다(깜빡임 없음). */
+(function navStick(){
+  const nav=document.querySelector("nav");if(!nav)return;
+  let t=null;
+  const snap=()=>{
+    try{
+      const vv=window.visualViewport;
+      if(vv&&Math.abs((vv.scale||1)-1)>0.02)return;     /* 핀치 확대 중엔 건드리지 않음 */
+      nav.style.display="none";void nav.offsetHeight;nav.style.display="";
+    }catch(e){}
+  };
+  const later=(ms)=>{clearTimeout(t);t=setTimeout(snap,ms||120);};
+  window.addEventListener("scroll",()=>later(140),{passive:true});
+  window.addEventListener("scrollend",()=>later(30),{passive:true});
+  window.addEventListener("resize",()=>later(60));
+  window.addEventListener("orientationchange",()=>later(300));
+  if(window.visualViewport){visualViewport.addEventListener("resize",()=>later(60));}
+  document.addEventListener("focusout",e=>{const tg=e.target&&e.target.tagName;if(/INPUT|TEXTAREA|SELECT/.test(tg||""))later(250);},true);
+  document.addEventListener("visibilitychange",()=>{if(!document.hidden)later(80);});
+  window.addEventListener("pageshow",()=>later(80));
+})();
 
 /* ═════════ 행동강령 PROTOCOL DB (문서 기반) ═════════ */
 const PROTOCOLS=[
@@ -2197,7 +2601,7 @@ const PROTOCOLS=[
   "【중】⭐단계별 유폴 승인 (고정 04~08 / 임플 09~14 / 가철 15~21)",
   "【중】케이스 용지: 날짜·Tx·시간·점수 적고 서명",
   "【중】⭐다음 예약 잡히면 바로 앱 토탈 탭에 날짜 기록",
-  "【후】delivery면 레포트 주제 받기 (유폴 1주 / 레포트 2주)"]},
+  "【후】delivery면 레포트 주제 받기 (레포트 1주 / 유폴 2주)"]},
  {d:"보철",re:/임수/,arrive:"15분 전 도착",sign:"유폴 [임플수술 AND 18점] + 케이스용지 서명",steps:[
   "【전】15분 전 도착 · 상차림·기구 확인",
   "【중】⭐유폴: 임수 AND 18점 구조로 채우기",
@@ -3203,13 +3607,13 @@ function renderToday(){
   document.getElementById("today-count").textContent=evs.length+"건";
   const skOf=e=>e.time?hm2min(e.time):(e.span==="full"?540:e.span==="am"?540:e.span==="pm"?780:2000);
   const ordered=evs.slice().sort((a,b)=>skOf(a)-skOf(b));
-  const _MS2=matchSet();
-  const ups=upOn(today).filter(u=>_MS2.has(u)&&!evs.some(e=>e.title.includes(u.pt)));
+  const _TL2=totLink(evs,today);
+  const ups=_TL2.rest;   /* 일정에 연결 안 된 토탈 OCS만 따로 (중복 카드 방지) */
   let html="";const de0=1020;let cur=540;
   const gapH=(a,b)=>gapAdviceHtml(today,a,b);
   const blkOf=e=>e.span==="full"?{s:540,e:1020}:e.span==="am"?{s:540,e:720}:e.span==="pm"?{s:780,e:1020}:e.time?{s:hm2min(e.time),e:hm2min(e.time)+(e.dur||120)}:null;
   const evCard=e=>`<div class="ev"><div class="dt" style="background:${DEPT_COLOR[e.dept]}1A"><div class="d" style="color:${DEPT_COLOR[e.dept]}">${e.span==="full"?"하루":e.span==="am"?"오전":e.span==="pm"?"오후":(e.time||"시간?")}</div><div class="t" style="color:${DEPT_COLOR[e.dept]}">${e.span?"통짜":e.dept}</div></div>
-    <div class="body"><div class="title">${esc(e.title)}</div>${e.memo?`<div class="memo">${esc(e.memo)}</div>`:""}${(!e.time&&!e.span)?'<div class="memo" style="color:var(--red);font-weight:700">시간 미정 — 확인해서 입력!</div>':""}
+    <div class="body"><div class="title">${esc(e.title)}</div>${e.memo?`<div class="memo">${esc(e.memo)}</div>`:""}${(_TL2.byEv.get(e)||[]).map(u=>`<div class="memo" style="color:var(--purple);font-weight:700">◇ OCS ${esc(u.t||"")}${u.t&&e.time&&u.t!==e.time?' <span style="color:var(--red)">(시간 다름!)</span>':""} · ${esc(u.dr||"")} · ${esc(u.cat||"—")}</div>`).join("")}${(!e.time&&!e.span)?'<div class="memo" style="color:var(--red);font-weight:700">시간 미정 — 확인해서 입력!</div>':""}
     ${protoBlock(e)}</div></div>`;
   if(!ordered.length){html=`<div class="empty">고정 일정 없음 — 사다리 풀가동!</div>`+gapH(540,720)+gapH(780,de0);}
   else{
@@ -3558,10 +3962,12 @@ function renderTomorrowBrief(){
   if(evs.some(e=>/원진실/.test(e.title)))prep.push("원진실 → 오늘 16:30 예약·환자 리마인드");
   let free="";
   if(!evs.length)free=`<div class="gap">내일 일정 통비움 — OCS 당일 뷰에서 내일 진료를 미리 훑어보세요</div>`;
+  if(!evs.length&&document.body.classList.contains("share-mode"))free=`<div class="gap">내일 일정 통비움 — OCS 당일 뷰에서 내일 진료를 미리 훑어보세요</div>`;
   document.getElementById("tomorrow-brief").innerHTML=
     `<b style="font-size:13px">${d.getMonth()+1}/${d.getDate()} (${["일","월","화","수","목","금","토"][d.getDay()]})</b> · ${evs.length?evs.map(e=>`${e.time||"?"} [${e.dept}]${esc(e.title)}`).join(" · "):"일정 없음"}
      ${prep.length?`<div style="margin-top:6px">${prep.map(p=>`<div class="rt" style="padding:5px 0"><div class="chk" style="width:18px;height:18px;font-size:11px"></div><div class="tx" style="font-size:12.5px">${p}</div></div>`).join("")}</div>`:""}
-     ${free}`;   /* 노티는 상단 '📣 토탈 노티' 카드에서 일괄 표시 */
+     ${free}`
+;   /* 노티는 상단 '📣 토탈 노티' 카드에서 일괄 표시 */
 }
 
 function caseTasks(){
@@ -3617,35 +4023,463 @@ function renderRoutine(){
       <div class="tx">${esc(r.tx)}</div></div>`).join(""):'<div class="empty">오늘은 케이스 파생 할 일 없음</div>');
 }
 function tglRoutine(id){S.routine.done[id]=!S.routine.done[id];save();renderRoutine();}
+/* 서류 마감(보철 규칙 기준): visit이 필요 횟수에 도달한 날부터 레포트 +7일 · 유폴 +14일 */
+function paperDue(t){const vs=(t.visits||[]).filter(Boolean).slice().sort();const need=t.need||0;
+  if(!vs.length||vs.length<need)return null;const base=vs[Math.max(0,(need||1)-1)];
+  return {base,rep:daysFrom(base,7),ufol:daysFrom(base,14)};}
 function daysFrom(ds,p){const d=new Date(ds+"T00:00");d.setDate(d.getDate()+p);return d;}
 function dLeft(d){const n=new Date();n.setHours(0,0,0,0);return Math.round((d-n)/86400000);}
 function fmtD(s){if(!s)return"";const d=new Date(s+"T00:00");return (d.getMonth()+1)+"/"+d.getDate();}
 
 /* ═════════ 미니 / 토탈 ═════════ */
+function semExpectedPct(){const d=SEM_DATES[S.semester];if(!d)return 0;
+  const s=new Date(d.s),e=new Date(d.e),n=new Date();
+  return Math.max(0,Math.min(1,(n-s)/(e-s)));}
+function renderMini(){
+  /* 미니달성 탭은 유폴리오 현황 전용 — 기존 목록 요소가 없으면 그것만 렌더 */
+  const _ml=document.getElementById("mini-list");
+  if(!_ml){ renderMiniOff(); return; }
+  const exp=semExpectedPct();
+  _ml.innerHTML=S.mini.map((d,di)=>{
+    const w=d.items.filter(i=>i.t>0);
+    const semW=d.items.filter(i=>i.t>0&&i.s==="sem");
+    const pct=w.length?Math.min(100,Math.round(w.reduce((a,i)=>a+Math.min(1,i.c/i.t),0)/w.length*100)):0;
+    const semPct=semW.length?semW.reduce((a,i)=>a+Math.min(1,i.c/i.t),0)/semW.length:1;
+    const gapv=semPct-exp;
+    const paceCls=gapv>=-0.05?"ok":gapv>=-0.18?"warn":"bad";
+    const paceLbl=gapv>=-0.05?"페이스 OK":gapv>=-0.18?"약간 뒤처짐":"위험";
+    return `<div class="dept" id="dept-${di}">
+      <div class="dept-head" onclick="document.getElementById('dept-${di}').classList.toggle('open')">
+        <span style="width:10px;height:10px;border-radius:4px;background:${DEPT_COLOR[d.dept]||"#888"}"></span>
+        <span class="name">${d.dept}</span>${semW.length?`<span class="pace ${paceCls}">${paceLbl}</span>`:""}
+        <span class="pct">${pct}%</span></div>
+      <div class="dept-bar"><i style="width:${pct}%"></i><span class="exp" style="left:${Math.round(exp*100)}%"></span></div>
+      <div class="dept-body">${d.items.map((it,ii)=>{
+        const done=it.t>0&&it.c>=it.t;
+        return `<div class="mi">
+          <div class="nm"><span class="scope ${it.s==="yr"?"yr":"sem"}">${it.s==="yr"?"연":"학기"}</span>${it.n}${it.note?`<span class="note">${it.note}</span>`:""}</div>
+          <button class="step" onclick="stepMini(${di},${ii},-1)">−</button>
+          <span class="cnt ${done?"done":""}" onclick="editMini(${di},${ii})">${it.c}${it.t>0?" / "+it.t:""}</span>
+          <button class="step" onclick="stepMini(${di},${ii},1)">＋</button>
+        </div>`;}).join("")}
+      </div></div>`;
+  }).join("");
+  renderSummary();
+  renderMiniOff();
+}
 
-
+/* ═════════ 미니 목표표 (#306 · 사용자 정리본 기준) ═════════
+   u: "pt"=점수 기준(유폴리오 점수) · "cnt"=개수 기준(유폴리오 승인 수)
+   m: 유폴리오 항목명 매칭(정규식 문자열, 대소문자 무시) · menu: 구분 제한(선택)
+   agg: 기본=합계 · "distinct"=1건 이상인 항목 수 · "all"=그 과 전체 점수 합
+   yr: 연간(학년) 기준 · note: 짧은 주의 */
+const MINI_GOALS=[
+ {d:"보철",items:[
+  {id:"pr-chart",l:"신환 차팅 (진토 포함)",t:10,u:"cnt",m:["^22\\.?\\s*charting"]},
+  {id:"pr-dx",l:"진단 토탈",t:2,u:"cnt",m:["charting and treatment planning"]},
+  {id:"pr-gp",l:"교픽",t:50,u:"pt",m:["^02\\.?\\s*observation"]},
+  {id:"pr-dt",l:"단타",t:150,u:"pt",m:["^01\\.?\\s*student evaluation"]},
+  {id:"pr-sum",l:"교픽+단타 총합",t:250,u:"pt",m:["^02\\.?\\s*observation","^01\\.?\\s*student evaluation"]},
+  {id:"pr-imc",l:"임플 수술 어시",t:2,u:"cnt",m:["implant assist"]},
+  {id:"pr-imp",l:"임플 수술 점수",t:18,u:"pt",m:["implant assist"]},
+  {id:"pr-tr",l:"토탈 가철",t:2,u:"cnt",m:["total case evaluation\\s*\\(가철"]},
+  {id:"pr-tf",l:"토탈 고정",t:5,u:"cnt",m:["total case evaluation\\s*\\(고정"]},
+  {id:"pr-ti",l:"토탈 임플",t:5,u:"cnt",m:["total case evaluation\\s*\\(implant"]},
+  {id:"pr-lab",l:"기공 가·고·임 각 1",t:3,u:"cnt",agg:"distinct",m:["laboratory case evaluation"]},
+  {id:"pr-labp",l:"기공 합",t:15,u:"pt",m:["laboratory case evaluation"]},
+  {id:"pr-crown",l:"크라운 practice",t:1,u:"cnt",yr:1,m:["crown practice"]}]},
+ {d:"치주",items:[
+  {id:"pe-flap",l:"Flap 어시",t:15,u:"cnt",yr:1,m:["flap assist"]},
+  {id:"pe-impl",l:"Implant 어시",t:15,u:"cnt",yr:1,m:["implant assist"]},
+  {id:"pe-oe",l:"Practice OE",t:5,u:"cnt",m:["\\boe\\b","oral exam"]},
+  {id:"pe-sc",l:"Practice SC",t:6,u:"cnt",m:["\\bsc\\b","scaling"]},
+  {id:"pe-rp",l:"Practice RP",t:6,u:"cnt",m:["\\brp\\b","root planing"]},
+  {id:"pe-pci",l:"Practice PCI",t:5,u:"cnt",m:["\\bpci\\b","plaque control"]},
+  {id:"pe-psum",l:"Practice 총합",t:22,u:"cnt",note:"연 70↑",m:["\\boe\\b","oral exam","\\bsc\\b","scaling","\\brp\\b","root planing","\\bpci\\b","plaque control"]},
+  {id:"pe-adv",l:"포폴 Advanced",t:1,u:"cnt",yr:1,m:["advanced.*portfolio"]},
+  {id:"pe-bas",l:"포폴 Basic total",t:1,u:"cnt",yr:1,m:["basic.*portfolio"]}]},
+ {d:"보존",items:[
+  {id:"co-oop",l:"Obs Operative",t:20,u:"pt",m:["observation\\s*\\(operative"]},
+  {id:"co-oen",l:"Obs Endo",t:20,u:"pt",m:["observation\\s*\\(endodontic"]},
+  {id:"co-osu",l:"Obs Surgery",t:8,u:"pt",m:["observation\\s*\\(surgery"]},
+  {id:"co-pop",l:"Practice Operative",t:10,u:"pt",m:["practice.*operative","operative.*practice"]},
+  {id:"co-pen",l:"Practice 근관치료",t:5,u:"pt",m:["practice.*(endo|근관)","근관치료"]},
+  {id:"co-ch",l:"신환차팅",t:2,u:"pt",m:["charting","차팅"]},
+  {id:"co-tot",l:"학기 총점",t:65,u:"pt",agg:"all",note:"⚠️ 미달 시 F"}]},
+ {d:"외과",items:[
+  {id:"os-mal",l:"수술실 Obs 말리컨",t:1,u:"cnt",m:["수술실-malignant"]},
+  {id:"os-orth",l:"수술실 Obs 양악",t:1,u:"cnt",m:["수술실-maxillofacial"]},
+  {id:"os-sext",l:"수술실 Obs Surgical ext",t:2,u:"cnt",m:["수술실-surgical extraction"]},
+  {id:"os-cyst",l:"수술실 Obs Cyst",t:2,u:"cnt",m:["수술실-cyst"]},
+  {id:"os-tmj",l:"수술실 Obs TMJ",t:1,u:"cnt",m:["턱관절","tmj"]},
+  {id:"os-ext",l:"마이너 발치 어시",t:20,u:"cnt",m:["^extraction_\\[a\\]"]},
+  {id:"os-simp",l:"발치 practice simple",t:2,u:"cnt",m:["extraction_\\[p\\]_simple"]},
+  {id:"os-id",l:"I&D 어시",t:1,u:"cnt",menu:"증례별",m:["^i\\s*&\\s*d$"]},
+  {id:"os-idf",l:"I&D F/U",t:1,u:"cnt",m:["follow-up\\(i&d\\)"]},
+  {id:"os-bx",l:"Biopsy 어시",t:1,u:"cnt",menu:"증례별",m:["^biopsy$"]},
+  {id:"os-bxf",l:"Biopsy F/U",t:1,u:"cnt",m:["follow-up\\(biopsy\\)"]},
+  {id:"os-imp",l:"임플 1st 어시 (3개↑ 식립)",t:3,u:"cnt",m:["implant 1st op\\s*\\(3개"]},
+  {id:"os-rcM",l:"외래 major R/C",t:3,u:"cnt",m:["recall check major"]},
+  {id:"os-rcm",l:"외래 minor R/C",t:100,u:"cnt",m:["recall check minor"]},
+  {id:"os-new",l:"외래 신환차팅",t:20,u:"cnt",m:["신환 차팅"]},
+  {id:"os-model",l:"모델 푸어링 (악궁)",t:2,u:"cnt",m:["모델 제작"]},
+  {id:"os-ward",l:"병동",t:450,u:"pt",yr:1,note:"max",m:["병동"]}]},
+ {d:"소치",items:[
+  {id:"pd-ch",l:"차팅 (자율턴 포함)",t:30,u:"cnt",m:["차팅","charting"]},
+  {id:"pd-tot",l:"토탈 (신환 3회 F/U)",t:1,u:"cnt",menu:"total",m:["."]},
+  {id:"pd-sum",l:"총점 (교픽·단타·GSP)",t:1000,u:"pt",agg:"all"},
+  {id:"pd-q",l:"Q-ray 케이스",t:4,u:"cnt",m:["q-?\\s*ray"]},
+  {id:"pd-pr",l:"Practice (B↑)",t:1,u:"cnt",m:["practice"]},
+  {id:"pd-pf",l:"포트폴리오 토탈",t:1,u:"cnt",yr:1,m:["포트폴리오","portfolio"]}]},
+ {d:"교정",items:[
+  {id:"or-bond",l:"토탈 본딩",t:3,u:"cnt",m:["total case\\s*\\(신환"]},
+  {id:"or-old",l:"토탈 구환",t:6,u:"cnt",m:["total case\\s*\\(구환"]},
+  {id:"or-dx",l:"토탈 진단 F/U",t:6,u:"cnt",m:["analysis\\s*&\\s*diagnosis"]},
+  {id:"or-b",l:"단타 Bonding",t:40,u:"pt",m:["assist case\\s*-\\s*bonding"]},
+  {id:"or-la",l:"단타 L&A",t:50,u:"pt",m:["assist case\\s*-\\s*leveling"]},
+  {id:"or-sc",l:"단타 SC",t:50,u:"pt",m:["assist case\\s*-\\s*space closure"]},
+  {id:"or-fin",l:"단타 Finishing",t:40,u:"pt",m:["assist case\\s*-\\s*finishing"]},
+  {id:"or-etc",l:"단타 Etc",t:30,u:"pt",m:["assist case\\s*-\\s*etc"]},
+  {id:"or-lab",l:"기공 5종 각 1",t:5,u:"cnt",agg:"distinct",menu:"기공",m:["."],note:"⚠️ 한 달 1개"},
+  {id:"or-tot",l:"총점",t:1370,u:"pt",agg:"all",note:"A 2600 · B 2100 · C 1600"}]},
+ {d:"내과",items:[
+  {id:"om-ch",l:"차팅",t:20,u:"cnt",m:["^charting$"]},
+  {id:"om-tch",l:"TMD 차팅",t:10,u:"cnt",m:["^tmd charting"]},
+  {id:"om-pt",l:"물치실 (8시간)",t:64,u:"pt",m:["physical therapy"]},
+  {id:"om-imp",l:"내푸 Impression",t:2,u:"cnt",m:["impression taking"]},
+  {id:"om-spl",l:"내푸 Splint",t:1,u:"cnt",m:["splint fabrication"]},
+  {id:"om-med",l:"MED",t:2,u:"cnt",m:["medical certificate"]},
+  {id:"om-lab",l:"LAB",t:2,u:"cnt",m:["lab reading"]},
+  {id:"om-oth",l:"OTHERS",t:5,u:"cnt",m:["^others"]},
+  {id:"om-tmdo",l:"TMD 옵저",t:20,u:"cnt",m:["orofacial pain"]},
+  {id:"om-stlo",l:"연조직 옵저",t:3,u:"cnt",m:["soft tissue lesion observation"]},
+  {id:"om-stlt",l:"연조직 토탈",t:2,u:"cnt",m:["soft tissue lesion total"]},
+  {id:"om-tmdt",l:"TMD 토탈 (티토)",t:2,u:"cnt",yr:1,m:["tmd total"]},
+  {id:"om-hal",l:"Halitosis 옵저",t:1,u:"cnt",yr:1,m:["halitosis"]},
+  {id:"om-snr",l:"Snoring 옵저",t:1,u:"cnt",yr:1,m:["snoring"]}]},
+ {d:"영상",items:[
+  {id:"ra-fix",l:"판독 Fix",t:4,u:"cnt",yr:1,m:["판독 토론","\\bfix\\b"]},
+  {id:"ra-quiz",l:"Quiz",t:4,u:"cnt",yr:1,m:["quiz","퀴즈"]},
+  {id:"ra-io",l:"IO 촬영 (매)",t:40,u:"cnt",yr:1,m:["구내 촬영","\\bio\\b"]},
+  {id:"ra-hw",l:"실습 과제",t:1,u:"cnt",yr:1,m:["과제"]},
+  {id:"ra-sia",l:"Sialography",t:1,u:"cnt",yr:1,m:["sialography"]}]},
+ {d:"병리",items:[
+  {id:"pa-dx",l:"진단 참여",t:1,u:"cnt",yr:1,note:"11월 말까지",m:["육안","진단"]}]}
+];
+/* 원자료(S.ufItems) → 목표별 현재값 */
+function miniEval(){
+  const items=S.ufItems||[];
+  const rxc={};const rx=s=>rxc[s]||(rxc[s]=new RegExp(s,"i"));
+  const used=new Set();
+  const out=MINI_GOALS.map(g=>{
+    const pool=items.filter(it=>it.dept===g.d);
+    const rows=g.items.map(it=>{
+      let hit=pool;
+      if(it.menu)hit=hit.filter(x=>rx(it.menu).test(x.menu||""));
+      if(it.agg!=="all")hit=hit.filter(x=>(it.m||[]).some(p=>rx(p).test(x.n)));
+      hit.forEach(x=>used.add(x));
+      const val=x=>it.u==="pt"?(x.sc||0):(x.ap||0);
+      let c,pd=0;
+      if(it.agg==="distinct"){c=hit.filter(x=>(x.ap||0)>=1).length;}
+      else{c=hit.reduce((a,x)=>a+val(x),0);pd=it.u==="cnt"?hit.reduce((a,x)=>a+(x.pd||0),0):hit.reduce((a,x)=>a+(x.pd||0),0);}
+      const manual=!hit.length&&S.miniManual&&S.miniManual[it.id]!=null;
+      if(manual)c=+S.miniManual[it.id]||0;
+      const sum=k=>hit.reduce((a,x)=>a+(+x[k]||0),0);
+      const scN=hit.filter(x=>x.sc!=null).length;
+      return Object.assign({},it,{c:+(+c).toFixed(2),pd,found:hit.length>0,manual,src:hit.map(x=>x.n),
+        st:{ap:sum("ap"),pd:sum("pd"),pt:sum("pt"),sc:scN?+sum("sc").toFixed(2):null,unset:hit.length>0&&!scN&&hit.some(x=>x.scRaw==="미설정")}});
+    });
+    return {d:g.d,rows};
+  });
+  const extra=items.filter(x=>!used.has(x)&&((x.ap||0)>0||(x.sc||0)>0));
+  return {depts:out,extra};
+}
+function miniManualEdit(id){
+  let g=null;MINI_GOALS.forEach(d=>d.items.forEach(it=>{if(it.id===id)g=it;}));if(!g)return;
+  askInput(`${g.l} — 직접 입력`,[{label:`유폴리오에서 자동으로 못 찾는 항목이라 직접 적어둘 수 있어요 (${g.u==="pt"?"점수":"개수"})`,type:"number",val:(S.miniManual&&S.miniManual[id])||0}],(v)=>{
+    S.miniManual=S.miniManual||{};S.miniManual[id]=Math.max(0,+v[0]||0);save();renderMiniOff();},"저장");
+}
 
 /* 유폴리오 공식 미니 현황 렌더 — 과별 그룹, 미달 강조, 카테고리 표시 */
+function mffBasis(f){
+  S.miniOffField=f;
+  if(S.ufItems&&S.ufItems.length)ufBuildMini();
+  else toast("기준은 다음 가져오기부터 적용돼요 — 지금 표는 이전 방식 자료예요");
+  save();renderMiniOff();
+}
+function mffFilter(mode){
+  S.mffMode=mode;
+  document.querySelectorAll("#mff-filter button").forEach(b=>b.classList.toggle("on",b.dataset.mf===mode));
+  save();renderMiniOff();
+}
+function renderMiniOff(){
+  const box=document.getElementById("mini-off-list");
+  if(!box)return;
+  const mode=S.mffMode||"miss";
+  document.querySelectorAll("#mff-filter button").forEach(b=>b.classList.toggle("on",b.dataset.mf===mode));
+  /* 예전 방식(v1)으로만 가져온 적 있으면 그 값으로 임시 표시 */
+  let legacy=false;
+  if(!(S.ufItems&&S.ufItems.length)&&S.miniOff&&S.miniOff.some(d=>d.items.some(i=>i.c>0))){
+    legacy=true;const f=S.miniOffField||"score";
+    S.ufItems=[];S.miniOff.forEach(d=>d.items.forEach(i=>S.ufItems.push({dept:d.dept,menu:i.cat||"",n:i.n,ap:f==="approved"?i.c:0,pd:0,pt:0,sc:f==="score"?i.c:null})));
+  }
+  const has=S.ufItems&&S.ufItems.length;
+  const ev=miniEval();
+  if(legacy)S.ufItems=null;
+  const upd=document.getElementById("mff-upd");
+  const pend=has&&!legacy?(S.ufItems||[]).reduce((a,x)=>a+(x.pd||0),0):0;
+  const st=S.ufStudent;
+  if(upd)upd.innerHTML=has?`갱신 ${esc(S.miniOffUpd||"—")}${st&&st.name?` · ${esc(st.name)}`:""}${legacy?' · <span style="color:var(--red)">이전 방식 자료 — 다시 가져오면 정확해져요</span>':` · 승인대기 <span style="color:#B7791F">${pend}건</span>`}`:"";
+  if(!has){box.innerHTML='<p class="hint" style="padding:6px 0">아직 가져온 자료가 없어요 — 아래 <b>🔖 북마클릿</b>으로 유폴리오에서 복사한 뒤 <b>📥 가져오기</b>를 눌러주세요.</p>';const b=document.getElementById("mff-badge");if(b)b.textContent="";return;}
+  const fmt=x=>Number.isInteger(+x)?+x:(+x).toFixed(2).replace(/0+$/,"").replace(/\.$/,"");
+  let totMiss=0,totDone=0;
+  ev.depts.forEach(d=>d.rows.forEach(r=>{r.done=r.c>=r.t;r.done?totDone++:totMiss++;}));
+  const rowHtml=r=>{
+    const pct=Math.min(100,Math.round(r.c/r.t*100));
+    const need=Math.max(0,+(r.t-r.c).toFixed(2));
+    const unit=r.u==="pt"?"점":"";
+    const tags=`${r.yr?'<span class="mtag">연간</span>':""}${r.note?`<span class="mnote${/⚠️/.test(r.note)?" warn":""}">${esc(r.note)}</span>`:""}`;
+    const sub=[];
+    /* 유폴리오 원자료: 승인 · 대기 · 환자 · 점수 (여러 항목 합산 목표면 합계) */
+    if(r.found&&r.st){const s=r.st;
+      sub.push(`<span class="mst">승인 <b>${s.ap}</b> · <span style="${s.pd>0?"color:#B7791F;font-weight:800":""}">대기 ${s.pd}</span> · 환자 ${s.pt} · 점수 ${s.sc==null?(s.unset?"미설정":"—"):fmt(s.sc)}</span>`);}
+    if(!r.found&&!r.agg)sub.push(`<span class="mlink" onclick="miniManualEdit('${r.id}')">${r.manual?"✎ 직접 입력값":"유폴리오 항목 없음 · ✎ 직접 입력"}</span>`);
+    return `<div class="mrow${r.done?" ok":""}">
+      <div class="mline"><span class="mlbl">${esc(r.l)}${tags}</span>
+        <span class="mval"><b>${fmt(r.c)}</b><i>/ ${fmt(r.t)}${unit}</i>${r.done?'<em class="ok">✓</em>':`<em>−${fmt(need)}</em>`}</span></div>
+      <div class="mbar"><span style="width:${pct}%"></span></div>
+      ${sub.length?`<div class="msub">${sub.join(" · ")}</div>`:""}
+    </div>`;
+  };
+  const html=ev.depts.map(d=>{
+    const rows=mode==="miss"?d.rows.filter(r=>!r.done):d.rows;
+    const done=d.rows.filter(r=>r.done).length,all=d.rows.length;
+    if(!rows.length&&mode==="miss")return "";
+    const c=DEPT_COLOR[d.d]||"#666";
+    return `<details class="mdept"${(mode!=="miss"&&done===all)?"":" open"}>
+      <summary><span class="mdot" style="background:${c}"></span><b style="color:${c}">${d.d}</b>
+        <span class="mcnt${done===all?" ok":""}">${done}/${all}</span>
+        <span class="mmini"><span style="width:${Math.round(done/all*100)}%;background:${c}"></span></span></summary>
+      ${rows.map(rowHtml).join("")}
+    </details>`;
+  }).join("");
+  const extra=(mode==="all"&&ev.extra.length)?`<details class="mdept"><summary><b style="color:var(--sub)">미니 없는 유폴리오 항목 ${ev.extra.length}개</b></summary>${ev.extra.map(x=>`<div class="mrow"><div class="mline"><span class="mlbl">${esc(x.dept)} · ${esc(x.n)}</span><span class="mval" style="font-size:11px;color:var(--sub)">승인 ${x.ap||0}${x.sc!=null?` · ${fmt(x.sc)}점`:""}</span></div></div>`).join("")}</details>`:"";
+  box.innerHTML=(html||`<p class="hint" style="padding:8px 0">${mode==="miss"?"미달 항목이 없어요 🎉":"표시할 항목이 없어요"}</p>`)+extra;
+  const badge=document.getElementById("mff-badge");
+  if(badge)badge.textContent=`미달 ${totMiss} · 달성 ${totDone}`;
+}
 
+/* ═════════ 유폴리오 미니 v2 — ufolio 수집기(ufolio-rho.vercel.app)와 같은 기준 ═════════
+   · 대상: 3학년 '임상실습 2' 과목만
+   · 항목 범위: 외과·보철은 지정 항목만, 치주 '기타 수술·단타 Assist'는 제외 (수집기와 동일)
+   · 값: 승인(app_cnt) · 승인대기(submit_cnt) · 환자수(sum_patient_cnt) · 점수(cal_score, 미설정=null)
+   · 점수를 쓰지 않는 항목(치주 Flap/Implant Assist, 외과 수술실 5종, 영상 판독 토론)은 승인 개수로 미니 판정 */
+const UF_SUMMARY_URL="https://sdent.u-folio.com/st/dentistry-3/dent_summary";
+const UF_NOSCORE=["치주과|증례별 임상참여|Flap Assist","치주과|증례별 임상참여|Implant Assist",
+  "구강악안면외과|증례별 임상참여|수술실-Malignant tumor and/or reconstruction surgery(free flap)",
+  "구강악안면외과|증례별 임상참여|수술실-Maxillofacial deformity and orthognathic surgery",
+  "구강악안면외과|증례별 임상참여|수술실-Cyst and benign tumor surgery",
+  "구강악안면외과|증례별 임상참여|수술실-Surgical extraction","구강악안면외과|증례별 임상참여|수술실-기타",
+  "영상치의학과|나절별 임상참여|판독 토론 및 평가"];
+const UF_ONLY={
+  "구강악안면외과":["증례별 임상참여|Extraction_[P]_simple extraction","증례별 임상참여|Extraction_[P]_surgical extraction","증례별 임상참여|Extraction_[A]",
+    "증례별 임상참여|수술실-Malignant tumor and/or reconstruction surgery(free flap)","증례별 임상참여|수술실-Maxillofacial deformity and orthognathic surgery",
+    "증례별 임상참여|수술실-Cyst and benign tumor surgery","증례별 임상참여|수술실-Surgical extraction","증례별 임상참여|수술실-기타",
+    "증례별 임상참여|턱관절강 세정술","증례별 임상참여|외래 Recall check major","증례별 임상참여|외래 Recall check minor","증례별 임상참여|외래 신환 차팅",
+    "증례별 임상참여|병동 및 당직","증례별 임상참여|Implant 1st op. (2개 이하 식립)_[A]","증례별 임상참여|Implant 1st op (3개 이상 식립)_[A]",
+    "증례별 임상참여|Biopsy","증례별 임상참여|follow-up(Biopsy)","증례별 임상참여|I & D","증례별 임상참여|follow-up(I&D) 2nd or 3rd visit",
+    "기공|모델 제작 (악당)","Total Case|Biopsy","Total Case|I & D"],
+  "보철과":["Total Case|Total case evaluation (가철성)","Total Case|Total case evaluation (고정성)","Total Case|Total case evaluation (Implant)",
+    "Total Case|Charting and Treatment planning evaluation","증례별 임상참여|01. Student evaluation","증례별 임상참여|02. observation (교수님)",
+    "증례별 임상참여|03. Implant assist","증례별 임상참여|22. Charting","기공|[가철성]Laboratory case evaluation","기공|[고정성]Laboratory case evaluation",
+    "기공|[임플란트]Laboratory case evaluation"]};
+const UF_EXCL={"치주과":["증례별 임상참여|기타 수술","증례별 임상참여|단타 Assist"]};
 
-
-/* ── 유폴리오 임포트: 전용 북마클릿(클립보드 복사형) ──
-   sdent.u-folio.com에서 실행 → 점수를 긁어 JSON을 클립보드에 복사.
-   (CORS 때문에 앱에서 직접 못 부르므로, 유폴리오 페이지 위에서 same-origin 실행) */
-
-
-/* 붙여넣기 입력창 */
-
-
-/* 유폴리오 JSON → S.miniOff 매칭·갱신 */
-
+/* ── 유폴리오 페이지 위에서 도는 코드 (앱 변수에 의존하지 않음 — 그대로 북마클릿으로 직렬화) ── */
+function ufBmRuntime(ONLY,EXCL,NOSCORE){(async function(){
+  var K=function(v){return String(v==null?"":v).trim().replace(/\s+/g," ");};
+  var E=function(v){return String(v==null?"":v).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});};
+  var N=function(v){if(v==null)return null;var t=String(v).trim();if(t===""||t==="미설정")return null;var n=Number(t);return isFinite(n)?n:null;};
+  if(location.hostname.indexOf("u-folio")<0){alert("u-folio(sdent.u-folio.com)에 로그인한 상태에서 실행하세요.");return;}
+  var old=document.getElementById("__wn_uf");if(old)old.remove();
+  var P=document.createElement("section");P.id="__wn_uf";
+  P.style.cssText="position:fixed;top:12px;right:12px;left:12px;max-width:560px;margin-left:auto;max-height:88vh;overflow:auto;z-index:2147483647;background:#fff;border:2px solid #2E5E4E;border-radius:14px;box-shadow:0 16px 50px rgba(0,0,0,.3);font:13px/1.5 -apple-system,sans-serif;color:#1d2528";
+  P.innerHTML='<div style="display:flex;justify-content:space-between;align-items:center;padding:10px 13px;background:#2E5E4E;color:#fff"><b>🦷 원내생 커맨드센터 · 미니 가져오기</b><button id="wnx" style="border:0;background:none;color:#fff;font-size:22px">×</button></div><div id="wnb" style="padding:12px">확인 중…</div>';
+  document.body.appendChild(P);P.querySelector("#wnx").onclick=function(){P.remove();};
+  var B=P.querySelector("#wnb"),show=function(h){B.innerHTML=h;};
+  try{
+    var H={"Content-Type":"application/x-www-form-urlencoded; charset=UTF-8","X-Requested-With":"XMLHttpRequest"};
+    var post=async function(u,p){var r=await fetch(u,{method:"POST",headers:H,body:new URLSearchParams(p),credentials:"same-origin"});var t=await r.text(),d;
+      try{d=JSON.parse(t);}catch(e){throw new Error("u-folio 응답을 읽지 못했어요 — 로그인 만료 확인");}
+      if(!r.ok||String(d.status==null?"200":d.status)!=="200")throw new Error("u-folio가 요청을 거부했어요 — 다시 로그인");return d;};
+    var who=null;[".user-info-wrap .name",".user-info-wrap",".user-info",".user-name",".profile .name",".profile","header"].some(function(s){
+      return Array.prototype.some.call(document.querySelectorAll(s),function(el){var m=/([가-힣A-Za-z][가-힣A-Za-z\s·]{0,39}?)\s*\(\s*(\d{4}-\d{5})\s*\)/.exec(el.textContent||"");if(m){who={name:K(m[1]),id:m[2]};return true;}return false;});});
+    var AC=(document.querySelector('input[name="administer_code"]')||{}).value||"15";
+    var map={};
+    for(var pg=1;pg<=20;pg++){var d=await post("/ajax/st/dent_summary/list",{page:String(pg),dt_seq:"",administer_code:AC});var L=Array.isArray(d.list)?d.list:[];if(!L.length)break;
+      L.forEach(function(c){map[c.curr_seq+"|"+c.dt_seq+"|"+c.hospital_seq]=c;});if(!d.pageNav||String(d.pageNav).indexOf("page=")<0)break;}
+    var cs=Object.keys(map).map(function(k){return map[k];}).filter(function(c){return /임상실습\s*2/.test(String(c.curr_name||""));});
+    if(!cs.length){show("<b>임상실습 2 과목을 못 찾았어요.</b><br>임상실습요약표 페이지에서 실행하세요.");return;}
+    var items=[],fail=[];
+    for(var i=0;i<cs.length;i++){var c=cs[i];show("불러오는 중… ("+(i+1)+"/"+cs.length+") "+E(c.dt_name));
+      try{var s=await post("/ajax/st/dent_summary/getSummaryData",{curr_seq:String(c.curr_seq||""),dt_seq:String(c.dt_seq||""),hospital_seq:String(c.hospital_seq||""),administer_code:AC});
+        (Array.isArray(s.list)?s.list:[]).forEach(function(it){
+          var dep=K(c.dt_name),key=K(it.menu_name)+"|"+K(it.pc_name);
+          if(EXCL[dep]&&EXCL[dep].indexOf(key)>=0)return;
+          if(ONLY[dep]&&ONLY[dep].indexOf(key)<0)return;
+          var ns=NOSCORE.indexOf(dep+"|"+key)>=0,unset=it.db_score==="N";
+          items.push({dept:dep,menu:K(it.menu_name),item:K(it.pc_name),approved:N(it.app_cnt),pending:N(it.submit_cnt),patient:N(it.sum_patient_cnt),
+            score:ns||unset?null:N(it.cal_score),scoreRaw:ns?"":(unset?"미설정":String(it.cal_score==null?"":it.cal_score)),noScore:ns});});
+      }catch(e){fail.push(c.dt_name+": "+e.message);}}
+    if(fail.length){show('<b style="color:#b42318">일부 과목을 못 불러왔어요 — 다시 실행해 주세요.</b><br>'+fail.map(E).join("<br>"));return;}
+    if(!items.length){show("<b>가져올 항목이 없어요.</b>");return;}
+    var out=JSON.stringify({src:"ufolio",v:2,ts:Date.now(),student:who,items:items});
+    var pend=items.reduce(function(a,x){return a+(x.pending||0);},0),sc=items.filter(function(x){return x.score>0;}).length;
+    show('<p style="margin:0 0 6px"><b>'+(who?E(who.name)+" ("+E(who.id)+")":"(이름 확인 안 됨)")+"</b> · 임상실습 2 · "+items.length+"개 항목 · 점수 있는 항목 "+sc+"개 · 승인대기 <b>"+pend+"</b>건</p>"+
+      '<button id="wncp" style="width:100%;padding:12px;border:0;border-radius:10px;background:#2E5E4E;color:#fff;font-size:15px;font-weight:800">📋 복사하고 앱으로 돌아가기</button>'+
+      '<p id="wnst" style="margin:8px 0;color:#555">복사 후 앱 › 플랜 › 미니달성 › [📥 유폴리오에서 가져오기]에 붙여넣기</p>'+
+      '<textarea id="wnta" readonly style="width:100%;height:70px;font-size:10px">'+E(out)+"</textarea>");
+    var cp=async function(){try{await navigator.clipboard.writeText(out);P.querySelector("#wnst").innerHTML="✅ <b>복사 완료!</b> 앱에 붙여넣으세요.";}
+      catch(e){var ta=P.querySelector("#wnta");ta.focus();ta.select();try{document.execCommand("copy");P.querySelector("#wnst").innerHTML="✅ 복사 완료 (안 되면 아래 칸을 길게 눌러 전체 복사)";}catch(e2){P.querySelector("#wnst").textContent="아래 칸을 길게 눌러 전체 선택 → 복사하세요";}}};
+    P.querySelector("#wncp").onclick=cp;
+  }catch(e){show('<b style="color:#b42318">오류:</b> '+E(e.message));}
+})();}
+function ufBookmarkletCode(){
+  /* 정리본 미니(크라운 practice·임수 점수 등)는 수집기 지정 항목보다 넓어서, 임상실습 2 항목은 전부 가져온다 */
+  return "javascript:"+encodeURIComponent("("+ufBmRuntime.toString()+")({},{},"+JSON.stringify(UF_NOSCORE)+");void 0;");
+}
+function ufolioBookmarklet(){
+  const code=ufBookmarkletCode();
+  const done=()=>askConfirm(`<b>🔖 유폴리오 미니 가져오기 — 처음 한 번만 설치</b><br><br>
+    1️⃣ 방금 복사된 코드를 <b>브라우저 즐겨찾기</b>로 저장<br><span class="hint">(아무 페이지나 즐겨찾기 추가 → 편집 → URL 칸을 지우고 붙여넣기 · 이름 "미니 가져오기")</span><br><br>
+    2️⃣ <b>u-folio 로그인 → <a href="${UF_SUMMARY_URL}" target="_blank" rel="noreferrer">임상실습요약표</a></b> 열기<br><br>
+    3️⃣ 즐겨찾기에서 <b>"미니 가져오기"</b> 실행 → 뜨는 창에서 <b>📋 복사</b><br><br>
+    4️⃣ 이 앱 › 플랜 › 미니달성 › <b>📥 유폴리오에서 가져오기</b> → 붙여넣기<br><br>
+    <span class="hint">임상실습 2 항목의 승인·승인대기·환자·점수를 가져와요. 비밀번호·쿠키는 어디에도 보내지 않고 복사만 해요.</span>`,()=>{},"확인");
+  (navigator.clipboard?navigator.clipboard.writeText(code):Promise.reject()).then(()=>{toast("🔖 북마클릿 복사됨");done();})
+    .catch(()=>{askInput("북마클릿 코드 (길게 눌러 전체 복사)",[{label:"아래 전체를 복사해 즐겨찾기 URL에 붙여넣기",type:"textarea",val:code}],()=>{},"닫기");});
+}
+function ufolioImportOpen(){
+  askInput("유폴리오 미니 붙여넣기",[
+    {label:"u-folio에서 [📋 복사]한 내용을 붙여넣으세요",type:"textarea",val:"",ph:'{"src":"ufolio","v":2,...}'}
+  ],(vals)=>{ufolioApply(vals[0]);},"가져오기");
+}
+/* 붙여넣은 JSON → S.ufItems(원자료) → S.miniOff(미니 표) */
+function ufolioApply(raw,valField){
+  ensureMiniOff();normOrthoKinds();
+  valField=valField||S.miniOffField||"score";
+  let data;
+  try{data=JSON.parse((raw||"").trim());}catch(e){toast("형식이 달라요 — u-folio에서 다시 [📋 복사] 해 주세요");return;}
+  let rows=Array.isArray(data)?data:(Array.isArray(data.items)?data.items:(Array.isArray(data.rows)?data.rows:[]));
+  if(!rows.length){toast("항목이 없어요 — 붙여넣은 내용을 확인해 주세요");return;}
+  const nn=v=>{if(v==null||v==="")return null;const n=Number(v);return isFinite(n)?n:null;};
+  let skipped=0;
+  const items=[];
+  rows.forEach(r=>{
+    const prac=String(r.practice??r.practice_name??"");
+    if(prac&&!/실습\s*2/.test(prac)){skipped++;return;}          /* v1 자료 호환: 실습 1 등 제외 */
+    const nm=String(r.item??r.item_name??r.pc_name??r.name??"").trim();if(!nm||/테스트/.test(nm))return;
+    const depRaw=String(r.dept??r.dept_name??"").trim();
+    items.push({dept:ufDept(depRaw),menu:String(r.menu??r.menu_name??"").trim(),n:nm,
+      ap:nn(r.approved??r.app_cnt)||0,pd:nn(r.pending??r.submit_cnt)||0,pt:nn(r.patient??r.sum_patient_cnt)||0,
+      sc:nn(r.score??r.cal_score),scRaw:String(r.scoreRaw??(r.score==null?"":r.score)),
+      ns:!!r.noScore||UF_NOSCORE.indexOf(depRaw+"|"+String(r.menu??"").trim()+"|"+nm)>=0});
+  });
+  if(!items.length){toast("반영할 항목을 못 찾았어요");return;}
+  S.ufItems=items;
+  S.ufStudent=data.student||S.ufStudent||null;
+  S.miniOffField=valField;
+  S.miniOffUpd=new Date(data.ts||Date.now()).toISOString().slice(0,16).replace("T"," ");
+  ufBuildMini();save();renderMiniOff();
+  const ev=miniEval();const g=ev.depts.reduce((a,d)=>a+d.rows.filter(r=>r.found).length,0),all=ev.depts.reduce((a,d)=>a+d.rows.length,0);
+  toast(`✅ 임상실습 2 · ${items.length}개 항목 반영 · 미니 ${all}개 중 ${g}개 자동 연결${skipped?` (실습1 등 ${skipped}개 제외)`:""}`);
+}
+/* S.ufItems + 공식 미니표 → 과별 미니 현황 */
+function ufBuildMini(){
+  const f="approved";   /* 내부 조회용(토탈 다이얼로그) — 개수 기준 */
+  const goal={};
+  officialMini().forEach(d=>d.items.forEach(it=>{goal[d.dept+"|"+ufNorm(it.n)]=it;}));
+  const valOf=it=>(it.ns||f==="approved")?it.ap:(f==="patient"?it.pt:(it.sc==null?0:it.sc));
+  const byDept={},seen={};
+  (S.ufItems||[]).forEach(it=>{
+    const key=it.dept+"|"+ufNorm(it.n);
+    const g=goal[key]||null;
+    const row={n:it.n,cat:it.menu||(g?g.cat:""),mini:g?g.mini:0,max:g?g.max:null,c:valOf(it),ap:it.ap,pd:it.pd,pt:it.pt,sc:it.sc,scRaw:it.scRaw,ns:it.ns,
+      basis:(it.ns||f==="approved")?"승인":(f==="patient"?"환자":"점수")};
+    if(seen[key]){const p=seen[key];if(row.c>p.c)Object.assign(p,row);return;}   /* 같은 항목 중복 → 큰 값 */
+    seen[key]=row;(byDept[it.dept]=byDept[it.dept]||[]).push(row);
+  });
+  /* 유폴리오에 아직 안 뜬 공식 미니 항목도 0으로 표시 (빠뜨리지 않게) */
+  /* 외과·보철은 수집 범위(지정 항목)에 있는 것만 — 범위 밖 공식 항목은 유폴리오에서 올 수 없으니 표시 안 함 */
+  const scopeOK=(dep,n)=>{const ufd={"외과":"구강악안면외과","보철":"보철과"}[dep];if(!ufd||!UF_ONLY[ufd])return true;
+    return UF_ONLY[ufd].some(k=>ufNorm(k.split("|")[1])===ufNorm(n));};
+  officialMini().forEach(d=>d.items.forEach(it=>{const key=d.dept+"|"+ufNorm(it.n);if(!seen[key]&&scopeOK(d.dept,it.n)&&S.ufItems&&S.ufItems.some(x=>x.dept===d.dept)){
+    const row={n:it.n,cat:it.cat,mini:it.mini,max:it.max,c:0,ap:0,pd:0,pt:0,sc:null,scRaw:"",ns:false,basis:"—",absent:true};seen[key]=row;(byDept[d.dept]=byDept[d.dept]||[]).push(row);}}));
+  const ORDER=["교정","내과","외과","보존","보철","치주","소치","영상","병리","원진실","기타"];
+  const built=[];ORDER.forEach(d=>{if(byDept[d]){built.push({dept:d,items:byDept[d]});delete byDept[d];}});
+  Object.keys(byDept).forEach(d=>built.push({dept:d,items:byDept[d]}));
+  S.miniOff=built;
+}
 
 /* 붙여넣은 유폴리오 데이터의 항목명을 그대로 보여주는 진단 도구 */
-
-
-
-
-
+function ufolioDebug(){
+  askInput("유폴리오 데이터 확인",[
+    {label:"붙여넣으면 항목명을 그대로 보여줘요 (매칭 안 될 때 사용)",type:"textarea",val:"",ph:'{"rows":[...]} 또는 {"items":[...]}'}
+  ],(vals)=>{
+    let data;
+    try{ data=JSON.parse((vals[0]||"").trim()); }catch(e){ toast("JSON 형식이 아니에요"); return; }
+    let rows=Array.isArray(data)?data:(data.rows||data.items||[]);
+    if(!rows.length){ askConfirm("<b>항목을 못 찾았어요</b><br><br>최상위 키: "+esc(Object.keys(data||{}).join(", ")||"(없음)"),()=>{},"확인"); return; }
+    const keys=Object.keys(rows[0]||{});
+    const list=rows.slice(0,25).map(r=>{
+      const nm=r.item??r.item_name??r.pc_name??r.name??"(이름없음)";
+      const ap=r.approved??r.approved_cnt??r.app_cnt??"-";
+      const pt=r.patient??r.patient_cnt??r.sum_patient_cnt??"-";
+      return esc(String(nm))+` <span class="hint">승인 ${esc(String(ap))} · 환자 ${esc(String(pt))}</span>`;
+    }).join("<br>· ");
+    askConfirm(`<b>총 ${rows.length}개 항목</b><br><span class="hint">필드: ${esc(keys.join(", "))}</span><br><br>· ${list}${rows.length>25?"<br>…":""}`,()=>{},"확인");
+  },"확인");
+}
+function stepMini(di,ii,v){const it=S.mini[di].items[ii];it.c=Math.max(0,it.c+v);save();renderMini();}
+function editMini(di,ii){
+  const it=S.mini[di].items[ii];
+  askInput(`"${it.n}" 수정`,[
+    {label:"현재값",type:"num",val:it.c},
+    {label:"목표 (0=목표없음)",type:"num",val:it.t}
+  ],([c,t])=>{
+    it.c=Math.max(0,c);it.t=Math.max(0,t);
+    save();renderMini();renderSummary();toast("수정됨");
+  });
+}
+function addCustomItem(){
+  askInput("＋ 항목 직접 추가",[
+    {label:"어느 과?",type:"pick",val:"",opts:S.mini.map(d=>d.dept)},
+    {label:"항목 이름",type:"text",val:""},
+    {label:"목표 (없으면 0)",type:"num",val:0},
+    {label:"범위",type:"seg",val:"sem",opts:[{v:"sem",lb:"학기"},{v:"yr",lb:"연(1년)"}]}
+  ],([dept,n,t,s])=>{
+    if(!dept||!n){toast("과와 항목 이름을 입력해주세요");return;}
+    let d=S.mini.find(x=>x.dept===dept);
+    if(!d){d={dept,items:[]};S.mini.push(d);}
+    d.items.push({n,t:Math.max(0,t),c:0,s});
+    save();renderMini();renderSummary();toast(`"${n}" 추가됨`);
+  });
+}
+function renderSummary(){
+  /* 미니달성 탭이 유폴리오 전용으로 바뀌어 요약 요소가 없을 수 있음 */
+  if(!document.getElementById("sum-badge")||!document.getElementById("summary"))return;
+  document.getElementById("sum-badge").textContent=S.semester+" · 주황선=기대 페이스";
+  const exp=semExpectedPct();
+  document.getElementById("summary").innerHTML=S.mini.map(d=>{
+    const w=d.items.filter(i=>i.t>0);if(!w.length)return"";
+    const pct=Math.min(100,Math.round(w.reduce((a,i)=>a+Math.min(1,i.c/i.t),0)/w.length*100));
+    const worst=w.filter(i=>i.c<i.t).sort((a,b)=>(a.c/a.t)-(b.c/b.t))[0];
+    return `<div class="pace-row"><b style="min-width:36px;color:${DEPT_COLOR[d.dept]}">${d.dept}</b>
+      <div class="bar"><i style="width:${pct}%;background:${DEPT_COLOR[d.dept]}"></i><span class="exp" style="left:${Math.round(exp*100)}%"></span></div>
+      <span style="min-width:34px;text-align:right;font-weight:800">${pct}%</span>
+      ${worst?`<span class="hint" style="max-width:36%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${worst.n}</span>`:"<span class='hint'>✓</span>"}</div>`;
+  }).join("");
+}
 /* 과별 토탈 종류(기본 필요횟수)·내원 항목 태그 — 가이드라인 기반 프리셋 */
 const TOTAL_CFG={
  "교정":{kinds:[["진토",2],["구토",3],["본토",3]],
@@ -3960,6 +4794,8 @@ function syncAll(opt){
   try{renderRoutine();}catch(e){}
   try{renderCalendar();}catch(e){}
   try{renderDayDetail();}catch(e){}
+  try{if(typeof renderMini==="function")renderMini();}catch(e){}
+  try{if(typeof renderMiniOff==="function")renderMiniOff();}catch(e){}
   /* OCS 서브탭 — 현재 열려 있는 것만 (내용이 있는 것만 골라 비용 절약) */
   try{
     const od=document.getElementById("o-day");
@@ -4054,8 +4890,9 @@ function tcUrgency(t){
     const lastV=sorted.length?sorted[sorted.length-1]:null;
     let dl=9999;
     if(lastV){
-      if(!t.ufol)dl=Math.min(dl,dLeft(daysFrom(lastV,7)));    /* 레포트 마감 */
-      if(!t.report)dl=Math.min(dl,dLeft(daysFrom(lastV,14))); /* 유폴 마감 */
+      const _pd=paperDue(t);
+      if(_pd){if(!t.report)dl=Math.min(dl,dLeft(_pd.rep));   /* 레포트 +7 */
+              if(!t.ufol)dl=Math.min(dl,dLeft(_pd.ufol));}   /* 유폴 +14 */
     }
     if(dl===9999)dl=0;
     return -1000000+dl;      /* 마감이 급한 것일수록 더 위 */
@@ -4248,9 +5085,10 @@ function renderTotals(listOnly){
         </span></div>`;}).join("")}</div>`:"";
     let dl="";
     if(t.visits.length>=t.need&&lastV){
-      const u=daysFrom(lastV,7),r=daysFrom(lastV,14),ul=dLeft(u),rl=dLeft(r);
-      if(!t.ufol)dl+=`<div class="deadline ${ul<0?"late":ul<=2?"warn":"ok"}">유폴 ${fmtD(ymd(u))} (${ul<0?Math.abs(ul)+"일 지남!":"D-"+ul})</div>`;
-      if(!t.report)dl+=`<div class="deadline ${rl<0?"late":rl<=3?"warn":"ok"}">레포트 ${fmtD(ymd(r))} (${rl<0?Math.abs(rl)+"일 지남!":"D-"+rl})</div>`;
+      const _pd=paperDue(t)||{rep:daysFrom(lastV,7),ufol:daysFrom(lastV,14)};
+      const u=_pd.ufol,r=_pd.rep,ul=dLeft(u),rl=dLeft(r);
+      if(!t.report)dl+=`<div class="deadline ${rl<0?"late":rl<=2?"warn":"ok"}">레포트 ${fmtD(ymd(r))} (${rl<0?Math.abs(rl)+"일 지남!":"D-"+rl})</div>`;
+      if(!t.ufol)dl+=`<div class="deadline ${ul<0?"late":ul<=3?"warn":"ok"}">유폴 ${fmtD(ymd(u))} (${ul<0?Math.abs(ul)+"일 지남!":"D-"+ul})</div>`;
     }else{
       /* ★다음 내원 배너는 (a)내가 입력한 미래 날짜 또는 (b)OCS에서 찾은 예약이 있을 때만.
          이미 visit로 기록한 날짜·지나간 날짜는 '다음 내원'이 아니므로 경고 안 띄움 */
@@ -5216,6 +6054,16 @@ function hiIcon(k){const n=hiOf(k);return n?HI_COLORS[n].ico:"🖍️";}
    penColor=0이면 '순환' 모드(기존 동작), 1~3이면 그 색으로 바로 칠함 */
 
 
+function penDotsHtml(){
+  const items=[[1,"노랑","#FFF3B0"],[2,"🟥 빨강","#FFD8D2"],[3,"⬜ 회색","#ECEEF1"]];
+  if(window.penColor===undefined)window.penColor=0;
+  const cy=window.penColor===0;
+  return `<span style="font-size:10px;font-weight:800;color:var(--sub);opacity:.8">🖍️</span>`
+    +`<button onclick="hiSetPen(0)" title="순환 모드 — 탭할 때마다 노랑→빨강→회색→해제" style="width:19px;height:17px;padding:0;border-radius:50%;cursor:pointer;background:${cy?"#FFF4F2":"#fff"};font-size:10.5px;line-height:1;border:${cy?"2px solid var(--coral)":"1px solid rgba(0,0,0,.13)"};box-shadow:${cy?"0 0 0 2px rgba(255,107,90,.18)":"none"}">🔄</button>`
+    +items.map(([n,lb,c])=>{const on=window.penColor===n;
+      return `<button onclick="hiSetPen(${n})" title="${lb}" style="width:17px;height:17px;padding:0;border-radius:50%;cursor:pointer;background:${c};border:${on?"2px solid var(--coral)":"1px solid rgba(0,0,0,.13)"};box-shadow:${on?"0 0 0 2px rgba(255,107,90,.18)":"none"}"></button>`;
+    }).join("");
+}
 /* 하이라이트 탭 — 색별 보기 전환 */
 function hlSetColor(k){window.hlColor=k;renderOcsHl();}
 function ocsHiSet(k,n){
@@ -5295,8 +6143,9 @@ function hiPaint(k){
           tr.style.background=HL;tr.style.opacity=OP;
           cells.forEach(td=>{td.style.background=HL;});
         }else{
-          tr.style.background="";tr.style.opacity="";
           cells.forEach(td=>{td.style.background="";});
+          if(tr.dataset.st!=null)tr.setAttribute("style",tr.dataset.st);   /* 원래 줄 스타일(◇보라·🔒흐림) 복원 */
+          else{tr.style.background="";tr.style.opacity="";}
         }
       }else{
         /* 쌤별 뷰 등 div 구조: 버튼에서 위로 올라가며 배경을 가진 카드 컨테이너를 찾아 칠함 */
@@ -5347,50 +6196,7 @@ function accessOf(u){
   return "resi";                                                          /* ★그 외 전공의쌤 진료 = 내역 무관 전부 가능 */
 }
 /* ═══ 하이밸류 케이스 판정 — 가이드라인 점수 + A컷 전략 종합 (참여가능 진료만, 장부성 보철 포함) ═══ */
-const HV_RULES=[
- /* 치주: 수술·임플·신환차팅(★★★)·RP(★★)·치은절제/explant/sinus(★) — SC·SPT 제외 */
- {dep:"치주",re:/flap|판막|op\b|GBR|GTR|FGG|CTG|APF|OFD|crown ?length|CLP|root ?cover/i,lb:"수술(Flap계)",w:5},
- {dep:"치주",re:/impla|임플|1st|2nd|fixture|ISQ/i,lb:"임플",w:4.5},
- {dep:"치주",re:/발치|\bext\b/i,ex:/발치\s?후|후\s?발치|\b(rc|r\/c|s\/o|check)\b/i,lb:"ext(플랩감)",w:3.6},   /* 케전: 플랩 감은 ext 진료에서 */
- {dep:"치주",re:/신환|초진|C N [MF]|I N [MF]/i,lb:"신환차팅",w:4},
- {dep:"치주",re:/\bs?rp\d?\b|root ?plan|subcure/i,lb:"RP",w:3.5},
- {dep:"치주",re:/gin?givec|치은절제/i,lb:"치은절제",w:2.5},
- {dep:"치주",re:/explant/i,lb:"explant",w:2.5},
- {dep:"치주",re:/sinus/i,lb:"sinus",w:2.5},
- {dep:"보철",re:/impression|인상|\bimp\.?\b|final ?imp|prelim/i,lb:"인상",w:4.5},
- /* 교정: 본딩(즉저!)·진단·디본딩·신환 — 교수 진료 포함, 단순 F/U는 제외 */
- /* 본딩(즉저!) — 단, debond·디본드·rr/fr del 같은 '제거' 진료는 제외 */
- {dep:"교정",re:/^(?!.*(?:debond|디본|\b[rf]\s*r\s*del))(?=.*(?:본딩|\bbond(?!ing agent)))/i,lb:"본딩⚡즉저",w:5},
- {dep:"교정",re:/진단(?!서)|진준|\bDx\b/i,lb:"진단·진준",w:5},
- /* 디본딩·rr/fr del = 장치 제거 진료 → 고밸류에서 제외 (요청) */
- {dep:"교정",re:/신환|초진|C N [MF]|I N [MF]/,lb:"신환",w:3.5},
- /* 보철: 신환차팅(★★★=차팅케이스20)·장부성 전부 포함(레지 진료면 다 기회) */
- {dep:"보철",re:/부러|파절|fract|치료\s?계획|(tx|치료)\s?plan|상담|consult|cbct|\bC\.?T\b/i,ex:/결과\s?상담/i,lb:"토탈씨앗🌱",w:4.2},   /* 케전: 파절·틀니불편·상담 = 토탈 배정 노리기 */
- {dep:"보철",re:/신환|초진|C N [MF]|I N [MF]/,lb:"신환차팅",w:4.4},
- {dep:"보철",re:/prep|형성/i,lb:"prep",w:4.5},
- {dep:"보철",re:/\bdel\b|셋팅|세팅|접착|cementa|set\b/i,lb:"세팅·del",w:4},
- {dep:"보철",re:/impla|임플|fixture|abut|\d\s?i\b|ISQ/i,lb:"임플체크",w:3.5},
- {dep:"보철",re:/denture|의치|틀니|RPD|\bCD\b|wax ?rim|이장|relin/i,lb:"의치",w:4},
- {dep:"보철",re:/crown|\bcr\b|브릿지|bridge|inlay|온레이|onlay/i,lb:"Cr·Br",w:3.5},
- {dep:"보철",re:/impression|\bimp\b|인상/i,lb:"인상",w:3},
- /* 보존: 보존수술·엔도·오퍼(레진/ClassV/crown prep, ★★)·C/I류(★, 빨리 끝남)·신환 */
- {dep:"보존",re:/apico|apical|재식|replanta|이식|transplant|intentional|미세수술/i,lb:"보존수술⚡달신",w:5.2},
- {dep:"보존",re:/endo|근관|RCT|발수|치수/i,lb:"엔도",w:4.5},
- {dep:"보존",re:/레진|resin|\bGI\b|\bAM\b|inlay|onlay|수복|caries|와동|class ?[IV]+|\bcl[\.\s]?[IV]+\b|cervical|crown|\bcr\b|prep|형성|post ?(and|&|\+)? ?core/i,lb:"오퍼",w:4},
- {dep:"보존",re:/\bC\s?\/\s?[IEF]\b/i,lb:"C/I·C/E",w:3},
- {dep:"보존",re:/신환|초진|C N [MF]|I N [MF]/,lb:"신환",w:3},
- /* 내과: 신환차팅(★★★)만 — Bx는 병리 케전 결론 "마이너 Bx가 남아돌아 내과 Bx 불필요"라 제외 */
- {dep:"내과",re:/신환|초진|신\)|C N [MF]|I N [MF]/,lb:"신환차팅",w:4.6},
- {dep:"내과",re:/splint|스플린트|\bsp\.?\s?del\b/i,lb:"스플린트",w:3.6},
- /* 소치: GA·SED(★★★)·신환차팅(★★★)·복합치료(★★) — FTA류 단순진료 제외 */
- {dep:"소치",re:/\bG\/?A\b|\[GA\]|\bSED\b|N2O|진정|전신마취/i,lb:"GA·SED",w:5},
- {dep:"소치",re:/신환|초진|C N [MF]|I N [MF]/,lb:"신환차팅",w:5},
- {dep:"소치",re:/레진|수복|발수|치수|pulp|크라운|SSC|ssc|Cr\b|caries|PRR|\btx\b/i,lb:"수복·치료",w:4},
- {dep:"소치",re:/발치|ext/i,lb:"발치",w:3},
- {dep:"소치",re:/공간유지|space ?maint|band ?(&|and)? ?loop|LLHA|\b(FR|RR|SM)\b|frankel|과잉치|mesiodens/i,lb:"장치·과잉치",w:3.2},
- /* 영상: Sialography = 월 1~2회 희귀 케이스 — 뜨면 무조건 저요 (연미니 1) */
- {dep:"영상",re:/sialo/i,lb:"Sialo(희귀)",w:6}
-];
+
 /* ── 신환 판정 ──
    OCS에서 미리 예약된 신환은 담당의가 「[과]일반」 형식으로 표기됨
    (예: [보철]일반 · [내과]일반 · [교정]일반). 이 표기만 신환으로 본다. */
@@ -5436,9 +6242,6 @@ function goPill(o){
 }
 let goldSub="hl";   /* 고밸류 탭 서브: hv=💎전부(기본) · nail=⛺알박기 · dr=👨‍⚕️쌤별 */
 
-/* 쌤별 탭 — 오전/오후 나절 전환 */
-
-
    /* 시간대 상세는 이제 "오늘 뭐 열리나" 하단 */
 /* ═══ ⏱ 시간대별 전체 — '오늘 뭐 열리나' 최하단에 상주 (gslot 앵커 = hvJump 착지점) ═══ */
 /* 케전 명단 기반 직급 — 알박기 쌤 파악용 (치주·보철) */
@@ -5456,11 +6259,95 @@ let goldSub="hl";   /* 고밸류 탭 서브: hv=💎전부(기본) · nail=⛺�
 
 
 /* ═══ 🌱 신환만 — 과별로 신환 예약을 시간순 모아보기 ═══ */
-const NEW_DEPS=["소치","내과","보존","보철","교정"];
 
 
 
-/* ═══ 오늘 뭐 열리나 — 과별로 보기 → 내 스케줄 → 이날 OCS 요약 ═══ */
+
+/* ═══ 오늘 뭐 열리나 — 보기 상태 (보기 방식·과·정렬은 이 기기에 기억) ═══ */
+
+
+
+   /* 과별 들어가면 시간순이 기본 */
+
+
+
+
+/* 담당의 → 쌤별 묶음 키 (A/B 동명이인 구분 유지 · [과]일반=신환) */
+
+
+/* 오전 = 12:30까지 · 오후 = 13:00부터 */
+
+
+/* 쌤별/시간대 공용 행 — 시간 맨 왼쪽, 살짝 띄우고 이름(아래 작게 번호), 남은 폭은 진료내역, 🖍️는 맨 오른쪽 */
+
+const OD_COLS_DR=`<colgroup><col style="width:var(--od-h,19px)"><col style="width:var(--od-t,36px)"><col style="width:var(--od-p,54px)"><col><col style="width:var(--od-r,46px)"></colgroup>`;
+const OD_COLS_TV=OD_COLS_DR;
+const OD_COLS_TM=`<colgroup><col style="width:var(--od-h,19px)"><col style="width:var(--od-p,54px)"><col><col style="width:var(--od-r,46px)"></colgroup>`;
+/* 시간대 슬롯의 과 칩이 한 줄에 안 들어가면(좁은 폰) 여백부터 줄이고, 그래도 넘치면 글자를 아주 살짝만 줄임 */
+window.addEventListener("resize",()=>{clearTimeout(window.__tvFitT);window.__tvFitT=setTimeout(()=>{try{tvFitChips();}catch(e){}},150);});
+function odMeasureCols(){
+  try{
+    const box=document.createElement("div");box.className="odprobe";box.style.cssText="position:absolute;left:-9999px;top:0;visibility:hidden;white-space:nowrap";
+    box.innerHTML=`<table class="odtbl"><tr><td class="h"><button style="border:none;background:transparent;font-size:12px;padding:0">🖍️</button></td><td class="t"><span id="odm-t">00:00</span></td><td class="p"><span class="nm" id="odm-n" style="display:inline">홍길동</span><br><span class="no" id="odm-o" style="display:inline">00000000</span></td><td class="r"><span id="odm-r">김수연B</span></td></tr></table>`;
+    document.body.appendChild(box);
+    const w=id=>Math.ceil(box.querySelector("#"+id).getBoundingClientRect().width);
+    const bw=Math.ceil(box.querySelector("button").getBoundingClientRect().width);
+    const R=document.documentElement.style;
+    if(bw>0){R.setProperty("--od-h",(bw+3)+"px");
+      R.setProperty("--od-t",(w("odm-t")+3)+"px");
+      R.setProperty("--od-p",(Math.max(w("odm-n"),w("odm-o"))+4)+"px");
+      R.setProperty("--od-r",(w("odm-r")+4)+"px");}
+    box.remove();
+  }catch(e){}
+  try{tvFitChips();}catch(e){}
+}
+try{if(document.readyState!=="loading")odMeasureCols();else document.addEventListener("DOMContentLoaded",odMeasureCols);
+    if(document.fonts&&document.fonts.ready)document.fonts.ready.then(odMeasureCols);}catch(e){}
+/* ═══ 오늘 뭐 열리나 글씨체 — 기기별 저장, 웹폰트는 고를 때만 불러옴 ═══ */
+const OD_FONTS={
+  pre:{nm:"프리텐다드",sub:"부드럽고 산뜻한 기본",css:"https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.min.css",fam:"Pretendard",ff:'Pretendard,sans-serif'},
+  nsr:{nm:"나눔스퀘어라운드",sub:"둥글고 편안한 느낌",css:"https://hangeul.pstatic.net/hangeul_static/css/nanum-square-round.css",fam:"NanumSquareRound",ff:"NanumSquareRound,sans-serif"},
+  sys:{nm:"기본 (애플 고딕)",sub:"예전 글씨체",css:null,fam:null,ff:'"Apple SD Gothic Neo","Noto Sans KR",sans-serif'}
+};
+function odFontGet(){try{const v=localStorage.getItem("wonnae_odfont");return OD_FONTS[v]?v:"pre";}catch(e){return "pre";}}
+function odFontApply(k){
+  const f=OD_FONTS[k]||OD_FONTS.pre;
+  document.body.classList.remove("odf-pre","odf-nsr");
+  if(k!=="sys")document.body.classList.add("odf-"+k);
+  if(f.css&&!document.querySelector('link[data-odf="'+k+'"]')){
+    const l=document.createElement("link");l.rel="stylesheet";l.href=f.css;l.setAttribute("data-odf",k);
+    l.onload=()=>{try{if(document.fonts)Promise.all([document.fonts.load('700 12px '+f.fam,"가나다0"),document.fonts.load('400 12px '+f.fam,"가나다0")]).then(()=>{odMeasureCols();});}catch(e){}};
+    document.head.appendChild(l);
+  }
+  odMeasureCols();
+  try{if(document.fonts&&f.fam)document.fonts.load('600 12px '+f.fam,"가나다0").then(()=>odMeasureCols());}catch(e){}
+}
+function odFontMenu(btn){
+  document.querySelectorAll(".odfont-pop").forEach(e=>e.remove());
+  const cur=odFontGet();
+  const pop=document.createElement("div");pop.className="odfont-pop";
+  pop.innerHTML=Object.entries(OD_FONTS).map(([k,f])=>`<button type="button" data-k="${k}" class="${k===cur?"on":""}" style="font-family:${f.ff.replace(/"/g,"&quot;")}">${f.nm}<small>${f.sub}</small></button>`).join("");
+  document.body.appendChild(pop);
+  Object.keys(OD_FONTS).forEach(k=>{const f=OD_FONTS[k];if(f.css&&!document.querySelector('link[data-odf="'+k+'"]')){const l=document.createElement("link");l.rel="stylesheet";l.href=f.css;l.setAttribute("data-odf",k);document.head.appendChild(l);}});   /* 미리보기용 */
+  const r=btn.getBoundingClientRect();
+  pop.style.left=Math.max(8,Math.min(window.innerWidth-pop.offsetWidth-8,r.left))+"px";
+  pop.style.top=(r.bottom+6)+"px";
+  pop.querySelectorAll("button").forEach(b=>b.onclick=ev=>{ev.stopPropagation();
+    const k=b.dataset.k;try{localStorage.setItem("wonnae_odfont",k);}catch(e){}
+    odFontApply(k);pop.remove();toast("글씨체: "+OD_FONTS[k].nm);
+    setTimeout(()=>{try{renderOcsDay();}catch(e){}},60);});
+  setTimeout(()=>{const close=e=>{if(!pop.contains(e.target)){pop.remove();document.removeEventListener("click",close);}};document.addEventListener("click",close);},0);
+}
+try{if(document.readyState!=="loading")odFontApply(odFontGet());else document.addEventListener("DOMContentLoaded",()=>odFontApply(odFontGet()));}catch(e){}
+function tvFitChips(){
+  requestAnimationFrame(()=>{document.querySelectorAll("#ocs-myday .tvchips").forEach(c=>{
+    c.classList.remove("tight","tighter","fit1","fit2");
+    /* 여백부터 줄이고, 그래도 넘치면(좁은 폰) 글자를 반 단계씩 — 최소 예전 크기(10.5px)까지만 */
+    for(const k of ["tight","tighter","fit1","fit2"]){if(c.scrollWidth>c.clientWidth+1)c.classList.add(k);else break;}
+  });});
+}
+
+/* ═══ 오늘 뭐 열리나 — ⏱ 시간대별 전체(기본) / 🗂 과별로 보기 ═══ */
 function renderOcsDay(){
   const ds=ocsDate||ymd(new Date());
   const d=new Date(ds+"T00:00");const day=d.getDay();
@@ -5507,7 +6394,7 @@ function renderOcsDay(){
         +(withTime?`<td class="ocl-t">${u.t||"?"}</td>`:"")
         +`<td class="ocl-p"><b>${esc(u.pt)}</b><span>${esc(u.no||"")}</span>${mine?`<i>◇내 토탈</i>`:""}</td>`
         +`<td class="ocl-c">${dp}${nb}${lock?"🔒 ":""}${esc(u.cat||"—")}</td>`
-        +(withTime?"":`<td class="ocl-d">${esc(drLabel(u))}</td>`)+`</tr>`;};
+        +`<td class="ocl-d">${esc(drLabel(u))}</td></tr>`;};
     /* 오늘이면 지금 시각 기준: 30분 넘게 지난 시간대=흐리게, 다음 시간대=NEXT */
     const isToday=ds===ymd(new Date());
     const nowM=(()=>{const n=new Date();return n.getHours()*60+n.getMinutes();})();
@@ -5519,8 +6406,8 @@ function renderOcsDay(){
     }else if(ocsByDr){
       /* 쌤별: 담당쌤 가나다순 묶음 · 묶음 안은 시간순 */
       const G={};L.forEach(u=>{const nm=(drLabel(u)||"").trim()||"담당 미지정";(G[nm]=G[nm]||[]).push(u);});
-      list=`<table class="ocl bydr"><colgroup><col class="c-hi"><col class="c-t"><col class="c-p"><col></colgroup>`+Object.keys(G).sort((a,b)=>a==="담당 미지정"?1:b==="담당 미지정"?-1:a.localeCompare(b,"ko"))
-        .map(nm=>`<tr class="ocl-h"><td colspan="4"><span class="ocl-pill dr">${esc(nm)}</span></td></tr>`+G[nm].map(u=>row(u,true)).join("")).join("")+`</table>`;
+      list=`<table class="ocl bydr"><colgroup><col class="c-hi"><col class="c-t"><col class="c-p"><col><col class="c-d"></colgroup>`+Object.keys(G).sort((a,b)=>a==="담당 미지정"?1:b==="담당 미지정"?-1:a.localeCompare(b,"ko"))
+        .map(nm=>`<tr class="ocl-h"><td colspan="5"><span class="ocl-pill dr">${esc(nm)}</span></td></tr>`+G[nm].map(u=>row(u,true)).join("")).join("")+`</table>`;
     }else{
       /* 🕘 시간순: 같은 시각끼리 묶어 시각은 한 번만 */
       const T={};const ks=[];L.forEach(u=>{const t=u.t||"시간?";if(!T[t]){T[t]=[];ks.push(t);}T[t].push(u);});
@@ -5538,12 +6425,11 @@ function renderOcsDay(){
       <div class="odt-bar">${tabs}</div>
       <div class="ocl-sum">${sel==="__all"?"<b>전체</b>":`<span class="dept-tag" style="background:${DEPT_COLOR[sel]||"#666"};color:${txtOn(DEPT_COLOR[sel]||"#666")}">${sel}</span>`}
         <b class="ocl-sum-n">${allLock?L0.length:okL.length}건</b>
-        <span>${allLock?"참여불가":`오전 ${am} · 오후 ${pm}`}</span>${mineN?`<span class="ocl-sum-mine">◇내 토탈 ${mineN}</span>`:""}${tag?`<span class="ocl-sum-tag">${tag}</span>`:""}
+        <span>${allLock?"참여불가":`오전 ${am} · 오후 ${pm}`}</span>${lockN?`<button type="button" class="ocl-lk${ocsHideResv?"":" open"}" onclick="ocsToggleResv()" title="${ocsHideResv?"탭하면 교수님 진료 보기":"탭하면 교수님 진료 숨기기"}">${ocsHideResv?"🔒":"🔓"}${lockN}</button>`:""}${mineN?`<span class="ocl-sum-mine">◇내 토탈 ${mineN}</span>`:""}${tag?`<span class="ocl-sum-tag">${tag}</span>`:""}
 </div>
       <div class="ocl-tools">
         <div class="hi-pen"></div>
         <div class="ocl-seg"><button class="${ocsByDr?"":"on"}" onclick="ocsSetSort(false)">시간순</button><button class="${ocsByDr?"on":""}" onclick="ocsSetSort(true)">쌤별</button></div>
-        <button class="ocl-lock${ocsHideResv?" on":""}" onclick="ocsToggleResv()">${ocsHideResv?"🔒 교수님 숨김":"👁 교수님 표시"}</button>
       </div>
       ${!ocsByDr&&L.length?`<div class="ocl-jump">${isToday&&nextT?`<button class="now" onclick="ocsJump('oclt-${nextT.replace(":","")}')">⏰ 지금</button>`:""}<button onclick="ocsJump('ocl-top')">☀️ 오전</button>${pm&&L.some(u=>slotM(u.t||"")>=750)?`<button onclick="ocsJump('ocl-pm')">🌙 오후</button>`:""}</div>`:""}
       ${list}
@@ -5820,7 +6706,7 @@ function renderBackupBanner(){
       <button class="btn small" style="margin-left:auto;background:var(--amber);border-color:var(--amber);color:#3a2600" onclick="exportFile()">파일 저장</button></div>`;
   }else{el.style.display="none";el.innerHTML="";}
 }
-function renderAll(lazy){initSchedForm();renderToday();tick();renderBackupBanner();updateBackupTxt();
+function renderAll(lazy){renderMini();initSchedForm();renderToday();tick();renderBackupBanner();updateBackupTxt();
   const heavy=()=>{renderTotals();};  /* renderFlows/renderKnow는 가이드 탭 최초 진입 시 렌더 (지연 로딩) */
   if(lazy)setTimeout(heavy,60); else heavy();
   if(!window._totScan){window._totScan=1;const M=totalMatches();
@@ -6236,7 +7122,7 @@ function toggleSeen(tid,idx,val){
   const newVal=e.seen===val?null:val;         /* 같은 버튼 재탭=해제 */
   const hadO=e.seen==="o";
   e.seen=newVal;
-  if(newVal==="o"&&!t.visits.includes(e.d)){  /* ✅봤음 → visit 자동 기록 (유폴 D-7 연동) */
+  if(newVal==="o"&&!t.visits.includes(e.d)){  /* ✅봤음 → visit 자동 기록 (서류 마감 연동) */
     t.visits.push(e.d);t.visits=t.visits.filter(Boolean).sort();
     if(t.next===e.d){t.next="";t.nextT="";t.nextHidden=false;t.nextU=Date.now();}
     if(t.visits.length>=t.need){t.next="";t.nextT="";t.nextHidden=false;t.nextU=Date.now();}
@@ -6305,38 +7191,40 @@ function renderOcsHl(){
   Object.values(o.days||{}).forEach(rs=>(rs||[]).forEach(r=>pool.push(r)));
   (o.arch||[]).forEach(r=>pool.push(r));
   const seen=new Set();const all=[];
-  pool.forEach(r=>{const k=ocsKey(r);if(seen.has(k)||!(hiOf(k)>0))return;seen.add(k);all.push(r);});
+  let MS=new Set();try{matchSet().forEach(u=>MS.add(ocsKey(u)));}catch(e){}
+  /* 칠한 진료 + 내 토탈 진료(칠하지 않아도 자동 포함 · 보라) */
+  pool.forEach(r=>{const k=ocsKey(r);if(seen.has(k)||!(hiOf(k)>0||MS.has(k)))return;seen.add(k);all.push(r);});
   Object.keys(S.ocsHi||{}).forEach(k=>{if(seen.has(k)||!(hiOf(k)>0))return;const p=k.split("|");if(p.length<4||!p[0])return;
     seen.add(k);all.push({d:p[0],t:p[1],no:p[2],dep:p[3],pt:"(정리된 진료)",cat:"",dr:"",_gone:1});});
   const cn=n=>all.filter(u=>hiOf(ocsKey(u))===n).length;
-  const chips=[["main","🖍️ 기본",cn(1)+cn(2)],["1","노랑",cn(1)],["2","🟥 빨강",cn(2)],["3","⬜ 회색",cn(3)],["all","전체",all.length]];
+  const mineOnly=all.filter(u=>!(hiOf(ocsKey(u))>0)).length;
+  const chips=[["main","🖍️ 기본",cn(1)+cn(2)+mineOnly],["1","노랑",cn(1)],["2","🟥 빨강",cn(2)],["3","⬜ 회색",cn(3)],["all","전체",all.length]];
   let html=`<div class="card"><h2>🖍️ 하이라이트한 진료 <span class="badge pu">${all.length}건</span></h2>
     <p class="hint">당일 뷰에서 칠한 진료가 날짜별로 모여요 · <b>새 OCS 파일을 올리면 초기화</b>돼요</p>
     <div style="display:flex;gap:5px;align-items:center;margin:8px 0 2px;flex-wrap:wrap">
       <span style="font-size:11px;font-weight:800;color:var(--sub)">색</span>
       ${chips.map(([k,lb,n])=>{const on=f===k;
         return `<button onclick="hlSetColor('${k}')" ${n?"":"disabled"} style="border:1.5px solid ${on?"var(--coral)":"var(--line)"};background:${on?"var(--coral)":(k==="1"?"#FFF3B0":k==="2"?"#FFD8D2":k==="3"?"#ECEEF1":"#fff")};color:${on?"#fff":(n?"var(--ink)":"#CCC")};border-radius:999px;padding:3px 11px;font-size:11.5px;font-weight:800;cursor:${n?"pointer":"default"}">${lb} ${n}</button>`;}).join("")}
-      <span class="hint" style="font-size:10.5px">회색은 기본에서 제외</span>
+      <span class="hint" style="font-size:10.5px">회색은 기본에서 제외 · <b style="color:var(--purple)">◇내 토탈</b>은 자동 포함</span>
     </div>
     <div class="ocl-tools" style="margin:8px 0 0"><div class="hi-pen"></div><span class="hint" style="font-size:10.5px">🔄=탭마다 노랑→빨강→회색→해제 · 색 선택=그 색만</span></div></div>`;
-  const list=all.filter(u=>pass(hiOf(ocsKey(u))));
+  const list=all.filter(u=>{const n=hiOf(ocsKey(u));return n>0?pass(n):(f==="main"||f==="all");});
   if(!list.length){
     html+=`<div class="card"><p class="hl-empty">${all.length?"이 색으로 칠한 진료가 없어요 — 위 색 칩을 바꿔보세요.":"아직 칠한 진료가 없어요 — <b>당일 뷰</b>에서 진료 줄 왼쪽 <b>🖍️</b>를 탭해보세요. 위 🖍️ 동그라미로 칠할 색을 고를 수 있어요."}</p></div>`;
     body.innerHTML=html;renderHiPen();return;
   }
-  let MS=new Set();try{matchSet().forEach(u=>MS.add(ocsKey(u)));}catch(e){}
   const today=ymd(new Date());
   const byD={};list.forEach(r=>{(byD[r.d]=byD[r.d]||[]).push(r);});
   const ds=Object.keys(byD).sort((a,b)=>{const pa=a<today,pb=b<today;if(pa!==pb)return pa?1:-1;return pa?(a<b?1:-1):(a<b?-1:1);});
-  html+=`<div class="card ocl-card"><table class="ocl bydr"><colgroup><col class="c-hi"><col class="c-t"><col class="c-p"><col></colgroup>`+ds.map(d=>{
+  html+=`<div class="card ocl-card"><table class="ocl bydr"><colgroup><col class="c-hi"><col class="c-t"><col class="c-p"><col><col class="c-d"></colgroup>`+ds.map(d=>{
     const L=byD[d].sort((a,b)=>(a.t||"")<(b.t||"")?-1:1);
     const lbl=d===today?"오늘 · "+fmtD(d):fmtD(d)+(d<today?" · 지난 날짜":"");
-    return `<tr class="ocl-h"><td colspan="4"><span class="ocl-pill">${lbl}</span></td></tr>`+L.map(u=>{
+    return `<tr class="ocl-h"><td colspan="5"><span class="ocl-pill">${lbl}</span></td></tr>`+L.map(u=>{
       const k=ocsKey(u);const col=DEPT_COLOR[u.dep]||"#666";const mine=MS.has(k);
       return `<tr class="ocl-r${mine?" mine":""}" style="${hiStyle(k)}"><td><button type="button" class="ocl-hi" data-k="${k}" onclick="event.stopPropagation();ocsHiByKey('${k}')" title="탭=칠하기(🔄순환 또는 고른 색) · 길게=색 선택">${hiIcon(k)}</button></td>
       <td class="ocl-t">${u.t||"?"}</td>
       <td class="ocl-p"><b>${esc(u.pt||"")}</b><span>${esc(u.no||"")}</span>${mine?`<i>◇내 토탈</i>`:""}</td>
-      <td class="ocl-c"><span class="ocl-dep" style="background:${col};color:${txtOn(col)}">${esc(u.dep||"")}</span>${u._gone?'<span style="color:var(--sub)">원본 정리됨</span>':esc(u.cat||"—")}${u.dr?` <span style="color:var(--sub);font-size:10.5px;font-weight:700">· ${esc(drLabel(u))}</span>`:""}</td></tr>`;
+      <td class="ocl-c"><span class="ocl-dep" style="background:${col};color:${txtOn(col)}">${esc(u.dep||"")}</span>${u._gone?'<span style="color:var(--sub)">원본 정리됨</span>':esc(u.cat||"—")}</td><td class="ocl-d">${u.dr?esc(drLabel(u)):""}</td></tr>`;
     }).join("");
   }).join("")+`</table></div>`;
   body.innerHTML=html;
@@ -6362,9 +7250,17 @@ function shareMigrate(){
     if(first)S.hiV=3;
     (S.totals||[]).forEach(t=>{if(t&&t.pre&&!t.preRep){t.preRep=true;}});
     if(S.viewMode!==undefined)delete S.viewMode;
+    /* build 18~26이 넣어둔 예시 미니 수치(갱신 2026-08-10) 정리 → 0에서 시작.
+       유폴리오에서 직접 가져온 적이 있으면(ufItems) 건드리지 않음 */
+    if(S.miniOffUpd==="2026-08-10"&&!(Array.isArray(S.ufItems)&&S.ufItems.length)){
+      S.miniOff=null;delete S.miniOffUpd;
+      try{ensureMiniOff();}catch(e){}
+    }
   }catch(e){}
 }
 
 </script>
+
+<!-- WONNAE_PIPELINE: Claude용 OCS 반영 스크립트 번들(base64 JSON). 브라우저에선 실행 안 됨 -->
 </body>
 </html>
