@@ -500,8 +500,8 @@ table.ocl tr.ocl-h.past .ocl-pill{background:#F3F4F3;color:#9AA3A0}
 table.ocl tr.ocl-r.was td{opacity:.5}
 table.ocl tr.ocl-div td{padding:12px 4px 2px;border-bottom:none;background:transparent!important}
 table.ocl tr.ocl-div span{font-size:10.5px;font-weight:800;color:var(--sub);letter-spacing:.04em}
-.ocl-jump{margin-left:auto;display:inline-flex;gap:3px}
-.ocl-jump button{border:1px solid var(--line);background:#fff;color:var(--sub);font-size:10px;font-weight:800;padding:2px 7px;white-space:nowrap;border-radius:99px;cursor:pointer;font-family:inherit}
+.ocl-jump{display:flex;gap:5px;margin:0 0 6px}
+.ocl-jump button{flex:1 1 0;text-align:center;border:1px solid var(--line);background:#fff;color:var(--sub);font-size:10px;font-weight:800;padding:2px 7px;white-space:nowrap;border-radius:99px;cursor:pointer;font-family:inherit}
 .ocl-jump button.now{border-color:var(--coral);color:var(--coral)}
 .ocl-empty{font-size:12px;color:var(--sub);padding:10px 2px}
 </style>
@@ -936,7 +936,7 @@ const DEP1R={j:"치주",b:"보존",c:"보철",k:"교정",s:"소치",n:"내과",o
 function txtOn(hex){try{const x=(hex||"").replace("#","");const r=parseInt(x.substr(0,2),16),g=parseInt(x.substr(2,2),16),b=parseInt(x.substr(4,2),16);return (0.299*r+0.587*g+0.114*b)/255>0.62?"#1E2823":"#fff";}catch(e){return "#fff";}}
 const DEPT_COLOR={"소치":"#EE7A1A","내과":"#C29B00","교정":"#2E9E44","치주":"#12A5B0","보존":"#3D7BE0","보철":"#23408F","외과":"#A8262A","영상":"#4F7FA8","병리":"#B0637C","원진실":"#9A5FD6","관악":"#6B2D8F","공통":"#5C6B73","기타":"#8A938D"};
 const KEY="wonnae-share-v1";
-const BUILD_ID="23";   /* 🎁 공유판(배포용) 빌드 — 새 파일마다 +1 */
+const BUILD_ID="24";   /* 🎁 공유판(배포용) 빌드 — 새 파일마다 +1 */
 function esc(s){return String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");}
 /* 저장 어댑터: 클로드 앱/웹에서 열면 계정 저장소(폰·PC 자동 동기화),
    파일을 따로 브라우저로 열면 그 기기 localStorage(비동기화)로 폴백 */
@@ -5537,12 +5537,13 @@ function renderOcsDay(){
       <div class="ocl-sum">${sel==="__all"?"<b>전체</b>":`<span class="dept-tag" style="background:${DEPT_COLOR[sel]||"#666"};color:${txtOn(DEPT_COLOR[sel]||"#666")}">${sel}</span>`}
         <b class="ocl-sum-n">${allLock?L0.length:okL.length}건</b>
         <span>${allLock?"참여불가":`오전 ${am} · 오후 ${pm}`}</span>${mineN?`<span class="ocl-sum-mine">◇내 토탈 ${mineN}</span>`:""}${tag?`<span class="ocl-sum-tag">${tag}</span>`:""}
-        ${!ocsByDr&&L.length?`<span class="ocl-jump">${isToday&&nextT?`<button class="now" onclick="ocsJump('oclt-${nextT.replace(":","")}')">⏰지금</button>`:""}<button onclick="ocsJump('ocl-top')">오전</button>${pm&&L.some(u=>slotM(u.t||"")>=750)?`<button onclick="ocsJump('ocl-pm')">오후</button>`:""}</span>`:""}</div>
+</div>
       <div class="ocl-tools">
         <div class="hi-pen"></div>
         <div class="ocl-seg"><button class="${ocsByDr?"":"on"}" onclick="ocsSetSort(false)">시간순</button><button class="${ocsByDr?"on":""}" onclick="ocsSetSort(true)">쌤별</button></div>
         <button class="ocl-lock${ocsHideResv?" on":""}" onclick="ocsToggleResv()">${ocsHideResv?"🔒 교수님 숨김":"👁 교수님 표시"}</button>
       </div>
+      ${!ocsByDr&&L.length?`<div class="ocl-jump">${isToday&&nextT?`<button class="now" onclick="ocsJump('oclt-${nextT.replace(":","")}')">⏰ 지금</button>`:""}<button onclick="ocsJump('ocl-top')">☀️ 오전</button>${pm&&L.some(u=>slotM(u.t||"")>=750)?`<button onclick="ocsJump('ocl-pm')">🌙 오후</button>`:""}</div>`:""}
       ${list}
     </div>`;
   }else{
