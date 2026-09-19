@@ -688,8 +688,10 @@ header .hdr-left{flex:1;min-width:0}
 #pw-dlg{border:none;border-radius:16px;padding:18px;max-width:340px;width:88vw;box-shadow:0 18px 50px rgba(0,0,0,.28)}
 #pw-dlg::backdrop{background:rgba(20,28,24,.45)}
 .hl-empty{font-size:12.5px;color:var(--sub);line-height:1.6}
-#ocs-pills{display:flex;gap:6px}
-#ocs-pills button{flex:1 1 0;min-width:0;justify-content:center;text-align:center;white-space:nowrap;margin:0}
+#ocs-pills,#save-pills{display:flex;gap:6px}
+#ocs-pills button,#save-pills button{flex:1 1 0;min-width:0;justify-content:center;text-align:center;white-space:nowrap;margin:0}
+#save-pills{margin-bottom:10px}
+#save-pills button{min-height:36px}
 
 /* ═ OCS 과별 진료 목록 (과 선택 → 그 과 전체 펼침) ═ */
 .ocl-card{padding:12px 11px}
@@ -967,35 +969,15 @@ table.ocl tr.mine .ocl-p b{color:var(--ink,#1E2823)}
 
 <!-- ══ 미니 ══ -->
 <!-- ══ 가이드 ══ -->
-<section class="tabpage" id="page-rules">
-  <div class="card" style="border:1.5px solid var(--purple)">
-    <h2>📋 노티 양식 <span class="badge pu">탭해서 복사</span></h2>
-    <p class="hint">아래 상자를 탭하면 양식이 복사돼요 — 카톡방에 붙여넣고 내용만 채우면 끝!</p>
-    <div class="copybox" onclick="copyTx(this)"><code>@케이스장, 내원시간, 환자번호, 이름, 들어가는 원내생</code><button class="btn small ghost">복사</button></div>
-    <p class="hint">↑ 친환 노티 — 당일 <b>08:30까지</b> 과별 질문/잡담방</p>
-    <div class="copybox" onclick="copyTx(this)"><code>선생님,날짜,시간,항목(가/고/임),환자명,환자번호,번호,이름</code><button class="btn small ghost">복사</button></div>
-    <p class="hint">↑ 보철 토탈 노티 — 전날 18:00~당일 08:00 토탈방 · 2명이면 각자!</p>
-    <div class="copybox" onclick="copyTx(this)"><code>36 ○○○ 원진실환자 촬영하겠습니다</code><button class="btn small ghost">복사</button></div>
-    <p class="hint">↑ 영상 본인환자 촬영 — 잡담방</p>
-  </div>
-  <div class="gsec" id="g-flow" style="display:block">
-    <div class="card share-blk"><h2>📋 노티 양식 <span class="badge pu">탭해서 복사</span></h2>
-      <div class="copybox" onclick="copyTx(this)"><code>@케이스장, 내원시간, 환자번호, 이름, 들어가는 원내생</code><button class="btn small ghost">복사</button></div>
-      <p class="hint">↑ 친환 노티 — 당일 <b>08:30까지</b> 과별 질문/잡담방</p>
-      <div class="copybox" onclick="copyTx(this)"><code>선생님,날짜,시간,항목(가/고/임),환자명,환자번호,번호,이름</code><button class="btn small ghost">복사</button></div>
-      <p class="hint">↑ 보철 토탈 노티 — 전날 18:00~당일 08:00 토탈방 · 2명이면 각자!</p>
-    </div>
-    <div class="card"><h2>케이스별 절차 체크리스트</h2>
-    <p class="hint">사인·유폴 순서 복잡한 케이스 단계별 (체크 저장 안 됨 — 케이스마다 재사용)</p></div>
-    <p class="hint" style="margin-bottom:6px">처음이면 <b>⓪ 공통 3개</b>부터! 제목 탭=단계 펼치기 · 과 칩 탭=그 과만 보기 · <span style="background:#DFF0E7;border-radius:4px;padding:0 4px">✍초록</span>=유폴·사인 단계 · <span style="background:#FBEAEA;border-radius:4px;padding:0 4px">⚠빨강</span>=실수 주의</p>
-    <div id="flow-depts" style="display:flex;gap:5px;overflow-x:auto;padding:2px 0 8px;-webkit-overflow-scrolling:touch"></div>
-    <input id="flow-q" placeholder="🔍 절차 검색 (케이스·키워드 ex. 유폴, 토탈, 차팅)" style="width:100%;margin-bottom:8px;padding:9px 12px;border:1.5px solid var(--line);border-radius:10px;font-size:13px" oninput="renderFlows()">
-    <div id="flow-list"></div>
-  </div>
-</section>
+
 
 <!-- ══ 데이터 저장 (백업 + GitHub 동기화 + 캘린더 구독) ══ -->
 <section class="tabpage" id="page-save">
+  <div class="slotpick" id="save-pills">
+    <button data-s="save" class="on">☁ 저장·동기화</button>
+    <button data-s="guide">✔ 가이드</button>
+  </div>
+  <div class="ssec" id="s-save">
   <div class="card" style="border:1.5px solid var(--amber)">
     <h2>💾 데이터 지키기 <span class="badge" id="db-mode"></span></h2>
     <p class="hint">데이터는 <b>이 기기 브라우저</b>에 저장돼요. ① <b>홈 화면에 추가</b>해서 앱처럼 쓰면 오래 안 열어도 안 지워져요(아이폰 강력 추천!). ② 폰↔컴퓨터 옮기기 = 한쪽에서 <b>[📤 원탭 복사]</b> → 카톡 '나에게' 붙여넣기 → 다른 기기에서 그 글 복사 후 <b>[📋 클립보드 복원]</b>. ③ 장기 보관은 파일 저장.</p>
@@ -1083,6 +1065,33 @@ table.ocl tr.mine .ocl-p b{color:var(--ink,#1E2823)}
       <button class="btn small ghost" style="width:100%;margin-top:6px" onclick="checkIcs()">🔎 GitHub에 실제로 올라갔는지 확인</button>
       <p class="hint" id="ics-check" style="margin-top:4px"></p>
     </div>
+</div>
+  <div class="ssec" id="s-guide" style="display:none">
+  <div class="card" style="border:1.5px solid var(--purple)">
+    <h2>📋 노티 양식 <span class="badge pu">탭해서 복사</span></h2>
+    <p class="hint">아래 상자를 탭하면 양식이 복사돼요 — 카톡방에 붙여넣고 내용만 채우면 끝!</p>
+    <div class="copybox" onclick="copyTx(this)"><code>@케이스장, 내원시간, 환자번호, 이름, 들어가는 원내생</code><button class="btn small ghost">복사</button></div>
+    <p class="hint">↑ 친환 노티 — 당일 <b>08:30까지</b> 과별 질문/잡담방</p>
+    <div class="copybox" onclick="copyTx(this)"><code>선생님,날짜,시간,항목(가/고/임),환자명,환자번호,번호,이름</code><button class="btn small ghost">복사</button></div>
+    <p class="hint">↑ 보철 토탈 노티 — 전날 18:00~당일 08:00 토탈방 · 2명이면 각자!</p>
+    <div class="copybox" onclick="copyTx(this)"><code>36 ○○○ 원진실환자 촬영하겠습니다</code><button class="btn small ghost">복사</button></div>
+    <p class="hint">↑ 영상 본인환자 촬영 — 잡담방</p>
+  </div>
+  <div class="gsec" id="g-flow" style="display:block">
+    <div class="card share-blk"><h2>📋 노티 양식 <span class="badge pu">탭해서 복사</span></h2>
+      <div class="copybox" onclick="copyTx(this)"><code>@케이스장, 내원시간, 환자번호, 이름, 들어가는 원내생</code><button class="btn small ghost">복사</button></div>
+      <p class="hint">↑ 친환 노티 — 당일 <b>08:30까지</b> 과별 질문/잡담방</p>
+      <div class="copybox" onclick="copyTx(this)"><code>선생님,날짜,시간,항목(가/고/임),환자명,환자번호,번호,이름</code><button class="btn small ghost">복사</button></div>
+      <p class="hint">↑ 보철 토탈 노티 — 전날 18:00~당일 08:00 토탈방 · 2명이면 각자!</p>
+    </div>
+    <div class="card"><h2>케이스별 절차 체크리스트</h2>
+    <p class="hint">사인·유폴 순서 복잡한 케이스 단계별 (체크 저장 안 됨 — 케이스마다 재사용)</p></div>
+    <p class="hint" style="margin-bottom:6px">처음이면 <b>⓪ 공통 3개</b>부터! 제목 탭=단계 펼치기 · 과 칩 탭=그 과만 보기 · <span style="background:#DFF0E7;border-radius:4px;padding:0 4px">✍초록</span>=유폴·사인 단계 · <span style="background:#FBEAEA;border-radius:4px;padding:0 4px">⚠빨강</span>=실수 주의</p>
+    <div id="flow-depts" style="display:flex;gap:5px;overflow-x:auto;padding:2px 0 8px;-webkit-overflow-scrolling:touch"></div>
+    <input id="flow-q" placeholder="🔍 절차 검색 (케이스·키워드 ex. 유폴, 토탈, 차팅)" style="width:100%;margin-bottom:8px;padding:9px 12px;border:1.5px solid var(--line);border-radius:10px;font-size:13px" oninput="renderFlows()">
+    <div id="flow-list"></div>
+  </div>
+</div>
 </section>
 
 </main>
@@ -1092,7 +1101,6 @@ table.ocl tr.mine .ocl-p b{color:var(--ink,#1E2823)}
   <button data-tab="today"><span class="ic">☀︎</span>오늘</button>
   <button data-tab="ocs"><span class="ic">◫</span>OCS</button>
   <button data-tab="mini"><span class="ic">◆</span>미니</button>
-  <button data-tab="rules"><span class="ic">✔</span>가이드</button>
   <button data-tab="save"><span class="ic">☁</span>저장</button>
 </nav>
 
@@ -1230,7 +1238,7 @@ const DEP1R={j:"치주",b:"보존",c:"보철",k:"교정",s:"소치",n:"내과",o
 function txtOn(hex){try{const x=(hex||"").replace("#","");const r=parseInt(x.substr(0,2),16),g=parseInt(x.substr(2,2),16),b=parseInt(x.substr(4,2),16);return (0.299*r+0.587*g+0.114*b)/255>0.62?"#1E2823":"#fff";}catch(e){return "#fff";}}
 const DEPT_COLOR={"소치":"#EE7A1A","내과":"#C29B00","교정":"#2E9E44","치주":"#12A5B0","보존":"#3D7BE0","보철":"#23408F","외과":"#A8262A","영상":"#4F7FA8","병리":"#B0637C","원진실":"#9A5FD6","관악":"#6B2D8F","공통":"#5C6B73","기타":"#8A938D"};
 const KEY="wonnae-share-v1";
-const BUILD_ID="27";   /* 🎁 공유판(배포용) 빌드 — 새 파일마다 +1 */
+const BUILD_ID="28";   /* 🎁 공유판(배포용) 빌드 — 새 파일마다 +1 */
 function esc(s){return String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");}
 /* 저장 어댑터: 클로드 앱/웹에서 열면 계정 저장소(폰·PC 자동 동기화),
    파일을 따로 브라우저로 열면 그 기기 localStorage(비동기화)로 폴백 */
@@ -2487,10 +2495,16 @@ document.querySelectorAll("nav button").forEach(b=>b.onclick=()=>{
   if(b.dataset.tab==="today"){try{renderToday();}catch(e){}}
   if(b.dataset.tab==="mini"){try{renderMini();}catch(e){}}
   if(b.dataset.tab==="sched"){renderCalendar();setTimeout(()=>{applyCalZoom&&applyCalZoom();},0);}
-  if(b.dataset.tab==="rules"&&!window._flowRendered){window._flowRendered=1;renderFlows();}
-  if(b.dataset.tab==="save"){try{renderIcsUrl();ghStatus();updateBackupTxt();}catch(e){}}
+  if(b.dataset.tab==="save"){saveSub("save");try{renderIcsUrl();ghStatus();updateBackupTxt();}catch(e){}}
   window.scrollTo(0,0);
 });
+/* 저장 탭 세부탭: 저장·동기화(기본) | 가이드 */
+function saveSub(s){
+  document.querySelectorAll("#save-pills button").forEach(x=>x.classList.toggle("on",x.dataset.s===s));
+  document.querySelectorAll("#page-save .ssec").forEach(x=>x.style.display=(x.id==="s-"+s)?"":"none");
+  if(s==="guide"&&!window._flowRendered){window._flowRendered=1;try{renderFlows();}catch(e){}}
+}
+document.querySelectorAll("#save-pills button").forEach(b=>b.onclick=()=>{saveSub(b.dataset.s);window.scrollTo(0,0);});
 document.querySelectorAll("#ocs-pills button").forEach(b=>b.onclick=()=>{
   document.querySelectorAll("#ocs-pills button").forEach(x=>x.classList.remove("on"));b.classList.add("on");
   document.querySelectorAll(".osec").forEach(s=>s.style.display="none");
