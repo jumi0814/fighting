@@ -769,6 +769,8 @@ table.ocl tr.mine .ocl-p b{color:var(--ink,#1E2823)}
 .ocl-seg button{height:100%}
 .ocl-card .odt-bar{margin-top:4px}
 #o-day .today-nav .odfont{margin-left:auto}
+@keyframes oclFlash{0%{background:rgba(255,107,90,.28)}100%{background:transparent}}
+table.ocl tr.ocl-h.flash td{animation:oclFlash 1.6s ease-out}
 .ocl-empty{font-size:12px;color:var(--sub);padding:10px 2px}
 </style>
 </head>
@@ -1238,7 +1240,7 @@ const DEP1R={j:"치주",b:"보존",c:"보철",k:"교정",s:"소치",n:"내과",o
 function txtOn(hex){try{const x=(hex||"").replace("#","");const r=parseInt(x.substr(0,2),16),g=parseInt(x.substr(2,2),16),b=parseInt(x.substr(4,2),16);return (0.299*r+0.587*g+0.114*b)/255>0.62?"#1E2823":"#fff";}catch(e){return "#fff";}}
 const DEPT_COLOR={"소치":"#EE7A1A","내과":"#C29B00","교정":"#2E9E44","치주":"#12A5B0","보존":"#3D7BE0","보철":"#23408F","외과":"#A8262A","영상":"#4F7FA8","병리":"#B0637C","원진실":"#9A5FD6","관악":"#6B2D8F","공통":"#5C6B73","기타":"#8A938D"};
 const KEY="wonnae-share-v1";
-const BUILD_ID="29";   /* 🎁 공유판(배포용) 빌드 — 새 파일마다 +1 */
+const BUILD_ID="30";   /* 🎁 공유판(배포용) 빌드 — 새 파일마다 +1 */
 function esc(s){return String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");}
 /* 저장 어댑터: 클로드 앱/웹에서 열면 계정 저장소(폰·PC 자동 동기화),
    파일을 따로 브라우저로 열면 그 기기 localStorage(비동기화)로 폴백 */
@@ -6445,7 +6447,7 @@ function renderOcsDay(){
         <div class="hi-pen"></div>
         <div class="ocl-seg"><button class="${ocsByDr?"":"on"}" onclick="ocsSetSort(false)">시간순</button><button class="${ocsByDr?"on":""}" onclick="ocsSetSort(true)">쌤별</button></div>
       </div>
-      ${!ocsByDr&&L.length?`<div class="ocl-jump">${isToday&&nextT?`<button class="now" onclick="ocsJump('oclt-${nextT.replace(":","")}')">⏰ 지금</button>`:""}<button onclick="ocsJump('ocl-top')">☀️ 오전</button>${pm&&L.some(u=>slotM(u.t||"")>=750)?`<button onclick="ocsJump('ocl-pm')">🌙 오후</button>`:""}</div>`:""}
+      ${!ocsByDr&&L.length?`<div class="ocl-jump"><button class="now" onclick="ocsJumpNow()" title="오늘 지금 시각의 진료로 이동">⏰ 지금</button><button onclick="ocsJump('ocl-top')">☀️ 오전</button>${pm&&L.some(u=>slotM(u.t||"")>=750)?`<button onclick="ocsJump('ocl-pm')">🌙 오후</button>`:""}</div>`:""}
       ${list}
     </div>`;
   }else{
@@ -6473,6 +6475,20 @@ let ocsByDr=false;        /* false=시간순 · true=쌤별 */
 function ocsDeptPick(dep){ocsDeptSel=dep;window.__oclKeepY=1;renderOcsDay();}
 function ocsSetSort(byDr){ocsByDr=!!byDr;window.__oclKeepY=1;renderOcsDay();}
 function ocsJump(id){const el=document.getElementById(id);if(!el)return;const y=el.getBoundingClientRect().top+window.scrollY-10;window.scrollTo({top:y,behavior:"smooth"});}
+/* ⏰ 지금: 오늘 날짜로 와서(다른 날 보고 있어도) 지금 이후 첫 시간대로 스크롤.
+   오늘 진료가 모두 끝났으면 마지막 시간대로 · 도착한 시간대는 잠깐 반짝 */
+function ocsJumpNow(){
+  const today=ymd(new Date());
+  if(ocsDate&&ocsDate!==today){ocsDate=null;renderOcsDay();}
+  const hs=[...document.querySelectorAll("#ocs-booked tr.ocl-h[id^='oclt-']")];
+  if(!hs.length){toast("오늘 이 과에는 표시할 진료가 없어요");return;}
+  const n=new Date(),nowM=n.getHours()*60+n.getMinutes();
+  const mOf=h=>{const x=h.id.slice(5);return (+x.slice(0,-2))*60+(+x.slice(-2));};
+  const tgt=hs.find(h=>mOf(h)>=nowM)||hs[hs.length-1];
+  if(!hs.some(h=>mOf(h)>=nowM))toast("오늘 이 과 진료는 모두 끝났어요 — 마지막 시간대로 이동");
+  const y=tgt.getBoundingClientRect().top+window.scrollY-10;window.scrollTo({top:y,behavior:"smooth"});
+  tgt.classList.remove("flash");void tgt.offsetWidth;tgt.classList.add("flash");
+}
 function ocsLockToggle(){ocsHideResv=!ocsHideResv;window.__oclKeepY=1;renderOcsDay();}
 /* 통계 기간: sem=학기(9월~) · vac=방학(7~8월) · all=전체
    방학과 학기는 진료량 차이가 커서 평균이 왜곡되므로 기본은 '학기'만 본다. */
