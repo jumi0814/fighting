@@ -1238,7 +1238,7 @@ const DEP1R={j:"치주",b:"보존",c:"보철",k:"교정",s:"소치",n:"내과",o
 function txtOn(hex){try{const x=(hex||"").replace("#","");const r=parseInt(x.substr(0,2),16),g=parseInt(x.substr(2,2),16),b=parseInt(x.substr(4,2),16);return (0.299*r+0.587*g+0.114*b)/255>0.62?"#1E2823":"#fff";}catch(e){return "#fff";}}
 const DEPT_COLOR={"소치":"#EE7A1A","내과":"#C29B00","교정":"#2E9E44","치주":"#12A5B0","보존":"#3D7BE0","보철":"#23408F","외과":"#A8262A","영상":"#4F7FA8","병리":"#B0637C","원진실":"#9A5FD6","관악":"#6B2D8F","공통":"#5C6B73","기타":"#8A938D"};
 const KEY="wonnae-share-v1";
-const BUILD_ID="28";   /* 🎁 공유판(배포용) 빌드 — 새 파일마다 +1 */
+const BUILD_ID="29";   /* 🎁 공유판(배포용) 빌드 — 새 파일마다 +1 */
 function esc(s){return String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");}
 /* 저장 어댑터: 클로드 앱/웹에서 열면 계정 저장소(폰·PC 자동 동기화),
    파일을 따로 브라우저로 열면 그 기기 localStorage(비동기화)로 폴백 */
@@ -6439,7 +6439,7 @@ function renderOcsDay(){
       <div class="odt-bar">${tabs}</div>
       <div class="ocl-sum">${sel==="__all"?"<b>전체</b>":`<span class="dept-tag" style="background:${DEPT_COLOR[sel]||"#666"};color:${txtOn(DEPT_COLOR[sel]||"#666")}">${sel}</span>`}
         <b class="ocl-sum-n">${allLock?L0.length:okL.length}건</b>
-        <span>${allLock?"참여불가":`오전 ${am} · 오후 ${pm}`}</span>${lockN?`<button type="button" class="ocl-lk${ocsHideResv?"":" open"}" onclick="ocsToggleResv()" title="${ocsHideResv?"탭하면 교수님 진료 보기":"탭하면 교수님 진료 숨기기"}">${ocsHideResv?"🔒":"🔓"}${lockN}</button>`:""}${mineN?`<span class="ocl-sum-mine">◇내 토탈 ${mineN}</span>`:""}${tag?`<span class="ocl-sum-tag">${tag}</span>`:""}
+        <span>${allLock?"참여불가":`오전 ${am} · 오후 ${pm}`}</span>${lockN?`<button type="button" class="ocl-lk${ocsHideResv?"":" open"}" onclick="ocsLockToggle()" title="${ocsHideResv?"탭하면 교수님 진료 보기":"탭하면 교수님 진료 숨기기"}">${ocsHideResv?"🔒":"🔓"}${lockN}</button>`:""}${mineN?`<span class="ocl-sum-mine">◇내 토탈 ${mineN}</span>`:""}${tag?`<span class="ocl-sum-tag">${tag}</span>`:""}
 </div>
       <div class="ocl-tools">
         <div class="hi-pen"></div>
@@ -6473,7 +6473,7 @@ let ocsByDr=false;        /* false=시간순 · true=쌤별 */
 function ocsDeptPick(dep){ocsDeptSel=dep;window.__oclKeepY=1;renderOcsDay();}
 function ocsSetSort(byDr){ocsByDr=!!byDr;window.__oclKeepY=1;renderOcsDay();}
 function ocsJump(id){const el=document.getElementById(id);if(!el)return;const y=el.getBoundingClientRect().top+window.scrollY-10;window.scrollTo({top:y,behavior:"smooth"});}
-
+function ocsLockToggle(){ocsHideResv=!ocsHideResv;window.__oclKeepY=1;renderOcsDay();}
 /* 통계 기간: sem=학기(9월~) · vac=방학(7~8월) · all=전체
    방학과 학기는 진료량 차이가 커서 평균이 왜곡되므로 기본은 '학기'만 본다. */
 
