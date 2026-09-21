@@ -838,6 +838,11 @@ table.ocl tr.mine .ocl-p b{color:var(--ink,#1E2823)}
 @keyframes oclFlash{0%{background:rgba(255,107,90,.28)}100%{background:transparent}}
 table.ocl tr.ocl-h.flash td{animation:oclFlash 1.6s ease-out}
 .ocl-empty{font-size:12px;color:var(--sub);padding:10px 2px}
+/* OCS 날짜 선택 — 날짜 버튼 위 투명 날짜 입력칸 */
+.ocs-dp-wrap{position:relative;display:inline-flex;align-items:center;align-self:stretch}
+#ocs-date-pick{position:absolute;inset:0;width:100%;height:100%;min-width:0;opacity:0;border:0;padding:0;margin:0;font-size:16px;cursor:pointer;z-index:2;-webkit-appearance:none;appearance:none;background:transparent;color:transparent}
+#ocs-date-pick::-webkit-calendar-picker-indicator{position:absolute;inset:0;width:100%;height:100%;margin:0;padding:0;opacity:0;cursor:pointer}
+.odnav .ocs-dp-wrap>#ocs-nav-title{color:var(--ink)!important;font-size:12px!important;padding:3px 6px!important}
 </style>
 </head>
 <body>
@@ -1306,7 +1311,7 @@ const DEP1R={j:"치주",b:"보존",c:"보철",k:"교정",s:"소치",n:"내과",o
 function txtOn(hex){try{const x=(hex||"").replace("#","");const r=parseInt(x.substr(0,2),16),g=parseInt(x.substr(2,2),16),b=parseInt(x.substr(4,2),16);return (0.299*r+0.587*g+0.114*b)/255>0.62?"#1E2823":"#fff";}catch(e){return "#fff";}}
 const DEPT_COLOR={"소치":"#EE7A1A","내과":"#C29B00","교정":"#2E9E44","치주":"#12A5B0","보존":"#3D7BE0","보철":"#23408F","외과":"#A8262A","영상":"#4F7FA8","병리":"#B0637C","원진실":"#9A5FD6","관악":"#6B2D8F","공통":"#5C6B73","기타":"#8A938D"};
 const KEY="wonnae-share-v1";
-const BUILD_ID="34";   /* 🎁 공유판(배포용) 빌드 — 새 파일마다 +1 */
+const BUILD_ID="35";   /* 🎁 공유판(배포용) 빌드 — 새 파일마다 +1 */
 function esc(s){return String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");}
 /* 저장 어댑터: 클로드 앱/웹에서 열면 계정 저장소(폰·PC 자동 동기화),
    파일을 따로 브라우저로 열면 그 기기 localStorage(비동기화)로 폴백 */
@@ -6412,20 +6417,7 @@ function hiPaint(k){
 function ocsMove(d){const b=ocsDate?new Date(ocsDate+"T00:00"):new Date();b.setDate(b.getDate()+d);ocsDate=ymd(b);renderOcs();}
 function ocsReset(){ocsDate=null;renderOcs();}
 /* OCS 날짜 탭 → 달력에서 직접 고르기 (#340) — 휴대폰 기본 날짜 선택기 사용, 못 쓰면 입력창 */
-function ocsPickDate(){
-  const today=ymd(new Date());const cur=ocsDate||today;
-  let inp=document.getElementById("ocs-date-pick");
-  if(!inp){inp=document.createElement("input");inp.type="date";inp.id="ocs-date-pick";
-    inp.style.cssText="position:fixed;left:50%;top:40%;width:1px;height:1px;opacity:0;pointer-events:none;border:0;padding:0";
-    inp.addEventListener("change",()=>{const v=inp.value;if(!v)return;ocsDate=(v===ymd(new Date()))?null:v;renderOcs();
-      toast(v===ymd(new Date())?"오늘 OCS":`${fmtD(v)} OCS${upDay(v).length||histDay(v).length?"":" — 이 날짜 데이터 없음"}`);});
-    document.body.appendChild(inp);}
-  inp.value=cur;
-  try{if(typeof inp.showPicker==="function"){inp.showPicker();return;}}catch(e){}
-  try{inp.focus();inp.click();}catch(e){}
-  /* 선택기가 안 열리는 브라우저 대비 */
-  setTimeout(()=>{if(document.activeElement!==inp&&typeof askDate==="function")askDate("OCS 날짜 선택",cur,d=>{ocsDate=(d===ymd(new Date()))?null:d;renderOcs();});},350);
-}
+
 const WALKIN_DEPTS=["소치","보존","치주","보철","내과","외과","교정"];
 const RESV_RE=/수술|토탈|임수|메이저|마이너|통진|GSP|GA\b|SED|픽스|교픽|대촬|판독|Flap|플랩|임플|라바지|Lavage|외래/i;
 const CASE_RE=/발치|매복|impla|임플|수술|op\b|flap|판막|\bsc\b|scal|\brp\b|GA|SED|진정|본딩|bond|debond|진단(?!서)|임수|denture|의치|prep|형성|set|셋|물리|물치|splint|endo|근관|신환|초진/i;
@@ -6468,6 +6460,7 @@ function isNewPt(u){
 
 
 function renderOcs(){
+  try{ocsDateOverlay();}catch(e){}
   try{renderHiPen();}catch(e){}
   const pill=document.querySelector("#ocs-pills button.on");
   const o=pill?pill.dataset.o:"day";
@@ -7744,11 +7737,44 @@ function shareMigrate(){
     if(S.viewMode!==undefined)delete S.viewMode;
     /* build 18~26이 넣어둔 예시 미니 수치(갱신 2026-08-10) 정리 → 0에서 시작.
        유폴리오에서 직접 가져온 적이 있으면(ufItems) 건드리지 않음 */
-    if(S.miniOffUpd==="2026-08-10"&&!(Array.isArray(S.ufItems)&&S.ufItems.length)){
+    if(!window.__EMBED&&S.miniOffUpd==="2026-08-10"&&!(Array.isArray(S.ufItems)&&S.ufItems.length)){   /* 개인판 안(배포용 화면)에선 개인 자료라 절대 건드리지 않음 */
       S.miniOff=null;delete S.miniOffUpd;
       try{ensureMiniOff();}catch(e){}
     }
   }catch(e){}
+}
+
+
+/* ═══ OCS 날짜 탭 → 휴대폰 달력 (#341 수정) ═══
+   예전: 숨긴 입력칸(1px·투명·클릭 불가)에 showPicker()를 불러 여는 방식 → 아이폰 등에서 안 열림.
+   지금: 날짜 버튼 위에 '진짜' 날짜 입력칸을 투명하게 겹쳐 둠 → 손가락이 입력칸을 직접 눌러 어떤 폰에서도 기본 달력이 열림.
+         PC(크롬 등)는 누를 때 showPicker()로 바로 달력 표시. 고르면 그 날짜 OCS로 이동. */
+function ocsDateOverlay(){
+  const b=document.getElementById("ocs-nav-title");if(!b||b.__dp)return;b.__dp=1;
+  const wrap=document.createElement("span");wrap.className="ocs-dp-wrap";
+  b.parentNode.insertBefore(wrap,b);wrap.appendChild(b);
+  b.removeAttribute("onclick");b.tabIndex=-1;
+  const inp=document.createElement("input");inp.type="date";inp.id="ocs-date-pick";inp.setAttribute("aria-label","OCS 날짜 선택");
+  const sync=()=>{inp.value=ocsDate||ymd(new Date());};
+  sync();
+  inp.addEventListener("pointerdown",sync);
+  inp.addEventListener("touchstart",sync,{passive:true});
+  inp.addEventListener("focus",sync);
+  inp.addEventListener("click",()=>{try{if(typeof inp.showPicker==="function")inp.showPicker();}catch(e){}});
+  const apply=()=>{const v=inp.value;if(!v)return;const today=ymd(new Date());const nv=(v===today)?null:v;
+    if(nv===ocsDate)return;ocsDate=nv;try{renderOcs();}catch(e){}
+    let has=true;try{has=!!(upOn(v)||[]).length;}catch(e){}
+    toast(v===today?"오늘 OCS":`${fmtD(v)} OCS${has?"":" — 이 날짜 데이터 없음"}`);};
+  inp.addEventListener("change",apply);
+  inp.addEventListener("input",apply);
+  wrap.appendChild(inp);
+}
+function ocsPickDate(){
+  ocsDateOverlay();
+  const inp=document.getElementById("ocs-date-pick");if(!inp)return;
+  inp.value=ocsDate||ymd(new Date());
+  try{if(typeof inp.showPicker==="function"){inp.showPicker();return;}}catch(e){}
+  try{inp.focus();inp.click();}catch(e){}
 }
 
 </script>
