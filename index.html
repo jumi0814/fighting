@@ -713,6 +713,8 @@ html.share-framed,html.share-framed body{overflow:hidden}
 .ocslive .orb{display:flex;flex-direction:column;gap:4px;flex:0 0 auto}
 .ocslive .orb .btn{font-size:11px;padding:4px 9px;white-space:nowrap}
 
+.chip .cmemo{font-weight:600;opacity:.75}
+
 /* ═ 공유판 전용 요소 (OCS 엑셀 업로드·과 칩·보기 토글·노티 내 정보·저장 탭·헤더 우측) ═ */
 header .hdr-left{flex:1;min-width:0}
 .hdr-right{margin-left:auto;display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex:0 0 auto}
@@ -1022,7 +1024,7 @@ table.ocl tr.ocl-h.flash td{animation:oclFlash 1.6s ease-out}
       <h2>OCS 당일 뷰 <span class="badge pu" id="ocs-day-meta"></span></h2>
       <div class="today-nav" style="margin-top:6px">
         <button class="btn small ghost" onclick="ocsMove(-1)">‹</button>
-        <button class="btn small" id="ocs-nav-title" onclick="ocsReset()">오늘</button>
+        <button class="btn small" id="ocs-nav-title" onclick="(typeof ocsPickDate==='function'?ocsPickDate:ocsReset)()" title="탭하면 달력에서 날짜 선택">오늘</button>
         <button class="btn small ghost" onclick="ocsMove(1)">›</button>
         <button class="btn small ghost odfont" onclick="odFontMenu(this)" title="글씨체 바꾸기 (이 기기에 저장)">Aa</button>
       </div>
@@ -1304,7 +1306,7 @@ const DEP1R={j:"치주",b:"보존",c:"보철",k:"교정",s:"소치",n:"내과",o
 function txtOn(hex){try{const x=(hex||"").replace("#","");const r=parseInt(x.substr(0,2),16),g=parseInt(x.substr(2,2),16),b=parseInt(x.substr(4,2),16);return (0.299*r+0.587*g+0.114*b)/255>0.62?"#1E2823":"#fff";}catch(e){return "#fff";}}
 const DEPT_COLOR={"소치":"#EE7A1A","내과":"#C29B00","교정":"#2E9E44","치주":"#12A5B0","보존":"#3D7BE0","보철":"#23408F","외과":"#A8262A","영상":"#4F7FA8","병리":"#B0637C","원진실":"#9A5FD6","관악":"#6B2D8F","공통":"#5C6B73","기타":"#8A938D"};
 const KEY="wonnae-share-v1";
-const BUILD_ID="32";   /* 🎁 공유판(배포용) 빌드 — 새 파일마다 +1 */
+const BUILD_ID="34";   /* 🎁 공유판(배포용) 빌드 — 새 파일마다 +1 */
 function esc(s){return String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");}
 /* 저장 어댑터: 클로드 앱/웹에서 열면 계정 저장소(폰·PC 자동 동기화),
    파일을 따로 브라우저로 열면 그 기기 localStorage(비동기화)로 폴백 */
@@ -1687,6 +1689,7 @@ async function load(){
   renderAll(true);
   try{renderIcsUrl();}catch(e){}
   loadDone=true;          /* 이제부터 저장 허용 (로드 전 빈 시드 덮어쓰기 방지) */
+  try{if(reconcileAllTotals()){save(true);renderAll();}}catch(e){}       /* 예전 버전이 남긴 꼬인 확정·점선 상태 정리 (#339) */
   bindCalPinch&&bindCalPinch();
   setTimeout(()=>{applyCalZoom&&applyCalZoom();},300);
   save(true,true);        /* 시스템 저장 — fresh 세션이면 flushSave가 스스로 거부함 */
@@ -2851,12 +2854,9 @@ function parseQuick(txt){
     span=z;
     /* 시각을 직접 찍었으면 유지, 아니면 나절 블록(시각 없음) */
   }else{
-    /* 단타(시간 단위 진료) — 시각 유지, 나절만 지정했으면 기본 시각 */
-    if(!time){
-      if(explicitZone==="am")time="09:00";
-      else if(explicitZone==="pm")time="13:00";
-    }
-    span=null;
+    /* 제목에 '오전'/'오후'만 있고 시각이 없으면 → 그 나절 통짜 일정 (#338) */
+    if(!time&&explicitZone){span=explicitZone;}
+    else span=null;
   }
   let dur=0;
   if(span==="full")dur=480;
@@ -2982,15 +2982,17 @@ function chipHtml(e){
   const tm=e.time?`<span class="tm2">${e.time.replace(":","")}</span>`:"";
   const st=e.status&&e.status!=="plan"?" st-"+e.status:"";
   const un=(e.time||sess)?"":" untimed";
-  return `<span class="chip${st}${un}${sess?" sess":""}" style="background:${c}1A;border-color:${c}" title="[${e.dept}] ${esc(e.title)}${sess?" (나절)":""}" onclick="event.stopPropagation();openChip('${e.id}')">${tm}${esc(e.title)}</span>`;
+  let mm="";if(Array.isArray(e.fromTotal)&&e.fromTotal.length===1){const f=e.fromTotal[0];const t=findT(f.id);if(t)mm=totNextMemo(t,f.d);}
+  return `<span class="chip${st}${un}${sess?" sess":""}" style="background:${c}1A;border-color:${c}" title="[${e.dept}] ${esc(e.title)}${mm?" · "+esc(mm):""}${sess?" (나절)":""}" onclick="event.stopPropagation();openChip('${e.id}')">${tm}${esc(e.title)}${mm?`<span class="cmemo"> · ${esc(mm)}</span>`:""}</span>`;
 }
 /* ⏳ 예상 일정(가상) — 토탈의 다음 내원일. 실제 events에 넣지 않아 동기화·중복 부작용 0 */
 /* 🗓️ 이미 일정표에 직접 넣어둔 케이스 — 새 일정 만들지 않고 예상(점선) 표시만 정리.
    토탈의 next/nextT만 비움 → 달력 ⏳칩·상세 예상행 사라짐. visit 기록·기존 일정은 그대로. */
-function markNextScheduled(tid){const t=findT(tid);if(!t||!t.next)return;
-  const when=`${fmtD(t.next)}${t.nextT?" "+t.nextT:""}`;
+function markNextScheduled(tid,ds){const t=findT(tid);if(!t)return;ds=ds||t.next;if(!ds)return;
+  const _x=nextsOf(t).find(y=>y&&y.d===ds)||{};
+  const when=`${fmtD(ds)}${_x.t?" "+_x.t:""}`;
   askConfirm(`${esc(t.pt)}의 예상(${esc(when)})을 달력에서만 숨길까요?\n이미 일정표에 직접 넣어두셨을 때 사용하세요 — 다음 내원일 기록(${esc(when)})은 그대로 남고, 달력의 예상 점선만 사라져요.`,()=>{
-    t.nextHidden=true;t.nextU=Date.now();      /* ★next는 보존 · 달력 점선만 숨김 */
+    t.hideVirt=t.hideVirt||{};t.hideVirt[ds]=Date.now();t.nextU=Date.now();   /* ★그 날짜 점선만 숨김 (옛 nextHidden은 무시되던 문제) */
     save(true);refreshAfterEventChange();syncTotals();
     toast(`🗓️ 달력 예상 표시만 숨겼어요 — 다음 내원일(${when})은 토탈에 그대로 있어요`);
   },"달력에서 숨기기");}
@@ -3011,17 +3013,19 @@ function confirmNextEvent(tid,onlyDate){
   let made=0,merged=0;
   arr.forEach(x=>{
     const tm=x.t||"";
+    const title=totalLabel(t,x.d);   /* 교정: "쌤 항목 2nd" */
     /* 같은 날짜·시간·제목 일정이 이미 있으면 메모에 환자만 추가 (다른 환자를 쌍둥이로 오인 방지) */
     const twin=S.events.find(e=>e.date===x.d&&(e.time||"")===tm&&e.title===title&&e.status!=="cancel");
     if(twin){
       if(!(twin.memo||"").includes(pinfo))twin.memo=(twin.memo?twin.memo+"\n":"")+pfull;
       twin.fromTotal=twin.fromTotal||[];
-      if(!twin.fromTotal.some(y=>y.id===t.id&&y.d===x.d))twin.fromTotal.push({id:t.id,d:x.d,pt:t.pt,pinfo,ti:title,tm:tmemo});
+      if(!twin.fromTotal.some(y=>y.id===t.id&&y.d===x.d))twin.fromTotal.push({id:t.id,d:x.d,pt:t.pt,pinfo});
       twin.u=Date.now();merged++;
     }else{
+      const _mm=totNextMemo(t,x.d);
       S.events.push({id:Date.now()+made,date:x.d,dept:t.dept,title,time:tm||null,dur:60,
-        memo:pfull,status:"plan",kind:"etc",span:null,manual:true,u:Date.now(),
-        fromTotal:[{id:t.id,d:x.d,pt:t.pt,pinfo,ti:title,tm:tmemo}]});
+        memo:pfull+(_mm?"\n📋 "+_mm:""),status:"plan",kind:"etc",span:null,manual:true,u:Date.now(),
+        fromTotal:[{id:t.id,d:x.d,pt:t.pt,pinfo}]});
       made++;
     }
     t.confirmed[x.d]=Date.now();       /* 이 날짜는 확정됨 → 점선칩 숨김 */
@@ -3039,9 +3043,11 @@ function nextVirts(ds){
     const arr=Array.isArray(t.nexts)?t.nexts:(t.next?[{d:t.next,t:t.nextT||"",memo:t.nextMemo||""}]:[]);
     arr.forEach(x=>{
       if(!x||x.d!==ds)return;
+      if((t.visits||[]).includes(ds))return;         /* 이미 다녀온 날짜 */
+      if(t.hideVirt&&t.hideVirt[ds])return;          /* '이미 일정에 있음'으로 숨긴 날짜 */
       /* 이미 '일정으로 확정'한 날짜만 점선칩을 생략한다.
          (구버전 nextHidden 플래그는 모든 예약을 통째로 숨겨 칩이 안 뜨는 원인이라 무시) */
-      if(t.confirmed&&t.confirmed[ds])return;
+      if(t.confirmed&&t.confirmed[ds]&&(S.events||[]).some(e=>e&&Array.isArray(e.fromTotal)&&e.fromTotal.some(f=>f.id===t.id&&f.d===ds)))return;   /* 연결 일정이 실제로 있을 때만 숨김 */
       out.push(Object.assign(Object.create(Object.getPrototypeOf(t)),t,{nextT:x.t||"",nextMemo:x.memo||"",__vd:ds}));
     });
   });
@@ -3059,13 +3065,37 @@ function normTime(s){s=String(s||"").trim();if(!s)return"";
 /* 🏅 전공의 티어표 렌더 — 여러 후기 통합. 티어색: SS금·S초록·A/B회색·⚠빨강 */
 
 
-function totalTitle(t){const hm=t.nextT?t.nextT.replace(":","")+" ":"";const who=(t.dr&&t.dr.trim())?t.dr.trim():t.dept;return hm+who+" "+(t.item||"토탈");}
-function virtChipHtml(t){const c=DEPT_COLOR[t.dept]||"#666";
+/* ═══ 교정 토탈 회차 (#338): "쌤 항목 2nd" ═══
+   그 날짜 회차 = 체크한 visit 중 그 날짜 이전 수 + 그 사이 앞으로 잡힌(아직 안 간) 다음 내원 수 + 1
+   (체크 안 한 지난 예약은 세지 않음) — 교정 토탈만 */
+function ordSuffix(n){const v=n%100;if(v>=11&&v<=13)return n+"th";return n+(["th","st","nd","rd"][n%10]||"th");}
+function visitOrdinal(t,d){
+  if(!t||!d)return 0;const today=ymd(new Date());
+  const vs=(t.visits||[]).filter(Boolean);
+  const done=vs.filter(v=>v<d).length;
+  const planned=nextsOf(t).filter(x=>x&&x.d&&x.d<d&&x.d>=today&&!vs.includes(x.d)).length;
+  return done+planned+1;
+}
+function totalLabel(t,d){
   const who=(t.dr&&t.dr.trim())?t.dr.trim():t.dept;
-  const label=`${who} ${t.item||"토탈"}`;
+  const base=`${who} ${t.item||"토탈"}`;
+  return (t.dept==="교정"&&d)?base+" "+ordSuffix(visitOrdinal(t,d)):base;
+}
+function stripOrd(s){return String(s||"").replace(/\s\d+(st|nd|rd|th)$/,"");}
+/* 토탈 예약의 진료내역: 다음 내원 메모 → 없으면 그날 OCS 진료내역 */
+function totNextMemo(t,d){
+  if(!t||!d)return "";
+  const x=nextsOf(t).find(y=>y&&y.d===d);if(x&&x.memo)return x.memo;
+  try{const u=upMatch(t).find(v=>v.d===d);if(u)return (u.cat)||"";}catch(e){}
+  return "";
+}
+function totalTitle(t){const hm=t.nextT?t.nextT.replace(":","")+" ":"";return hm+totalLabel(t,t.__vd||t.next);}
+function virtChipHtml(t){const c=DEPT_COLOR[t.dept]||"#666";
+  const label=totalLabel(t,t.__vd||t.next);   /* 교정은 회차(2nd 등) 포함 */
   const tm=t.nextT?`<span class="tm2" style="opacity:1;font-weight:900;color:${c}">${t.nextT.replace(":","")}</span> `:"";
   const un=t.nextT?"":" untimed";
-  return `<span class="chip${un}" style="background:${c}0D;border:1.6px dashed ${c};color:${c};opacity:.95" title="[예상] ${esc(totalTitle(t))} — ${esc(t.ptno||"")} ${esc(t.pt)}" onclick="event.stopPropagation();dayTap('${t.next}')">${tm}${esc(label)}</span>`;}
+  const vd=t.__vd||t.next;const mm=t.nextMemo||totNextMemo(t,vd);
+  return `<span class="chip${un}" style="background:${c}0D;border:1.6px dashed ${c};color:${c};opacity:.95" title="[예상] ${esc(totalTitle(t))}${mm?" · "+esc(mm):""} — ${esc(t.ptno||"")} ${esc(t.pt)}" onclick="event.stopPropagation();dayTap('${vd}')">${tm}${esc(label)}${mm?`<span class="cmemo"> · ${esc(mm)}</span>`:""}</span>`;}
 function openChip(id){const e=S.events.find(x=>String(x.id)===String(id));if(!e)return;selDate=e.date;renderCalendar();renderDayDetail();
   document.getElementById("day-detail").scrollIntoView({behavior:"smooth",block:"start"});}
 /* 📱 달력 탭 엔진 — iOS가 가로스크롤 표 안의 탭을 스크롤로 오판해 click을 삼키는 문제를
@@ -3345,11 +3375,11 @@ function renderDayDetail(){
     <div class="ev" style="border:1.7px dashed ${c};background:#fff">
       <div class="dt" style="background:${c}14"><div class="d" style="color:${c}">${t.nextT||"미정"}</div><div class="t" style="color:${c}">예상</div></div>
       <div class="body"><div class="title">${esc(totalTitle(t))} <span style="font-size:10px;color:var(--sub);font-weight:600">(예상 · 변동 가능)</span></div>
-        <div class="memo">${t.ptno?`${esc(t.ptno)} `:""}${esc(t.pt)}</div>
+        <div class="memo">${t.ptno?`${esc(t.ptno)} `:""}${esc(t.pt)}${(()=>{const mm=t.nextMemo||totNextMemo(t,t.__vd);return mm?`<br>📋 ${esc(mm)}`:"";})()}</div>
         <div class="st-row">
           <button onclick="openTotalDlg(${t.id})">토탈 열기</button>
-          <button style="color:var(--brand);font-weight:800" onclick="confirmNextEvent(${t.id})">✔ 확정 → 일정 생성</button>
-          <button style="color:var(--sub)" onclick="markNextScheduled(${t.id})" title="이 예상 표시만 지워요 — 토탈·기존 일정은 그대로">🗓️ 이미 일정에 있음</button>
+          <button style="color:var(--brand);font-weight:800" onclick="confirmNextEvent(${t.id},'${t.__vd}')">✔ 확정 → 일정 생성</button>
+          <button style="color:var(--sub)" onclick="markNextScheduled(${t.id},'${t.__vd}')" title="이 예상 표시만 지워요 — 토탈·기존 일정은 그대로">🗓️ 이미 일정에 있음</button>
         </div></div></div>`});});
   items.sort((a,b)=>a.k-b.k);
   document.getElementById("day-events").innerHTML=items.length?items.map(x=>x.html).join("")
@@ -3398,8 +3428,10 @@ function addEvent(){
   selDate=data.date;calYM={y:+data.date.slice(0,4),m:+data.date.slice(5,7)-1};
   save();["ev-title","ev-memo","ev-dur","ev-time"].forEach(i=>document.getElementById(i).value="");
   document.getElementById("ev-span").value="time";evSpanChange();
-  try{if(ev&&Array.isArray(ev.fromTotal)){let c=0;ev.fromTotal.map(f=>findT(f.id)).filter(Boolean).forEach(t=>{c+=syncConfirmedEvents(t);});if(c){save(true);renderTotals();}}}catch(e){}
-  renderCalendar();renderDayDetail();renderToday();toast(editId?"수정됨":"추가됨");
+  /* 확정 일정(토탈 연결)을 달력에서 고쳤으면 토탈 다음 내원도 즉시 따라감 */
+  let _tn=0;if(ev&&Array.isArray(ev.fromTotal)&&ev.fromTotal.length){_tn=reconcileAllTotals();if(_tn){save(true);try{renderTotals();}catch(e){}}}
+  renderCalendar();renderDayDetail();renderToday();try{refreshStrip();}catch(e){}
+  toast(editId?("수정됨"+(_tn?" · 토탈 다음 내원도 변경":"")):"추가됨");
 }
 function askConfirm(msg,onYes,yesLabel){
   const dlg=document.getElementById("confirm-dlg");
@@ -3521,7 +3553,6 @@ function delEvent(id){
     S.delIds=S.delIds||[];if(!S.delIds.includes(String(id)))S.delIds.push(String(id));   /* 묘비: 타 기기 동기화로 부활 차단 */
     if(S.delIds.length>400)S.delIds=S.delIds.slice(-400);
     S.events=S.events.filter(x=>String(x.id)!==String(id));
-    try{if(e&&Array.isArray(e.fromTotal))e.fromTotal.forEach(f=>{const t=findT(f.id);if(t)syncConfirmedEvents(t);});}catch(_){}   /* 확정 해제 → 점선칩 복귀 */
     save();refreshAfterEventChange();toast("삭제됨");
   },"삭제");
 }
@@ -3934,7 +3965,20 @@ function notiTimeOf(t,ds){
 /* 그 날짜에 대해 OCS와 내 입력이 어떻게 다른지 판정
    → {state:"ok"|"time"|"missing"|"unknown", mine, ocs} */
 /* OCS 시간에 맞춰 내 토탈의 다음내원 시간을 갱신 */
-
+function notiFixTime(id,ds,ocsT){
+  const t=findT(id);if(!t)return;
+  const arr=Array.isArray(t.nexts)?t.nexts:[];
+  const x=arr.find(y=>y&&y.d===ds);
+  const before=JSON.parse(JSON.stringify(arr));
+  if(x){x.t=ocsT;}else{arr.push({d:ds,t:ocsT,memo:""});t.nexts=arr;}
+  syncNextPrimary(t);t.u=Date.now();
+  /* ★이미 일정으로 확정한 건이면 그 일정 시간도 함께 바꾼다★
+     (예전엔 토탈만 바뀌고 일정은 옛 시간 그대로 남아 '반영 안 됨'으로 보였음) */
+  /* 확정해 둔 일정은 새 시간의 점선칩으로 복귀 (실선+점선 중복 방지 · 재확정은 직접) */
+  const moved=revertConfirmed(t,[ds]);
+  save(true);syncAll();
+  toast(`🕐 ${esc(t.pt)} ${ds.slice(5)} 시간을 OCS(${ocsT})에 맞췄어요${moved?" · 일정도 함께 변경":""}`);
+}
 function notiOcsCheck(t,ds){
   const arr=Array.isArray(t.nexts)?t.nexts:(t.next?[{d:t.next,t:t.nextT||""}]:[]);
   const mine=(arr.find(x=>x&&x.d===ds)||{}).t||"";
@@ -4683,7 +4727,7 @@ function syncTotalMemoToEvents(t,oldMemo){
       out.push(ln);
       if(ln.includes(pinfo)){
         /* 바로 다음 줄이 기존 📝 이면 제거 */
-        if(lines[i+1]!==undefined&&/^📝\s/.test(lines[i+1])){ i++; changed=true; }
+        while(lines[i+1]!==undefined&&/^(📝|📋)\s/.test(lines[i+1])){ if(/^📋\s/.test(lines[i+1]))out.push(lines[i+1]); i++; changed=true; }
         if(nm){ out.push("📝 "+nm); changed=true; }
         else changed=true;
       }
@@ -4870,7 +4914,7 @@ function syncAll(opt){
      무효해진 확정은 해제해 다시 점선칩으로 되돌린다.
      ★확정 일정이 있는 토탈만 훑어 비용을 줄인다★ */
   try{
-    let ch=0;
+    let ch=reconcileAllTotals();
     const linked=new Set();
     (S.events||[]).forEach(e=>{
       if(e&&Array.isArray(e.fromTotal))e.fromTotal.forEach(f=>linked.add(f.id));
@@ -5236,14 +5280,17 @@ function renderTotals(listOnly){
       ${um.map(u=>`<div class="deadline" style="border:1.5px dashed var(--purple);background:var(--purple-soft);color:var(--purple)">◇ OCS: ${fmtD(u.d)} ${u.t||""}${t.scope==="all"&&u.dep&&u.dep!==t.dept?` <span class="dept-tag" style="background:${DEPT_COLOR[u.dep]||"#666"};color:${txtOn(DEPT_COLOR[u.dep]||"#666")};font-size:9.5px">${u.dep}</span>`:""} ${esc(u.dr||"")}${u.cat?` · ${esc(u.cat)}`:""}${t.next!==u.d?` <button class="btn small" style="margin-left:6px;background:var(--purple);color:#fff" onclick="setNextFromUp(${t.id},'${u.d}','${u.t||""}','${(u.dr||"").replace(/'/g,"")}','${u.no||""}')">이 날짜로 반영</button>`:" · 반영됨 ✓"}</div>`).join("")}
       ${(t.ocsLog&&t.ocsLog.length)?`<div style="margin:7px 0 4px;border:1px solid var(--line);border-radius:9px;padding:6px 8px;background:#FAFCFB">
         <div style="font-size:10.5px;font-weight:800;color:var(--sub);margin-bottom:3px">📋 OCS 내원 이력 ${t.ocsLog.length}건 · <span style="color:#1D8A4E">봤음 ${t.ocsLog.filter(e=>e.seen==="o").length}</span> · <span style="color:var(--red)">못봄 ${t.ocsLog.filter(e=>e.seen==="x").length}</span> · 미체크 ${t.ocsLog.filter(e=>!e.seen).length}</div>
-        ${t.ocsLog.map((e,ei)=>`<div style="display:flex;gap:6px;align-items:center;font-size:11px;padding:1.5px 0;${e.seen==="x"?"opacity:.55":""}">
+        ${(()=>{const all=t.ocsLog.map((e,ei)=>[e,ei]);const open=(window.tcLogOpen||{})[t.id];
+          /* 기본은 미체크 + 최근 4건만 그림(이력이 길면 카드가 무거워져 렉) — '전체 보기'로 펼침 */
+          const show=open||all.length<=6?all:all.filter(([e],k)=>e.seen==null||k>=all.length-4);
+          return show.map(([e,ei])=>`<div style="display:flex;gap:6px;align-items:center;font-size:11px;padding:1.5px 0;${e.seen==="x"?"opacity:.55":""}">
           <b style="width:34px;flex:0 0 auto">${+e.d.slice(5,7)}/${+e.d.slice(8,10)}</b>
           <span style="color:var(--sub);flex:0 0 auto">${e.t||""}</span>
           ${t.scope==="all"&&e.dep&&e.dep!==t.dept?`<span class="dept-tag" style="background:${DEPT_COLOR[e.dep]||"#666"};color:${txtOn(DEPT_COLOR[e.dep]||"#666")};font-size:9px;flex:0 0 auto">${e.dep}</span>`:""}
           <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;${e.seen==="x"?"text-decoration:line-through":""}">${esc(e.cat||"—")}</span>
           <button onclick="toggleSeen(${t.id},${ei},'o')" style="flex:0 0 auto;border:1.5px solid #1D8A4E;background:${e.seen==="o"?"#1D8A4E":"transparent"};color:${e.seen==="o"?"#fff":"#1D8A4E"};border-radius:7px;padding:0 6px;font-size:10px;font-weight:800;cursor:pointer">✅</button>
           <button onclick="toggleSeen(${t.id},${ei},'x')" style="flex:0 0 auto;border:1.5px solid var(--red);background:${e.seen==="x"?"var(--red)":"transparent"};color:${e.seen==="x"?"#fff":"var(--red)"};border-radius:7px;padding:0 6px;font-size:10px;font-weight:800;cursor:pointer">✖</button>
-        </div>`).join("")}
+        </div>`).join("")+(show.length<all.length||open?`<div onclick="event.stopPropagation();(window.tcLogOpen=window.tcLogOpen||{})[${t.id}]=!${open?1:0};renderTotals(true)" style="font-size:10.5px;color:var(--sub);cursor:pointer;margin-top:2px;text-decoration:underline dotted">${open?"접기":`이력 전체 ${all.length}건 보기`}</div>`:"");})()}
       </div>`:""}
       <div class="visits">${Array.from({length:t.need},(_,i)=>{const v=t.visits[i];
         return `<div class="vdot ${v?"done":""}" onclick="toggleVisit(${t.id},${i})" title="${v||""}">${i+1}</div>`;}).join("")}
@@ -5287,7 +5334,29 @@ function vRemove(t,key){
   while(meta[vOccKey(d,k)]!==undefined){ meta[vOccKey(d,k-1)]=meta[vOccKey(d,k)]; delete meta[vOccKey(d,k)]; k++; }
   t.vmeta=meta;
 }
-
+function toggleVisit(id,i){
+  const _g=findT(id);if(!_g)return;
+  const t=findT(id);
+  if(t.visits[i]){
+    const lst=vListOf(t);const vo=lst[i];
+    const _vd=vo?vo.d:t.visits[i];
+    askConfirm(`${i+1}번째 visit(${fmtD(_vd)}) 기록을 삭제할까요?`,()=>{
+      if(vo)vRemove(t,vo.key); else {t.visits.splice(i,1);}
+      save();syncTotals();},"삭제");
+  }else{
+    askDate(`${esc(t.pt)} — ${i+1}번째 visit 날짜`,ymd(new Date()),d=>{
+      t.visits[i]=d;t.visits=t.visits.filter(Boolean).sort();   /* 같은 날짜 중복 허용 */
+      t.u=Date.now();
+      reconcileTotalEvents(t);   /* 그 날짜 예약(대표든 아니든) 제거 · 필요 횟수 채우면 전부 정리 · 확정 일정도 함께 */
+      save();syncTotals();toast(`${i+1}번째 visit 기록됨`);
+      /* 방금 추가한 그 발생 건의 항목 창 열기 */
+      const lst=vListOf(t);
+      const same=lst.filter(x=>x.d===d);
+      const target=same.length?same[same.length-1].key:d;
+      if((TOTAL_CFG[t.dept]||{}).tags)openVisitDlg(id,target);
+    });
+  }
+}
 function addVisitSlot(id){const t=findT(id);if(!t)return;t.need=(t.need||0)+1;t.u=Date.now();save();syncAll();}
 /* 필요 횟수 1 줄이기 — 이미 기록된 내원 수 아래로는 줄일 수 없음 */
 function delVisitSlot(id){
@@ -5348,7 +5417,9 @@ function normalizeNexts(){
   return fixed;
 }
 function syncNextPrimary(t){
-  const arr=nextsOf(t).filter(x=>x&&x.d).sort((a,b)=>(a.d+(a.t||"")).localeCompare(b.d+(b.t||"")));
+  /* 같은 날짜는 1건만 (확정·일정 연결이 날짜 기준이라 한 날 2건이면 칩이 겹침) — 나중에 넣은 값 우선, 메모는 보존 */
+  const byD=new Map();nextsOf(t).forEach(x=>{if(!x||!x.d)return;const p=byD.get(x.d);byD.set(x.d,p?Object.assign({},p,x,{memo:x.memo||p.memo||""}):x);});
+  const arr=[...byD.values()].sort((a,b)=>(a.d+(a.t||"")).localeCompare(b.d+(b.t||"")));
   t.nexts=arr;
   if(arr.length){ t.next=arr[0].d; t.nextT=arr[0].t||""; t.nextMemo=arr[0].memo||""; t.nextHidden=false; }
   else { t.next=""; t.nextT=""; t.nextMemo=""; t.nextHidden=false; }
@@ -5360,8 +5431,163 @@ function syncNextPrimary(t){
 /* ★확정한 일정도 토탈 수정을 따라가게★
    담당쌤·환자·항목·메모가 바뀌면 연결된 일정의 제목/메모를 갱신하고,
    더 이상 유효하지 않은 확정(날짜가 사라짐)은 해제해 다시 점선칩으로 돌린다. */
+/* 확정 일정 → 다시 점선칩으로 되돌리기 (규칙: 토탈 수정 시 즉시 점선칩 복귀)
+   예전엔 확정 표시만 지우고 실선 일정은 남겨서, 같은 예약이 실선+점선 두 개로 보였음 */
+/* 일정 메모에서 한 환자 몫(환자줄 + 바로 뒤 📝메모·📋진료내역 줄) 제거 */
+function stripPinfo(memo,pinfo){
+  const L=String(memo||"").split("\n"),out=[];
+  for(let i=0;i<L.length;i++){
+    if(pinfo&&L[i].includes(pinfo)){while(L[i+1]!==undefined&&/^(📝|📋)\s/.test(L[i+1]))i++;continue;}
+    out.push(L[i]);
+  }
+  return out.join("\n").trim();
+}
+function revertConfirmed(t,dates){
+  if(!t)return 0;let n=0;const only=dates?new Set(dates):null;
+  (S.events||[]).slice().forEach(e=>{
+    if(!e||e.status==="cancel"||!Array.isArray(e.fromTotal))return;
+    const links=e.fromTotal.filter(f=>f.id===t.id&&(!only||only.has(f.d)));
+    if(!links.length)return;
+    links.forEach(link=>{
+      e.fromTotal=e.fromTotal.filter(f=>f!==link);
+      if(link.pinfo){e.memo=stripPinfo(e.memo,link.pinfo);}
+      n++;
+    });
+    if(!e.fromTotal.length&&!(e.memo||"").trim()){S.events=S.events.filter(x=>x!==e);S.delIds=S.delIds||[];if(!S.delIds.includes(String(e.id)))S.delIds.push(String(e.id));}
+    else e.u=Date.now();
+  });
+  if(t.confirmed){(only?[...only]:Object.keys(t.confirmed)).forEach(d=>delete t.confirmed[d]);if(!Object.keys(t.confirmed).length)delete t.confirmed;}
+  if(n){t.nextU=Date.now();t.u=Date.now();}   /* 동기화 때 다른 기기의 옛 '확정'이 되살아나지 않게 수정시각 갱신 */
+  return n;
+}
+/* ═══ 토탈 다음 내원 ↔ 확정 일정 정합 엔진 (#335) — 어떤 경로로 바뀌든 마지막에 항상 한 번 맞춤 ═══
+   ① visit 기록한 날짜의 다음 내원은 제거, 필요 횟수를 채웠으면 다음 내원 전부 정리 (대표값·목록·달력 일치)
+   ② 일정표에서 확정 일정의 날짜·시간을 직접 고쳤으면(일정이 더 최신) → 토탈 다음 내원도 그 날짜·시간으로
+      토탈 쪽이 더 최신이면 → 확정을 풀고 새 값의 점선칩으로 (실선+점선 중복 방지)
+   ③ 다음 내원에 없는 날짜를 가리키는 확정 일정 연결은 정리
+   ④ '확정' 표시는 실제 연결된 일정이 있을 때만 (일정 삭제 시 칩이 통째로 사라지던 문제) */
+function reconcileTotalEvents(t){
+  if(!t)return 0;let n=0;
+  {const ds=nextsOf(t).map(x=>x&&x.d);if(new Set(ds).size!==ds.length){const u=t.nextU;syncNextPrimary(t);t.nextU=u;n++;}}   /* 한 날짜 1건 보장 (동기화 병합 등) */
+  const arr=nextsOf(t);
+  /* ② 일정표 직접 수정 → 토탈로 (가장 먼저: 이후 단계가 nextU를 갱신하기 전에 비교) */
+  (S.events||[]).slice().forEach(e=>{
+    if(!e||!Array.isArray(e.fromTotal)||e.status==="cancel")return;
+    e.fromTotal.slice().forEach(link=>{
+      if(link.id!==t.id)return;
+      const nx=arr.find(x=>x&&x.d===link.d);
+      if(!nx)return;                                   /* ③에서 처리 */
+      const same=e.date===link.d&&(e.time||"")===(nx.t||"");
+      if(same)return;
+      if((e.u||0)>(t.nextU||0)){                       /* 일정이 더 최신 = 달력에서 옮김 → 토탈도 따라감 */
+        const od=link.d;nx.d=e.date;nx.t=e.time||"";link.d=e.date;
+        if(t.confirmed){const v=t.confirmed[od];delete t.confirmed[od];t.confirmed[e.date]=v||Date.now();}
+        t.nexts=arr.filter(x=>x&&x.d).sort((a,b)=>(a.d+(a.t||"")).localeCompare(b.d+(b.t||"")));
+        if(t.nexts.length){t.next=t.nexts[0].d;t.nextT=t.nexts[0].t||"";t.nextMemo=t.nexts[0].memo||"";}
+        t.nextU=Math.max(e.u||0,Date.now());t.u=Date.now();n++;
+      }else{ n+=revertConfirmed(t,[link.d]); }         /* 토탈이 더 최신 → 점선칩으로 복귀 */
+    });
+  });
+  /* ① visit 반영 */
+  {const vs=new Set((t.visits||[]).filter(Boolean));const cur=nextsOf(t);
+   const full=(t.need>0)&&(t.visits||[]).filter(Boolean).length>=t.need;
+   const keep=cur.filter(x=>x&&x.d&&!vs.has(x.d));   /* 필요 횟수를 채워도 앞으로의 예약은 유지 */
+   if(keep.length!==cur.length){t.nexts=keep;syncNextPrimary(t);n++;}   /* 다녀온 날 확정 일정은 '진료 기록'으로 남김(지우지 않음) */
+   /* 🎉 필요 횟수를 처음 채운 순간 한 번 알림 — 완성 여부는 직접 결정 */
+   if(full&&!t.done&&!t.fullAt){t.fullAt=Date.now();n++;setTimeout(()=>{try{toast(`🎉 ${t.pt} 필요 횟수 ${t.need}회 채웠어요 — 끝났으면 토탈 [완성]을 눌러주세요 (다음 내원은 그대로 보여요)`);}catch(e){}},600);}
+   else if(!full&&t.fullAt){delete t.fullAt;n++;}}
+  /* ③ 다음 내원에 없는 날짜를 가리키는 연결 정리 */
+  {const live=new Set(nextsOf(t).map(x=>x&&x.d).concat((t.visits||[]).filter(Boolean)));const dead=new Set();   /* visit 날짜 연결은 기록이라 유지 */
+   (S.events||[]).forEach(e=>{(e&&e.fromTotal||[]).forEach(f=>{if(f.id===t.id&&!live.has(f.d))dead.add(f.d);});});
+   if(dead.size)n+=revertConfirmed(t,[...dead]);}
+  if(t.hideVirt){const live=new Set(nextsOf(t).map(x=>x&&x.d));Object.keys(t.hideVirt).forEach(d=>{if(!live.has(d)){delete t.hideVirt[d];n++;}});if(!Object.keys(t.hideVirt).length)delete t.hideVirt;}
+  /* ④ 확정 표시 = 실제 연결 일정 유무 */
+  {const linkD=new Set();(S.events||[]).forEach(e=>{(e&&e.fromTotal||[]).forEach(f=>{if(f.id===t.id)linkD.add(f.d);});});
+   if(t.confirmed){Object.keys(t.confirmed).forEach(d=>{if(!linkD.has(d)){delete t.confirmed[d];n++;}});if(!Object.keys(t.confirmed).length)delete t.confirmed;}
+   const live=new Set(nextsOf(t).map(x=>x&&x.d).concat((t.visits||[]).filter(Boolean)));
+   linkD.forEach(d=>{if(live.has(d)&&!(t.confirmed&&t.confirmed[d])){t.confirmed=t.confirmed||{};t.confirmed[d]=Date.now();n++;}});}
+  return n;
+}
+function reconcileAllTotals(){let n=0;(S.totals||[]).forEach(t=>{try{n+=reconcileTotalEvents(t);}catch(e){}});return n;}
+function syncConfirmedEvents(t){
+  if(!t)return 0;
+  let n=0;
+  const who=(t.dr&&t.dr.trim())?t.dr.trim():t.dept;
+  const title=`${who} ${t.item||"토탈"}`;
+  const pinfo=`${t.ptno?t.ptno+" ":""}${t.pt}`;
+  const tmemo=(t.memo||"").trim();
+  const pfull=pinfo+(tmemo?"\n📝 "+tmemo:"");
+  let touched=false;                 /* 이번에 실제로 바뀐 게 있나 */
+  (S.events||[]).forEach(e=>{
+    if(!e||e.status==="cancel"||!Array.isArray(e.fromTotal))return;
+    const link=e.fromTotal.find(f=>f.id===t.id);
+    if(!link)return;
+    if((e.u||0)>(t.u||0))return;       /* 달력에서 일정을 더 나중에 직접 고쳤으면 그 수정을 존중(예전엔 토탈 값으로 도로 덮음) */
+    /* 제목(담당쌤·항목·교정 회차) 갱신 — 이 일정이 이 토탈만의 것일 때만 (여러 환자 공유 시 제목 유지) */
+    {const want=totalLabel(t,link.d);
+     if(e.fromTotal.length===1&&e.title!==want){
+       if(stripOrd(e.title)===stripOrd(want)){e.title=want;n++;}      /* 회차만 바뀜(visit 기록 등) → 확정 유지한 채 제목만 */
+       else{e.title=want;e.dept=t.dept;e.u=Date.now();n++;touched=true;}}}
+    /* 메모 속 환자정보 갱신 */
+    if(link.pinfo&&link.pinfo!==pinfo){
+      e.memo=String(e.memo||"").split("\n").map(ln=>ln.includes(link.pinfo)?pfull.split("\n")[0]:ln).join("\n");
+      link.pinfo=pinfo;link.pt=t.pt;e.u=Date.now();n++;touched=true;
+    }else if(e.fromTotal.length===1&&tmemo&&!String(e.memo||"").includes(tmemo)){
+      e.memo=pfull;e.u=Date.now();n++;touched=true;
+    }
+  });
+  /* ★어떤 내용이든 수정했으면 확정을 풀어 다시 점선칩으로★
+     — 바뀐 내용으로 다시 확정할지 직접 고를 수 있게 한다. */
+  if(touched){n+=revertConfirmed(t)+1;}
+  /* 확정 목록 정리 — 예약에 없는 날짜의 확정은 해제(→ 다시 점선칩) */
+  if(t.confirmed){
+    const live=new Set((Array.isArray(t.nexts)?t.nexts:[]).map(x=>x&&x.d).concat(t.visits||[]).filter(Boolean));   /* visit 날짜 확정 = 진료 기록 → 유지 */
+    Object.keys(t.confirmed).forEach(ds=>{
+      if(!live.has(ds)){delete t.confirmed[ds];n++;}
+    });
+    if(!Object.keys(t.confirmed).length)delete t.confirmed;
+  }
+  return n;
+}
+function syncEventsWithNexts(t,oldList){
+  if(!t)return 0;
+  const now=(Array.isArray(t.nexts)?t.nexts:[]).filter(x=>x&&x.d);
+  const before=(oldList||[]).filter(x=>x&&x.d);
+  let n=0;
+  /* 없어진 예약과 새로 생긴 예약을 1:1로 짝지어 '이동'으로 해석
+     (날짜만 바꾼 경우를 삭제+추가로 오인하지 않도록) */
+  const goneList=before.filter(ob=>!now.some(x=>x.d===ob.d));
+  const newList=now.filter(x=>!before.some(ob=>ob.d===x.d));
+  const moveMap={};
+  goneList.forEach((ob,i)=>{ if(newList[i])moveMap[ob.d]=newList[i]; });
 
-
+  before.forEach(ob=>{
+    const still=now.find(x=>x.d===ob.d)||moveMap[ob.d];
+    const evs=(S.events||[]).filter(e=>e&&e.status!=="cancel"&&Array.isArray(e.fromTotal)&&e.fromTotal.some(f=>f.id===t.id&&f.d===ob.d));
+    evs.forEach(e=>{
+      const link=e.fromTotal.find(f=>f.id===t.id&&f.d===ob.d);
+      if(still){
+        /* 날짜/시간이 바뀌었으면 → 확정 일정을 풀고 새 날짜·시간의 점선칩으로 복귀 (실선+점선 중복 방지)
+           예전엔 실선 일정을 옮기기만 해서 새 날짜에 실선·점선이 함께 떴음 */
+        if(e.date!==still.d||(e.time||"")!==(still.t||"")){n+=revertConfirmed(t,[ob.d]);}
+      }else{
+        /* 예약 삭제 → 이 환자 몫 제거 */
+        e.fromTotal=e.fromTotal.filter(f=>!(f.id===t.id&&f.d===ob.d));
+        if(link&&link.pinfo){
+          e.memo=stripPinfo(e.memo,link.pinfo);
+        }
+        if(t.confirmed)delete t.confirmed[ob.d];       /* 예약이 사라졌으니 확정도 해제 */
+        if(!e.fromTotal.length&&!(e.memo||"").trim()){
+          /* 남은 환자가 없으면 일정 자체 삭제 */
+          S.events=S.events.filter(x=>x!==e);
+        }else e.u=Date.now();
+        n++;
+      }
+    });
+  });
+  if(n){t.nextHidden=false;save(true);refreshAfterEventChange&&refreshAfterEventChange();}
+  return n;
+}
 function setNext(id,idx){
   const t=findT(id);if(!t)return;
   const arr=nextsOf(t);
@@ -5379,7 +5605,9 @@ function setNext(id,idx){
     if(cur)arr[idx]=rec;
     else{
       if(arr.some(x=>x.d===rec.d&&(x.t||"")===(rec.t||""))){toast("이미 같은 날짜·시간이 있어요");return;}
-      arr.push(rec);
+      const same=arr.find(x=>x&&x.d===rec.d);
+      if(same){same.t=rec.t;if(rec.memo)same.memo=rec.memo;toast("같은 날짜 예약이 있어 시간을 바꿨어요");}   /* 한 날짜 1건 */
+      else arr.push(rec);
     }
     syncNextPrimary(t);
     const _mv=syncEventsWithNexts(t,_before);
@@ -5419,7 +5647,10 @@ function delTotal(id){const t=findT(id);
   askConfirm(`토탈 "${t?t.pt:""}" 케이스를 삭제할까요?`,()=>{
     S.delTot=S.delTot||[];if(!S.delTot.includes(String(id)))S.delTot.push(String(id));   /* 묘비 */
     if(S.delTot.length>200)S.delTot=S.delTot.slice(-200);
-    S.totals=S.totals.filter(x=>String(x.id)!==String(id));save();syncTotals();toast("삭제됨");},"삭제");}
+    S.totals=S.totals.filter(x=>String(x.id)!==String(id));
+    /* 확정 일정에 남은 이 토탈 연결 정리 (일정 자체는 내 일정으로 유지) */
+    (S.events||[]).forEach(e=>{if(e&&Array.isArray(e.fromTotal)&&e.fromTotal.some(f=>String(f.id)===String(id))){e.fromTotal=e.fromTotal.filter(f=>String(f.id)!==String(id));e.u=Date.now();}});
+    save();syncTotals();toast("삭제됨");},"삭제");}
 
 /* ═════════ 플랜 ═════════ */
 
@@ -6180,6 +6411,21 @@ function hiPaint(k){
 }
 function ocsMove(d){const b=ocsDate?new Date(ocsDate+"T00:00"):new Date();b.setDate(b.getDate()+d);ocsDate=ymd(b);renderOcs();}
 function ocsReset(){ocsDate=null;renderOcs();}
+/* OCS 날짜 탭 → 달력에서 직접 고르기 (#340) — 휴대폰 기본 날짜 선택기 사용, 못 쓰면 입력창 */
+function ocsPickDate(){
+  const today=ymd(new Date());const cur=ocsDate||today;
+  let inp=document.getElementById("ocs-date-pick");
+  if(!inp){inp=document.createElement("input");inp.type="date";inp.id="ocs-date-pick";
+    inp.style.cssText="position:fixed;left:50%;top:40%;width:1px;height:1px;opacity:0;pointer-events:none;border:0;padding:0";
+    inp.addEventListener("change",()=>{const v=inp.value;if(!v)return;ocsDate=(v===ymd(new Date()))?null:v;renderOcs();
+      toast(v===ymd(new Date())?"오늘 OCS":`${fmtD(v)} OCS${upDay(v).length||histDay(v).length?"":" — 이 날짜 데이터 없음"}`);});
+    document.body.appendChild(inp);}
+  inp.value=cur;
+  try{if(typeof inp.showPicker==="function"){inp.showPicker();return;}}catch(e){}
+  try{inp.focus();inp.click();}catch(e){}
+  /* 선택기가 안 열리는 브라우저 대비 */
+  setTimeout(()=>{if(document.activeElement!==inp&&typeof askDate==="function")askDate("OCS 날짜 선택",cur,d=>{ocsDate=(d===ymd(new Date()))?null:d;renderOcs();});},350);
+}
 const WALKIN_DEPTS=["소치","보존","치주","보철","내과","외과","교정"];
 const RESV_RE=/수술|토탈|임수|메이저|마이너|통진|GSP|GA\b|SED|픽스|교픽|대촬|판독|Flap|플랩|임플|라바지|Lavage|외래/i;
 const CASE_RE=/발치|매복|impla|임플|수술|op\b|flap|판막|\bsc\b|scal|\brp\b|GA|SED|진정|본딩|bond|debond|진단(?!서)|임수|denture|의치|prep|형성|set|셋|물리|물치|splint|endo|근관|신환|초진/i;
@@ -6234,6 +6480,7 @@ function renderOcs(){
    OCS 알박기/💎 뷰의 겹침(🔒) 판정도 즉시 다시 계산해야 함.
    보고 있는 OCS 날짜가 렌더돼 있으면 함께 갱신. */
 function refreshAfterEventChange(){
+  try{if(reconcileAllTotals()){save(true);try{renderTotals();}catch(e){}}}catch(e){}   /* 확정 일정 수정·삭제 → 토탈 즉시 반영 */
   renderCalendar();renderDayDetail();renderToday();
   try{
     if(window.hlTabMode)renderOcsHl();
@@ -6296,7 +6543,9 @@ const OD_COLS_TV=OD_COLS_DR;
 const OD_COLS_TM=`<colgroup><col style="width:var(--od-h,19px)"><col style="width:var(--od-p,54px)"><col><col style="width:var(--od-r,46px)"></colgroup>`;
 /* 시간대 슬롯의 과 칩이 한 줄에 안 들어가면(좁은 폰) 여백부터 줄이고, 그래도 넘치면 글자를 아주 살짝만 줄임 */
 window.addEventListener("resize",()=>{clearTimeout(window.__tvFitT);window.__tvFitT=setTimeout(()=>{try{tvFitChips();}catch(e){}},150);});
-function odMeasureCols(){
+let __odmRaf=0;
+function odMeasureCols(){cancelAnimationFrame(__odmRaf);__odmRaf=requestAnimationFrame(odMeasureColsNow);}
+function odMeasureColsNow(){
   try{
     const box=document.createElement("div");box.className="odprobe";box.style.cssText="position:absolute;left:-9999px;top:0;visibility:hidden;white-space:nowrap";
     box.innerHTML=`<table class="odtbl"><tr><td class="h"><button style="border:none;background:transparent;font-size:12px;padding:0">🖍️</button></td><td class="t"><span id="odm-t">00:00</span></td><td class="p"><span class="nm" id="odm-n" style="display:inline">홍길동</span><br><span class="no" id="odm-o" style="display:inline">00000000</span></td><td class="r"><span id="odm-r">김수연B</span></td></tr></table>`;
@@ -6597,10 +6846,12 @@ function mergeStates(a,b){
      if(aU&&bU&&Math.abs(aU-bU)>1000){          /* 명확히 한쪽이 나중에 편집 → 그쪽 목록 채택(삭제 전파) */
        merged=(bU>aU?arrB:arrA).slice();
      }else{                                      /* 그 외에는 합집합 (유실 방지 우선) */
-       const mp={};
-       [...arrA,...arrB].forEach(x=>{if(!x||!x.d)return;
-         const k=x.d+"|"+(x.t||"");
-         if(!mp[k]||((x.memo||"").length>(mp[k].memo||"").length))mp[k]=x;});
+       /* 한 날짜 1건 — 같은 날짜가 양쪽에 다르게 있으면 더 최근에 고친 쪽(nextU) 값, 메모는 보존 */
+       const mp={};const newerB=bU>=aU;
+       const put=(x,prefer)=>{if(!x||!x.d)return;const p=mp[x.d];
+         if(!p){mp[x.d]=x;return;}
+         mp[x.d]=prefer?Object.assign({},p,x,{memo:x.memo||p.memo||""}):Object.assign({},x,p,{memo:p.memo||x.memo||""});};
+       arrA.forEach(x=>put(x,false));arrB.forEach(x=>put(x,newerB));
        merged=Object.values(mp);
      }
      merged.sort((x,y)=>(x.d+(x.t||"")).localeCompare(y.d+(y.t||"")));
@@ -6612,7 +6863,11 @@ function mergeStates(a,b){
      if(am&&bm)ex.memo=((t.u||0)>(ex.u||0))?bm:am;
      else ex.memo=am||bm;}
     /* 체크 표시(사진 요청·진토 사인): 키 합집합 — 어느 기기에서 체크했든 유지 */
+    {const aC=ex.confirmed,bC=t.confirmed,aU=Math.max(ex.nextU||0,ex.u||0),bU=Math.max(t.nextU||0,t.u||0);
+     const pick=(bU>aU)?bC:(aU>bU?aC:Object.assign({},aC||{},bC||{}));
+     if(pick&&Object.keys(pick).length)ex.confirmed=JSON.parse(JSON.stringify(pick));else delete ex.confirmed;}
     ex.photoAsk=Object.assign({},ex.photoAsk||{},t.photoAsk||{});
+    if(ex.hideVirt||t.hideVirt)ex.hideVirt=Object.assign({},ex.hideVirt||{},t.hideVirt||{});   /* '이미 일정에 있음' 숨김도 병합 */
     ex.jintoSign=Object.assign({},ex.jintoSign||{},t.jintoSign||{});
     ex.jintoFinal=Object.assign({},ex.jintoFinal||{},t.jintoFinal||{});
     ex.confirmed=Object.assign({},t.confirmed||{},ex.confirmed||{});if(!Object.keys(ex.confirmed).length)delete ex.confirmed;
@@ -6668,6 +6923,20 @@ function mergeStates(a,b){
    const sn=new Set();const arch=[];[...(A.arch||[]),...(B.arch||[])].forEach(r=>{const k=r.d+"|"+(r.t||"")+"|"+(r.no||"")+"|"+(r.dep||"");if(sn.has(k))return;sn.add(k);arch.push(r);});
    out.ocs={days,arch:arch.sort((x,y)=>(x.d+(x.t||""))<(y.d+(y.t||""))?-1:1).slice(-4000)};}
   if(b&&b.archive)out.archive={...(b.archive),...(out.archive||{})};
+  /* ★(#333) 예전엔 여기 없는 항목은 원격 것만 남아, 이 기기에서 한 것이 동기화 때 사라질 수 있었음★ */
+  if(b){
+    /* 토탈 변동 카드 '그대로'(숨김) 기록: 합집합 — 어느 기기에서 숨겼든 다시 뜨지 않게 */
+    out.ocsSkip=Object.assign({},a.ocsSkip||{},b.ocsSkip||{});
+    Object.keys(out.ocsSkip).forEach(k=>{const x=(a.ocsSkip||{})[k],y=(b.ocsSkip||{})[k];out.ocsSkip[k]=Math.max(+x||0,+y||0)||1;});
+    /* 재업로드 전 OCS 시간 기록: 합집합 (이 기기 값 우선) */
+    out.ocsPrev=Object.assign({},a.ocsPrev||{},b.ocsPrev||{});
+    /* 미니: 직접 입력값·목표 수정은 합집합(이 기기 우선), 유폴리오 원자료는 더 최근에 가져온 쪽 */
+    out.miniManual=Object.assign({},a.miniManual||{},b.miniManual||{});
+    out.miniTarget=Object.assign({},a.miniTarget||{},b.miniTarget||{});
+    if(b.ufItems&&(!a.ufItems||String(b.miniOffUpd||"")>=String(a.miniOffUpd||""))){out.ufItems=b.ufItems;out.ufStudent=b.ufStudent||a.ufStudent||null;out.miniOffUpd=b.miniOffUpd||a.miniOffUpd;if(b.miniOff)out.miniOff=b.miniOff;}
+    /* 그 밖에 원격에 없는 항목은 이 기기 것을 살림 (새 기능 필드 유실 방지) */
+    Object.keys(b).forEach(k=>{if(out[k]===undefined&&b[k]!==undefined)out[k]=JSON.parse(JSON.stringify(b[k]));});
+  }
   return out;
 }
 function mergeRestore(bk){
@@ -6752,6 +7021,7 @@ function rebuildOcs(){
   Object.keys(o.days).forEach(d=>{if(d>=today)rows.push(...o.days[d]);});
   UPCOMING=rows.sort((a,b)=>(a.d+(a.t||""))<(b.d+(b.t||""))?-1:1);
   AGG.UPCOMING=UPCOMING;AGG.meta.days=Object.keys(o.days).length;
+  if(typeof __upVer!=="undefined")__upVer++;   /* 매칭·색인 캐시 무효화 (OCS가 바뀜) */
 }
 function ocsRollover(){
   /* 3일 넘게 지난 OCS만 정리: 등록 토탈과 매칭되는 행만 arch로 옮기고 나머지 폐기.
@@ -6780,7 +7050,15 @@ function histDay(ds){
   if(o.days[ds])return o.days[ds];
   return o.arch.filter(r=>r.d===ds).map(r=>({...r,hist:1}));
 }
-function upOn(ds){const u=UPCOMING.filter(x=>x.d===ds);return u.length?u:histDay(ds);}
+/* 날짜 색인 (개인판 #336 방식): OCS가 바뀔 때(__upVer)만 다시 만들고 날짜로 바로 꺼냄 */
+let __upByD=null,__upByDV=-1;
+function upDay(ds){upOn("");return __upByD.get(ds)||[];}   /* 색인 배열 그대로(읽기 전용) */
+function upOn(ds){
+  if(!__upByD||__upByDV!==__upVer){__upByD=new Map();for(const u of UPCOMING){let a=__upByD.get(u.d);if(!a)__upByD.set(u.d,a=[]);a.push(u);}__upByDV=__upVer;}
+  const u=__upByD.get(ds);return u&&u.length?u.slice():histDay(ds);
+}
+/* matchSet 캐시 (#334) */
+let __msCache=null,__msKey="";
 /* 지난 OCS 전체(토탈 이력 스캔용) = 정리된 매칭 행(arch) + 아직 정리 전인 지난 날짜(최근 3일) */
 function histObjs(){
   const o=ocsStore(),today=ymd(new Date());const out=o.arch.slice();
@@ -6867,6 +7145,7 @@ function ocsIngest(rows,bad,srcLabel){
   const upRows=[].concat(...dates.map(d=>o.days[d]));
   const ds=new Set(dates);
   (S.totals||[]).forEach(t=>{
+    if(!t||t.done)return;   /* 완성한 토탈은 더 찾지 않음 */
     t.ocsLog=Array.isArray(t.ocsLog)?t.ocsLog:[];
     const mine=matchRowsFor(t,upRows);
     const keyset=new Set(mine.map(u=>u.d+"|"+(u.t||"")));
@@ -6876,8 +7155,9 @@ function ocsIngest(rows,bad,srcLabel){
     t.ocsLog.sort((a,b)=>a.d<b.d?-1:a.d>b.d?1:((a.t||"")<(b.t||"")?-1:1));
   });
   /* 같은 날짜 재업로드: 이전 OCS에 있던 이 환자 시간 (변동 카드에 '이전 OCS 09:00'으로 표시) */
-  try{S.ocsPrev=S.ocsPrev||{};(S.totals||[]).forEach(t=>{dates.forEach(d=>{const p=matchRowsFor(t,prevByDate[d]||[]).find(u=>u.d===d);const k=t.id+"|"+d;if(p)S.ocsPrev[k]=p.t||"";else delete S.ocsPrev[k];});});}catch(e){}
+  try{S.ocsPrev=S.ocsPrev||{};(S.totals||[]).filter(t=>t&&!t.done).forEach(t=>{dates.forEach(d=>{const p=matchRowsFor(t,prevByDate[d]||[]).find(u=>u.d===d);const k=t.id+"|"+d;if(p)S.ocsPrev[k]=p.t||"";else delete S.ocsPrev[k];});});}catch(e){}
   ocsRollover();rebuildOcs();
+  try{if(typeof reconcileAllTotals==="function")reconcileAllTotals();}catch(e){}   /* 토탈 다음 내원 ↔ 확정 일정 정합 */
   save(1);
   /* 당일 뷰: 오늘이 들어 있으면 오늘, 아니면 오늘 이후 첫 날짜(없으면 파일의 마지막 날짜) */
   const today=ymd(new Date());
@@ -7075,7 +7355,12 @@ function ocsStatusHtml(){
   if(ds.length<=4)return `<p class="hint" style="margin-top:6px">보유: ${ds.map(item).join(" · ")||"—"}${arch}</p>`;
   return `<details class="hint" style="margin-top:6px"><summary style="cursor:pointer">보유: <b>${fmtD(ds[0])}~${fmtD(ds[ds.length-1])}</b> · ${ds.length}일 · ${tot}건${arch} <span style="color:var(--brand)">(날짜별 보기)</span></summary><div style="margin-top:4px;line-height:1.9">${ds.map(item).join(" · ")}</div></details>`;
 }
-function matchSet(){const s=new Set();(S.totals||[]).forEach(t=>{if(!t.done)upMatch(t).forEach(u=>s.add(u));});return s;}
+function matchSet(){
+  const k=__upVer+"|"+ymd(new Date())+"|"+(S.totals||[]).map(t=>t.done?"":t.id+":"+t.ptno+":"+t.pt+":"+t.dept+":"+(t.scope||"")).join(",");
+  if(__msCache&&__msKey===k)return __msCache;
+  const s=new Set();(S.totals||[]).forEach(t=>{if(!t.done)upMatch(t).forEach(u=>s.add(u));});
+  __msCache=s;__msKey=k;return s;
+}
 function upMatch(t){
   if(!t||t.done)return [];
   const nm=String(t.pt||"").trim();
@@ -7083,7 +7368,10 @@ function upMatch(t){
   const no=normNo(t.ptno);
   if(nm.length<2&&!no)return [];
   const today=ymd(new Date());
-  return UPCOMING.filter(u=>{
+  const ck=__upVer+"|"+today;if(ck!==__upCacheKey){__upCache.clear();__upCacheKey=ck;}
+  const key=t.id+"|"+no+"|"+nm+"|"+(t.dept||"")+"|"+(t.scope||"");
+  const hit=__upCache.get(key);if(hit)return hit;
+  const res=candRowsFor(t,UPCOMING).filter(u=>{
     if(u.d<today)return false;                                         /* ★과거일 제외 — 오늘 포함 이후만 */
     const uNo=normNo(u.no);
     if(no){                                                            /* ★환자번호가 등록돼 있으면 번호 정확일치만 토탈 — 동명이인 차단 */
@@ -7094,7 +7382,9 @@ function upMatch(t){
     if(t.scope==="all")return true;                                    /* 내환자형: 타과 내원도 */
     return !u.dep||!t.dept||u.dep===t.dept;                            /* 기본: 해당 과만 (과 미지정 토탈은 전과 허용) */
   }).sort((a,b)=>a.d<b.d?-1:a.d>b.d?1:(a.t||"")<(b.t||"")?-1:1);       /* 가까운 내원예정일부터 */
+  __upCache.set(key,res);return res;
 }
+const __upCache=new Map();var __upCacheKey="";
 function totalMatches(){
   /* 등록 토탈 × UPCOMING 전체 매칭 요약 */
   return S.totals.filter(t=>!t.done).map(t=>({t,ms:upMatch(t)})).filter(x=>x.ms.length);
@@ -7107,10 +7397,10 @@ function renderTotalFound(){
   const okN=M.reduce((a,x)=>a+x.ms.length,0);
   if(badge)badge.textContent=L.length?`OCS 변동 ${L.length}건`:(M.length?`OCS에서 ${M.length}명 발견 · 변동 없음`:((UPCOMING||[]).length?`예약 스캔 — 매칭 0`:"예약 데이터 대기중"));
   if(!L.length&&!M.length){box.innerHTML="";return;}
-  const LB={time:["🕐","시간 변경·확인","var(--amber)"],missing:["🔎","OCS에 예약 없음","var(--red)"],new:["🆕","새 예약 · 다음 내원 미등록","var(--purple)"],visit:["✅","지난 내원 · visit 미기록","var(--brand)"]};
-  const ACT={time:"OCS 시간으로",missing:"예약 지우기",new:"다음 내원에 추가",visit:"visit 기록"};
+  const LB={time:["🕐","시간 변경","var(--amber)"],missing:["🔎","OCS에 예약 없음","var(--red)"],new:["🆕","새 예약 · 다음 내원 미등록","var(--purple)"],visit:["✅","지난 내원 · visit 미기록","var(--brand)"]};
+  const ACT={wj:"원진실 토탈로 추가",time:"OCS 시간으로",missing:"예약 지우기",new:"다음 내원에 추가",visit:"visit 기록"};
   const row=it=>{const [ic,lb,c]=LB[it.type];
-    const det=it.type==="time"?`내 입력 ${esc(it.from||"시간 미정")} → <b>OCS ${esc(it.t)}</b>${it.cat?` · ${esc(it.cat)}`:""}`
+    const det=it.type==="time"?`내 입력 ${esc(it.from)} → <b>OCS ${esc(it.t)}</b>${it.cat?` · ${esc(it.cat)}`:""}`
       :it.type==="missing"?`내 입력 ${esc(it.t||"시간 미정")}${it.prevT?` · 이전 OCS엔 ${esc(it.prevT)} 있었음`:""} — 취소·예약변경?`
       :it.type==="wj"?`<b>${esc(it.t||"시간?")}</b> · ${esc(it.cat||"")}${it.no?` · #${esc(it.no)}`:""}${it.more>0?` · 이후 예약 ${it.more}건 더`:""}`
       :it.type==="new"?`<b>${esc(it.t||"시간?")}</b>${it.dr?` · <b style="color:#5b4a7a">${esc(it.dr)}</b>`:""}${it.cat?` · ${esc(it.cat)}`:""}${it.prevT&&it.prevT!==it.t?` · 이전 OCS ${esc(it.prevT)}`:""}`
@@ -7130,7 +7420,19 @@ function ghostChip(u){
   const tm=u.t?`<span class="tm2">${u.t.replace(":","")}</span>`:"";
   return `<span class="chip ghost" style="background:${c}10;border-color:${c}" title="OCS 예약 [${u.dep}] ${esc(u.pt)}" onclick="event.stopPropagation();selDate='${u.d}';renderCalendar();renderDayDetail();">${tm}◇${esc(u.pt)}</span>`;
 }
-
+function setNextFromUp(id,d,tm,dr,no){const t=findT(id);if(!t)return;
+  askInput(`${t.pt} 다음 내원 시간`,[{label:`📅 ${fmtD(d)} — 예약 시간을 확인/수정하세요 (비우면 시간 미정)`,type:"time",val:tm||""}],vals=>{
+    const _before=JSON.parse(JSON.stringify(nextsOf(t)));
+    t.next=d;t.nextT=vals[0]||"";t.nextU=Date.now();t.nextHidden=false;
+    try{const arr=nextsOf(t);const u=upMatch(t).find(x=>x.d===d);const ex=arr.find(x=>x&&x.d===d);
+      if(ex){ex.t=t.nextT;if(!ex.memo&&u&&u.cat)ex.memo=u.cat;}else arr.push({d,t:t.nextT,memo:(u&&u.cat)||""});
+      t.nexts=arr;syncNextPrimary(t);syncEventsWithNexts(t,_before);}catch(e){}
+    /* OCS에서 찾은 담당쌤·환자번호를 토탈에 자동 반영 → 제목 "시간 쌤 항목", 메모 "번호 이름" */
+    if(dr&&String(dr).trim())t.dr=String(dr).trim();
+    if(no&&!t.ptno)t.ptno=String(no).trim();
+    save(true);syncTotals();tick&&(lastMin=null);
+    toast(`${esc(t.pt)} 다음 내원 ${fmtD(d)}${t.nextT?" "+t.nextT:""} 반영`);
+  });}
 function normNoG(s){return String(s||"").replace(/\D/g,"").replace(/^0+/,"");}
 
 /* ═════════════ 앱에서 직접 OCS 올리기 (#316) ═════════════
@@ -7158,6 +7460,9 @@ function normNoG(s){return String(s||"").replace(/\D/g,"").replace(/^0+/,"");}
 
 /* 앱에서 올린 날짜들을 모든 화면·계산에 반영 */
 
+/* 원진실(=내 진료) 토탈은 OCS가 곧 내 예약 → 새 예약·시간 변경을 자동으로 다음 내원에 반영(진료내역 포함).
+   '예약 없음'(취소 추정)만은 직접 확인하도록 카드에 남김 */
+
 
 /* 시작할 때: 이 기기에 저장된 앱 OCS 불러오기 → 반영 → (GitHub 있으면) 다른 기기에서 올린 날짜 받아오기 */
 
@@ -7182,7 +7487,9 @@ function ocsLiveItems(){
   const items=[];const today=ymd(new Date());const skip=S.ocsSkip||{};
   const nowHM=(()=>{const n=new Date();return String(n.getHours()).padStart(2,"0")+":"+String(n.getMinutes()).padStart(2,"0");})();
   const isPast=u=>u.d<today||(u.d===today&&u.t&&u.t<=nowHM);   /* 오늘이라도 이미 지난 시간은 '지난 내원' */
-  const hasDayDep=(d,dep)=>UPCOMING.some(u=>u.d===d&&(!dep||u.dep===dep));
+  if(!ocsLiveItems.__dd||ocsLiveItems.__ddV!==__upVer){const s=new Set();for(const u of UPCOMING){s.add(u.d);s.add(u.d+"|"+u.dep);}ocsLiveItems.__dd=s;ocsLiveItems.__ddV=__upVer;}
+  const DD=ocsLiveItems.__dd;
+  const hasDayDep=(d,dep)=>DD.has(dep?d+"|"+dep:d);
   (S.totals||[]).forEach(t=>{
     if(!t||t.done||t.dept==="원진실")return;   /* 원진실은 변동 추적 제외 */
     const ms=upMatch(t);const nx=nextsOf(t);
@@ -7195,49 +7502,42 @@ function ocsLiveItems(){
       const prevT=(S.ocsPrev||{})[t.id+"|"+x.d]||"";
       if(!hit.length){add({type:"missing",d:x.d,t:x.t||"",prevT});return;}
       const u=hit.find(h=>h.t===x.t)||hit[0];
-      if(u.t&&u.t!==(x.t||""))add({type:"time",d:x.d,t:u.t,from:x.t,dr:u.dr||"",cat:u.cat||""});
+      if(u.t&&u.t!==(x.t||""))add({type:"time",d:x.d,t:u.t,from:x.t||"시간 미정",dr:u.dr||"",cat:(u.cat)||""});
     });
     const seenD=new Set();
     ms.forEach(u=>{if(isPast(u)||nx.some(x=>x&&x.d===u.d)||seenD.has(u.d))return;seenD.add(u.d);
-      add({type:"new",d:u.d,t:u.t||"",dr:u.dr||"",no:u.no||"",cat:u.cat||"",dep:u.dep,prevT:(S.ocsPrev||{})[t.id+"|"+u.d]||""});});
+      add({type:"new",d:u.d,t:u.t||"",dr:u.dr||"",no:u.no||"",cat:(u.cat)||"",dep:u.dep,prevT:(S.ocsPrev||{})[t.id+"|"+u.d]||""});});
     const since=(t.visits&&t.visits[0])||(t.id>1e12?ymd(new Date(t.id)):"0000");
     (t.ocsLog||[]).forEach(e=>{if(!isPast(e)||e.d<since||e.seen!=null||(t.visits||[]).includes(e.d))return;
       add({type:"visit",d:e.d,t:e.t||"",cat:e.cat||""});});
   });
   const ord={wj:0,time:1,missing:2,new:3,visit:4};
   let out=items.sort((a,b)=>ord[a.type]-ord[b.type]||(a.d<b.d?-1:a.d>b.d?1:0));
-  /* 토탈 탭에서 과 필터를 걸었으면 그 과 항목만 */
-  try{if(tcDeptFilter&&tcDeptFilter.size)out=out.filter(it=>tcDeptFilter.has(it.dept));}catch(e){}
+  if(!(ocsLiveItems.__all)){try{if(tcDeptFilter&&tcDeptFilter.size)out=out.filter(it=>tcDeptFilter.has(it.dept));}catch(e){}}   /* 카드 표시는 토탈 탭 과 필터 반영 */
   return out;
 }
+function ocsLiveItemsAll(){ocsLiveItems.__all=1;try{return ocsLiveItems();}finally{ocsLiveItems.__all=0;}}
 function ocsLiveApply(key,quiet){
-  const it=ocsLiveItems().find(x=>x.key===key);if(!it)return false;
+  const it=ocsLiveItemsAll().find(x=>x.key===key);if(!it)return false;
   const t=findT(it.id);if(!t)return false;
   const arr=nextsOf(t);const before=JSON.parse(JSON.stringify(arr));
   if(it.type==="time"){const x=arr.find(y=>y&&y.d===it.d);if(x){x.t=it.t;if(!x.memo&&it.cat)x.memo=it.cat;}
-    }
+    revertConfirmed(t,[it.d]);}   /* 확정해 둔 일정은 새 시간의 점선칩으로 복귀 — 다시 확정할지 직접 결정 */
   else if(it.type==="missing"){const k=arr.findIndex(y=>y&&y.d===it.d);if(k>=0)arr.splice(k,1);}
   else if(it.type==="new"){if(!arr.some(y=>y&&y.d===it.d))arr.push({d:it.d,t:it.t||"",memo:it.cat||""});   /* 진료내역도 함께 */
     if(it.dr&&!/^\s*\[/.test(it.dr)&&!t.dr)t.dr=it.dr;if(it.no&&!t.ptno)t.ptno=it.no;}
   else if(it.type==="visit"){t.visits=t.visits||[];if(!t.visits.includes(it.d)){t.visits.push(it.d);t.visits=t.visits.filter(Boolean).sort();}
     (t.ocsLog||[]).forEach(e=>{if(e.d===it.d&&e.seen==null)e.seen="o";});
-    for(let k=arr.length-1;k>=0;k--){const y=arr[k];if(y&&y.d<=it.d){const bi=before.findIndex(b=>b&&b.d===y.d&&(b.t||"")===(y.t||""));if(bi>=0)before.splice(bi,1);arr.splice(k,1);}}   /* 다녀온 날 이하 다음 내원 정리(그날 확정 일정은 기록으로 유지) */
-  }
+    t.u=Date.now();reconcileTotalEvents(t);}
   t.nexts=arr;syncNextPrimary(t);try{syncEventsWithNexts(t,before);}catch(e){}
   t.u=Date.now();t.nextU=Date.now();
   if(!quiet){save(true);syncAll();try{refreshStrip();}catch(e){}toast(`✓ ${esc(t.pt)} ${fmtD(it.d)} 반영`);}
   return true;
 }
 function ocsLiveSkip(key){S.ocsSkip=S.ocsSkip||{};S.ocsSkip[key]=Date.now();save(true);renderTotalFound();}
-function ocsLiveAll(){const L=ocsLiveItems();let n=0;L.forEach(it=>{if(ocsLiveApply(it.key,true))n++;});
+function ocsLiveAll(){const L=ocsLiveItems();   /* 보이는(필터된) 항목만 모두 반영 */let n=0;L.forEach(it=>{if(ocsLiveApply(it.key,true))n++;});
   save(true);syncAll();try{refreshStrip();}catch(e){}toast(`✓ 토탈 변동 ${n}건 반영 — 토탈·일정표·오늘·칩 모두 갱신`);}
 /* 날짜줄 📋 버튼 → 토탈 탭의 변동 카드로 이동 */
-
-/* 토탈별로: 등록한 다음 내원 ↔ 새 OCS 비교 (그 날짜에 그 과 OCS가 실제로 올라온 경우만 '없음' 판정) */
-
-/* 보고서 항목 반영 */
-
-
 
 /* ─ OCS 원문 한 줄 파서 (공유판과 동일 규칙 + 원내생 진료센터 등 띄어쓰기 대응) ─ */
 
@@ -7264,10 +7564,27 @@ function ocsLiveAll(){const L=ocsLiveItems();let n=0;L.forEach(it=>{if(ocsLiveAp
 
 
 
+
+/* ═══ 토탈 매칭 가속 (#334) ═══
+   예전: 토탈마다 OCS 전체(수천~수만 행)를 훑고 행마다 번호 정규식 → 렌더마다 수십만 번 연산
+   지금: 행 목록별로 '환자번호 → 행들' 색인을 한 번만 만들고, 번호로 바로 찾음 + 결과 캐시 */
+var __upVer=0;
+const __noIdx=new WeakMap();
+function noIndexOf(rows){
+  let ix=__noIdx.get(rows);if(ix)return ix;
+  ix=new Map();for(const u of rows){const k=normNoG(u.no);if(!k)continue;let a=ix.get(k);if(!a)ix.set(k,a=[]);a.push(u);}
+  __noIdx.set(rows,ix);return ix;
+}
+function candRowsFor(t,rows){
+  const no=normNoG(t.ptno);
+  if(no)return noIndexOf(rows).get(no)||[];
+  const nm=String(t.pt||"").trim();if(nm.length<2)return [];
+  return rows.filter(u=>u.pt&&(u.pt.includes(nm)||nm.includes(u.pt)));
+}
 function matchRowsFor(t,rows){
   const nm=String(t.pt||"").trim();const no=normNoG(t.ptno);
   if(nm.length<2&&!no)return [];
-  return rows.filter(u=>{
+  return candRowsFor(t,rows).filter(u=>{
     if(no){if(normNoG(u.no)!==no)return false;}
     else if(!(nm.length>=2&&(u.pt.includes(nm)||nm.includes(u.pt))))return false;
     if(t.scope==="all")return true;
@@ -7276,6 +7593,7 @@ function matchRowsFor(t,rows){
 }
 function refreshOcsLog(t){
   /* HIST(과거~) + UPCOMING(오늘~)에서 이 환자 내역을 찾아 t.ocsLog에 자동 누적 (중복 스킵) */
+  if(!t||t.done)return 0;   /* 완성한 토탈은 더 찾지 않음 */
   t.ocsLog=t.ocsLog||[];
   const have=new Set(t.ocsLog.map(e=>e.d+"|"+(e.t||"")));
   const rows=matchRowsFor(t,histObjs()).concat(matchRowsFor(t,UPCOMING||[]));
@@ -7299,8 +7617,7 @@ function toggleSeen(tid,idx,val){
   e.seen=newVal;
   if(newVal==="o"&&!t.visits.includes(e.d)){  /* ✅봤음 → visit 자동 기록 (서류 마감 연동) */
     t.visits.push(e.d);t.visits=t.visits.filter(Boolean).sort();
-    if(t.next===e.d){t.next="";t.nextT="";t.nextHidden=false;t.nextU=Date.now();}
-    if(t.visits.length>=t.need){t.next="";t.nextT="";t.nextHidden=false;t.nextU=Date.now();}
+    t.u=Date.now();reconcileTotalEvents(t);   /* 그 날짜 예약 제거·다 채우면 전부 정리·확정 일정 정리 (정합 엔진) */
     toast(`✅ ${fmtD(e.d)} visit에 기록됨 (${t.visits.length}/${t.need})`);
   }else if(hadO&&newVal!=="o"&&t.visits.includes(e.d)){
     t.visits=t.visits.filter(v=>v!==e.d);
@@ -7432,148 +7749,6 @@ function shareMigrate(){
       try{ensureMiniOff();}catch(e){}
     }
   }catch(e){}
-}
-
-
-/* ═══ 토탈 ↔ 일정표(확정 실선칩·점선칩) 연동 — 규칙 하나로 통일 ═══
-   · 확정(실선) 일정이 있는 날짜의 다음 내원을 바꾸면(날짜·시간·삭제·OCS 시간 반영·토탈 정보 수정)
-     그 확정 일정은 지우고 새 내용의 점선칩으로 되돌림 → 실선+점선 중복·옛 날짜 칩 잔존 없음
-   · 거꾸로 일정표에서 확정 일정의 날짜·시간을 직접 고치면(일정 수정이 더 나중) 토탈 다음 내원이 따라감
-   · 확정 일정을 지우면 확정도 풀려 점선칩이 다시 보임 (예전엔 칩이 통째로 사라졌음) */
-function totUnconfirm(t,d){
-  if(!t)return 0;let n=0;
-  (S.events||[]).slice().forEach(e=>{
-    if(!e||!Array.isArray(e.fromTotal))return;
-    const link=e.fromTotal.find(f=>f.id===t.id&&f.d===d);if(!link)return;
-    e.fromTotal=e.fromTotal.filter(f=>!(f.id===t.id&&f.d===d));
-    if(link.pinfo){
-      e.memo=String(e.memo||"").split("\n")
-        .filter((ln,i,arr)=>{if(ln.includes(link.pinfo))return false;
-          if(/^📝\s/.test(ln)&&arr[i-1]&&arr[i-1].includes(link.pinfo))return false;return true;})
-        .join("\n").trim();
-    }
-    if(!e.fromTotal.length&&!(e.memo||"").trim()){
-      S.events=S.events.filter(x=>x!==e);
-      S.delIds=S.delIds||[];if(!S.delIds.includes(String(e.id)))S.delIds.push(String(e.id));   /* 다른 기기에서 되살아나지 않게 */
-      if(S.delIds.length>400)S.delIds=S.delIds.slice(-400);
-    }else e.u=Date.now();
-    n++;
-  });
-  if(t.confirmed&&t.confirmed[d]){delete t.confirmed[d];n++;}
-  if(t.confirmed&&!Object.keys(t.confirmed).length)delete t.confirmed;
-  return n;
-}
-function syncConfirmedEvents(t){
-  if(!t)return 0;
-  let n=0;
-  const who=(t.dr&&t.dr.trim())?t.dr.trim():t.dept;
-  const title=`${who} ${t.item||"토탈"}`;
-  const pinfo=`${t.ptno?t.ptno+" ":""}${t.pt}`;
-  const tmemo=(t.memo||"").trim();
-  const nx=Array.isArray(t.nexts)?t.nexts:[];
-  const drop=new Set();
-  (S.events||[]).forEach(e=>{
-    if(!e||e.status==="cancel"||!Array.isArray(e.fromTotal))return;
-    const link=e.fromTotal.find(f=>f.id===t.id);
-    if(!link)return;
-    const mine=nx.find(x=>x&&x.d===link.d);
-    const evT=e.time||"";
-    const moved=(e.date!==link.d)||(mine&&evT!==(mine.t||""));
-    const tU=Math.max(t.u||0,t.nextU||0);
-    /* ① 일정표에서 확정 일정을 직접 옮김(일정 수정이 토탈보다 나중) → 토탈 다음 내원이 따라감 */
-    if(moved&&mine&&(e.u||0)>tU){
-      const oldD=link.d;mine.d=e.date;mine.t=evT;link.d=e.date;
-      if(t.confirmed){delete t.confirmed[oldD];t.confirmed[e.date]=Date.now();}
-      syncNextPrimary(t);n++;return;
-    }
-    /* ② 예약이 없어졌거나·옮겨졌거나·토탈 정보(쌤·항목·환자·메모)가 바뀜 → 확정 해제(점선칩으로) */
-    /* 다녀온 날·지난 날짜의 확정 일정은 기록이므로 그대로 둠 */
-    if(!mine&&((t.visits||[]).includes(link.d)||link.d<ymd(new Date())))return;
-    /* 확정할 때의 토탈 정보(쌤·항목·메모)를 기억해 두고 비교 — 일정 제목을 직접 고친 건 '토탈 수정'으로 보지 않음 */
-    if(link.ti===undefined){link.ti=title;link.tm=tmemo;}
-    const infoChanged=(link.pinfo&&link.pinfo!==pinfo)||link.ti!==title||(link.tm||"")!==tmemo;
-    if(!mine||moved||infoChanged)drop.add(link.d);
-  });
-  drop.forEach(d=>{n+=totUnconfirm(t,d);});
-  /* 확정 목록 정리 — 예약에 없는 날짜이거나, 연결된 일정이 사라진(지운) 날짜의 확정은 해제 → 점선칩 복귀 */
-  if(t.confirmed){
-    const live=new Set(nx.map(x=>x&&x.d).filter(Boolean));
-    Object.keys(t.confirmed).forEach(ds=>{
-      const hasEv=(S.events||[]).some(e=>e&&e.status!=="cancel"&&Array.isArray(e.fromTotal)&&e.fromTotal.some(f=>f.id===t.id&&f.d===ds));
-      const hist=(t.visits||[]).includes(ds)||ds<ymd(new Date());   /* 다녀온 날·지난 날짜 = 기록 → 확정 유지 */
-      if(!hasEv||(!live.has(ds)&&!hist)){delete t.confirmed[ds];n++;}
-    });
-    if(!Object.keys(t.confirmed).length)delete t.confirmed;
-  }
-  return n;
-}
-function syncEventsWithNexts(t,oldList){
-  if(!t)return 0;
-  const now=(Array.isArray(t.nexts)?t.nexts:[]).filter(x=>x&&x.d);
-  const before=(oldList||[]).filter(x=>x&&x.d);
-  let n=0;
-  /* 그대로인 예약(같은 날짜·같은 시간)만 확정 유지, 나머지(삭제·날짜 이동·시간 변경)는 확정 해제 → 새 점선칩 */
-  before.forEach(ob=>{
-    const same=now.some(x=>x.d===ob.d&&(x.t||"")===(ob.t||""));
-    if(!same)n+=totUnconfirm(t,ob.d);
-  });
-  if(n){t.nextHidden=false;save(true);refreshAfterEventChange&&refreshAfterEventChange();}
-  return n;
-}
-function notiFixTime(id,ds,ocsT){
-  const t=findT(id);if(!t)return;
-  const arr=nextsOf(t);
-  const before=JSON.parse(JSON.stringify(arr));
-  const x=arr.find(y=>y&&y.d===ds);
-  if(x){x.t=ocsT;}else{arr.push({d:ds,t:ocsT,memo:""});}
-  t.nexts=arr;syncNextPrimary(t);t.u=Date.now();
-  const mv=syncEventsWithNexts(t,before);
-  save(true);syncAll();try{refreshStrip();}catch(e){}
-  toast(`🕐 ${esc(t.pt)} ${ds.slice(5)} 시간을 OCS(${ocsT})에 맞췄어요${mv?" · 확정 일정은 새 시간 점선칩으로":""}`);
-}
-function setNextFromUp(id,d,tm,dr,no){const t=findT(id);if(!t)return;
-  askInput(`${t.pt} 다음 내원 시간`,[{label:`📅 ${fmtD(d)} — 예약 시간을 확인/수정하세요 (비우면 시간 미정)`,type:"time",val:tm||""}],vals=>{
-    const arr=nextsOf(t);const before=JSON.parse(JSON.stringify(arr));
-    const tt=vals[0]||"";
-    const u=upMatch(t).find(x=>x.d===d);const ex=arr.find(x=>x&&x.d===d);
-    if(ex){ex.t=tt;if(!ex.memo&&u&&u.cat)ex.memo=u.cat;}else arr.push({d,t:tt,memo:(u&&u.cat)||""});
-    t.nexts=arr;syncNextPrimary(t);
-    /* OCS에서 찾은 담당쌤·환자번호를 토탈에 자동 반영 */
-    if(dr&&String(dr).trim()&&!/^\s*\[/.test(String(dr)))t.dr=String(dr).trim();
-    if(no&&!t.ptno)t.ptno=String(no).trim();
-    t.u=Date.now();
-    syncEventsWithNexts(t,before);
-    save(true);syncTotals();try{refreshStrip();}catch(e){}tick&&(lastMin=null);
-    toast(`${esc(t.pt)} 다음 내원 ${fmtD(d)}${tt?" "+tt:""} 반영`);
-  });}
-/* 다녀온 날(visit) 이하의 다음 내원은 정리 — 그날 확정 일정은 기록으로 남김(지우지 않음) */
-function dropVisitedNexts(t,d){
-  const arr=nextsOf(t);const keep=arr.filter(x=>x&&x.d&&x.d>d);
-  if(keep.length!==arr.length){t.nexts=keep;syncNextPrimary(t);return arr.length-keep.length;}
-  return 0;
-}
-function toggleVisit(id,i){
-  const t=findT(id);if(!t)return;
-  if(t.visits[i]){
-    const lst=vListOf(t);const vo=lst[i];
-    const _vd=vo?vo.d:t.visits[i];
-    askConfirm(`${i+1}번째 visit(${fmtD(_vd)}) 기록을 삭제할까요?`,()=>{
-      if(vo)vRemove(t,vo.key); else {t.visits.splice(i,1);}
-      save();syncTotals();},"삭제");
-  }else{
-    askDate(`${esc(t.pt)} — ${i+1}번째 visit 날짜`,ymd(new Date()),d=>{
-      t.visits[i]=d;t.visits=t.visits.filter(Boolean).sort();   /* 같은 날짜 중복 허용 */
-      (t.ocsLog||[]).forEach(e=>{if(e.d===d&&e.seen==null)e.seen="o";});
-      const dn=dropVisitedNexts(t,d);
-      t.u=Date.now();
-      save();syncTotals();try{refreshStrip();}catch(e){}
-      toast(`${i+1}번째 visit 기록됨${dn?` · 지난 다음 내원 ${dn}건 정리`:""}`);
-      const lst=vListOf(t);
-      const same=lst.filter(x=>x.d===d);
-      const target=same.length?same[same.length-1].key:d;
-      if((TOTAL_CFG[t.dept]||{}).tags)openVisitDlg(id,target);
-    });
-  }
 }
 
 </script>
