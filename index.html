@@ -1341,7 +1341,7 @@ const DEP1R={j:"치주",b:"보존",c:"보철",k:"교정",s:"소치",n:"내과",o
 function txtOn(hex){try{const x=(hex||"").replace("#","");const r=parseInt(x.substr(0,2),16),g=parseInt(x.substr(2,2),16),b=parseInt(x.substr(4,2),16);return (0.299*r+0.587*g+0.114*b)/255>0.62?"#1E2823":"#fff";}catch(e){return "#fff";}}
 const DEPT_COLOR={"소치":"#EE7A1A","내과":"#C29B00","교정":"#2E9E44","치주":"#12A5B0","보존":"#3D7BE0","보철":"#23408F","외과":"#A8262A","영상":"#4F7FA8","병리":"#B0637C","원진실":"#9A5FD6","관악":"#6B2D8F","공통":"#5C6B73","기타":"#8A938D"};
 const KEY="wonnae-share-v1";
-const BUILD_ID="43";   /* 🎁 공유판(배포용) 빌드 — 새 파일마다 +1 */
+const BUILD_ID="44";   /* 🎁 공유판(배포용) 빌드 — 새 파일마다 +1 */
 function esc(s){return String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");}
 /* 저장 어댑터: 클로드 앱/웹에서 열면 계정 저장소(폰·PC 자동 동기화),
    파일을 따로 브라우저로 열면 그 기기 localStorage(비동기화)로 폴백 */
@@ -5061,7 +5061,17 @@ function cycleTcDone(){
   window.tcShowDone=(window.tcDoneMode!=="hide");   /* 기존 코드 호환 */
   renderTotals();
 }
-function setTcItem(it){tcItemFilter=(tcItemFilter===it)?null:it;tcResort(true);renderTotals();}
+function setTcItem(it){tcItemFilter=(tcItemFilter===it)?null:it;if(tcItemFilter)window.tcSub=null;tcResort(true);renderTotals();}
+/* 교정 토탈 세부칩 (#352): 구토·본토(신토) × 다음 내원 회차(1st·2nd·3rd — 3rd는 3회째 이상 포함) */
+function orthoSubOf(t){
+  if(!t||t.dept!=="교정")return "";
+  const it=String(t.item||"");const g=/구토/.test(it)?"구토":/본토|신토/.test(it)?"본토":"";
+  if(!g)return "";
+  const o=Math.min(3,(t.visits||[]).filter(Boolean).length+1);
+  return g+"|"+o;
+}
+function setTcSub(k){window.tcSub=(window.tcSub===k)?null:k;if(window.tcSub)tcItemFilter=null;tcResort(true);renderTotals();}
+
 /* 다음 내원(또는 마감) 임박 정렬용 — 작을수록 급함, 없으면 큰 값 */
 function tcUrgency(t){
   /* ══ 임박순 정렬 기준 ══
@@ -5199,6 +5209,16 @@ function renderTotals(listOnly){
           return `<button onclick="setTcItem('${esc(it).replace(/'/g,"")}')" style="border:1px solid ${on?"var(--ink)":"var(--line)"};background:${on?"var(--ink)":"transparent"};color:${on?"#fff":"var(--sub)"};border-radius:999px;padding:1px 9px;font-size:10px;font-weight:700;cursor:pointer">${esc(it)} ${n}</button>`;}).join("")}
       </div>`;
     }
+    /* 교정 세부칩 (#352) — 교정만 골랐을 때: 구토·본토 × 1st·2nd·3rd 환자 수 */
+    if(tcDeptFilter&&tcDeptFilter.size===1&&tcDeptFilter.has("교정")){
+      const base=scoped.filter(t=>!t.done);const oc=DEPT_COLOR["교정"]||"#2E9E44";
+      const grp=g=>`<span style="display:inline-flex;gap:4px;align-items:center;flex:0 0 auto"><b style="font-size:10px;color:${oc};font-weight:900">${g}</b>${[1,2,3].map(o=>{const k=g+"|"+o;const n=base.filter(t=>orthoSubOf(t)===k).length;const on=window.tcSub===k;
+          return `<button onclick="setTcSub('${k}')" title="${g} — 다음 내원이 ${o===3?"3번째 이상":ordSuffix(o)}인 환자" style="border:1px solid ${on?oc:"var(--line)"};background:${on?oc:"transparent"};color:${on?"#fff":(n?"var(--sub)":"#C9CFCC")};border-radius:999px;padding:1px 8px;font-size:10px;font-weight:700;cursor:pointer">${ordSuffix(o)} ${n}</button>`;}).join("")}</span>`;
+      const lbl=v=>`<span style="font-size:10px;color:var(--sub);font-weight:700;flex:0 0 auto;${v?"":"visibility:hidden"}">세부</span>`;
+      filterHtml+=`<div style="display:flex;flex-direction:column;gap:4px;margin:-2px 0 7px;padding-left:2px">
+        <div style="display:flex;gap:4px;align-items:center">${lbl(1)}${grp("구토")}</div>
+        <div style="display:flex;gap:4px;align-items:center">${lbl(0)}${grp("본토")}</div></div>`;
+    }
     /* 정렬 선택 (임박순 / 항목별) */
     filterHtml+=`<div style="display:flex;gap:5px;align-items:center;margin:0 0 10px;padding-left:2px">
       <span style="font-size:10px;color:var(--sub);font-weight:700">정렬</span>
@@ -5208,6 +5228,7 @@ function renderTotals(listOnly){
   }
   let shown=scoped;
   if(tcItemFilter)shown=shown.filter(t=>(t.item||"").trim()===tcItemFilter);
+  if(window.tcSub&&tcDeptFilter&&tcDeptFilter.size===1&&tcDeptFilter.has("교정"))shown=shown.filter(t=>orthoSubOf(t)===window.tcSub);   /* 교정 세부칩 (#352) */
   /* 🔍 검색: 환자명·번호·담당쌤·항목·과 (공백/대소문자 무시, 번호는 부분일치) */
   {const q=(window.tcQuery||"").trim().toLowerCase().replace(/\s+/g,"");
    if(q){
