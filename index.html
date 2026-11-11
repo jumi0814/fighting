@@ -874,6 +874,80 @@ table.ocl tr.ocl-h.flash td{animation:oclFlash 1.6s ease-out}
 #ocs-date-pick{position:absolute;inset:0;width:100%;height:100%;min-width:0;opacity:0;border:0;padding:0;margin:0;font-size:16px;cursor:pointer;z-index:2;-webkit-appearance:none;appearance:none;background:transparent;color:transparent}
 #ocs-date-pick::-webkit-calendar-picker-indicator{position:absolute;inset:0;width:100%;height:100%;margin:0;padding:0;opacity:0;cursor:pointer}
 .odnav .ocs-dp-wrap>#ocs-nav-title{color:var(--ink)!important;font-size:12px!important;padding:3px 6px!important}
+/* ═══ 🦷 원진실 탭 (#371) ═══ */
+#ocs-pills button[data-o="total"]{flex-grow:.55}
+#o-wj .wjhead{border:1.5px solid #9A5FD6}
+.wjme{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.wjme-l{font-weight:900;color:#8E5BD6;font-size:13px;flex:0 0 auto}
+.wjme input{flex:1 1 70px;min-width:0;padding:6px 9px;border:1.5px solid var(--line);border-radius:9px;font-size:13px;box-sizing:border-box}
+.wjme input#wj-me-no{flex:0 1 66px}
+.wjcand{display:flex;gap:4px;flex-wrap:wrap;align-items:center;margin-top:6px}
+.wjcand small{opacity:.6;font-weight:700}
+.wjup{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:9px}
+.wjup .btn{background:#9A5FD6;color:#fff;border:none;flex:0 0 auto}
+.wjup .hint{flex:1 1 160px;font-size:11px;line-height:1.35}
+.wjstat{display:flex;gap:5px;flex-wrap:wrap;margin-top:9px}
+.wjstat>*{border:1.5px solid #E4D6F6;background:#F8F2FE;color:#6E3FB0;border-radius:99px;padding:2px 9px;font-size:11px;font-weight:800;font-family:inherit;line-height:1.5}
+.wjstat button{cursor:pointer;border-color:#F0C27A;background:#FFF7E8;color:#A0620A}
+.wjstat button.on{background:var(--amber);border-color:var(--amber);color:#fff}
+.wjstat .wjat{background:transparent;border-style:dashed;color:var(--sub)}
+.wjcases .wjcg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
+.wjcb{display:flex;flex-direction:column;align-items:center;border:1.5px solid #D9C5F2;background:#FBF7FF;border-radius:10px;padding:5px 2px;cursor:pointer;font-family:inherit;color:#5B3591;min-width:0}
+.wjcb b{font-size:11.5px;font-weight:900;white-space:nowrap}
+.wjcb i{font-style:normal;font-size:17px;font-weight:900;line-height:1.15}
+.wjcb small{font-size:9.5px;font-weight:800;color:#A0620A}
+.wjcb.z{opacity:.55}
+.wjcb.on{background:#9A5FD6;border-color:#9A5FD6;color:#fff;opacity:1}
+.wjcb.on small{color:#FFE7B8}
+.wjcl{margin-top:8px;border-top:1px dashed var(--line);padding-top:6px}
+.wjcr{display:flex;gap:7px;align-items:center;padding:5px 2px;border-bottom:1px solid var(--line);font-size:12px;cursor:pointer}
+.wjcr b{flex:0 0 46px}.wjcr span{flex:1;min-width:0;word-break:break-word}.wjcr small{color:var(--sub);font-size:10px}
+.wjcr em{font-style:normal;font-size:10px;font-weight:800;color:#A0620A;background:#FFF2DA;border-radius:99px;padding:1px 7px;flex:0 0 auto}
+.wjsrch{display:flex;gap:5px;align-items:center;margin:10px 0 7px}
+.wjsrch input{flex:1;min-width:0;padding:6px 10px;border:1.5px solid var(--line);border-radius:9px;box-sizing:border-box}
+.wjsrch button{flex:0 0 auto;border:none;background:#9A5FD6;color:#fff;border-radius:9px;padding:7px 12px;font-size:12.5px;font-weight:800;cursor:pointer}
+.wjbar{display:flex;gap:4px;flex-wrap:wrap;align-items:center;margin:0 0 9px}
+.wjbar b{font-size:12px;color:#8E5BD6;margin-right:auto}
+.wjbar button{border-radius:999px;padding:2px 10px;font-size:10.5px;font-weight:800;cursor:pointer;font-family:inherit}
+.wjvd{border:1.5px solid #D9C5F2;background:#FBF7FF;border-radius:10px;padding:7px 8px;margin:2px 0 8px}
+.wjvd-h{font-size:12px;font-weight:900;color:#8E5BD6;margin-bottom:5px}
+.wjvd-h span{font-weight:700;color:var(--sub);font-size:10.5px;margin-left:4px}
+.wjvd-h em{display:block;font-style:normal;font-size:10.5px;color:#A0620A;font-weight:800;margin-top:2px}
+.wjcs{display:flex;flex-wrap:wrap;gap:5px}
+.wjcs button{border:1.5px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:4px 10px;font-size:12px;font-weight:800;cursor:pointer;font-family:inherit}
+.wjcs button.sg{border-style:dashed;border-color:#9A5FD6;color:#8E5BD6}
+.wjcs button.on{background:#9A5FD6;border-color:#9A5FD6;color:#fff}
+.wjcard .wjr{display:flex;gap:6px;align-items:center;padding:5px 0;border-bottom:1px solid #EEF2EF;font-size:90%;line-height:1.3}
+.wjcard .wjr.td{background:#FFF4F1;box-shadow:inset 3px 0 0 var(--coral);padding-left:6px}
+.wjr .wjd{flex:0 0 50px;white-space:nowrap}.wjr .wjd i{font-style:normal;font-size:9.5px;color:var(--sub);font-weight:700;margin-left:1px}
+.wjr .wjt{flex:0 0 38px;color:#8E5BD6}
+.wjr .wjc{flex:1 1 auto;min-width:0;word-break:break-word}
+.wjr .wjp{flex:0 0 64px;text-align:right;overflow:hidden}
+.wjr .wjp b{display:block;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wjr .wjp small{display:block;font-size:9px;font-weight:600;color:var(--sub);letter-spacing:-.2px;white-space:nowrap}
+.wjr .wjp em{display:inline-block;font-style:normal;background:#EFE6FA;color:#8E5BD6;border-radius:99px;padding:1px 8px;font-size:10.5px;font-weight:800}
+.wjcard .wjr{min-height:42px;box-sizing:border-box;padding:4px 0}   /* 줄 높이 일정 (#356) */
+.wjnb{display:inline-block;margin-left:5px;font-size:10.5px;font-weight:800;color:#8E5BD6;background:#EFE6FA;border-radius:99px;padding:2px 8px;vertical-align:2px}
+/* ═══ #372: OCS 메뉴 탭 — 낮고 촘촘하게 · 1줄 같은 폭 · 2줄 토탈:원진실:통계 = 2:2:1 ═══ */
+#ocs-pills{display:grid!important;grid-template-columns:repeat(20,minmax(0,1fr));gap:4px!important;margin:0 0 8px!important}
+#ocs-pills .pill-br{display:none!important}
+#ocs-pills>button{grid-column:span 5;min-width:0;min-height:0!important;padding:5px 2px!important;font-size:12.5px!important;font-weight:800;border-radius:10px;line-height:1.3;letter-spacing:-.2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#ocs-pills>button[data-o="total"],#ocs-pills>button[data-o="wj"]{grid-column:span 5}
+#ocs-pills>button[data-o="stats"]{grid-column:span 4}
+body.share-mode #ocs-pills>button[data-o="total"],body.share-mode #ocs-pills>button[data-o="wj"]{grid-column:span 5}
+@media (max-width:400px){#ocs-pills>button{font-size:12px!important}}
+@media (max-width:360px){#ocs-pills>button{font-size:11.5px!important;letter-spacing:-.4px}}
+/* 파일·파이프라인 상자 + 변동 카드 한 상자로 */
+.tpcard .ocslive{border:0!important;box-shadow:none!important;background:none!important;border-radius:0!important;margin:8px 0 0!important;padding:7px 0 0!important;border-top:1px dashed var(--line)!important}
+.tpcard .ocslive h2{font-size:12.5px;margin:0 0 2px}
+.tpcard .ocslive>p.hint{margin:0!important;font-size:11px}
+.tpcard .ocslive .orr:first-of-type{border-top:0}
+.wjtp h2{font-size:14px}
+.wjmec{border:1.5px solid #D9C5F2;background:#FBF7FF;color:#6E3FB0;border-radius:99px;padding:1px 8px;font-size:11px;font-weight:800;font-family:inherit;cursor:pointer}
+span.wjmec{cursor:default}
+.wjupb{background:#9A5FD6!important;color:#fff!important;border:none!important;padding:3px 10px!important;font-size:11px!important;font-weight:800}
+#wj-stat .wjstat{margin:0 0 8px}
+#wj-stat .wjstat>*{font-size:10.5px;padding:1px 8px}
 </style>
 </head>
 <body>
@@ -1025,8 +1099,9 @@ table.ocl tr.ocl-h.flash td{animation:oclFlash 1.6s ease-out}
 <section class="tabpage" id="page-ocs">
   <div class="slotpick" id="ocs-pills">
     <button data-o="day" class="on">당일 뷰</button>
-    <button data-o="hl">🖍️ 하이라이트</button>
+    <button data-o="hl">하이라이트</button>
     <button data-o="total">토탈</button>
+    <button data-o="wj">원진실</button>
   </div>
 
   <div class="osec" id="o-hl" style="display:none"><div id="ocs-hl-body"></div></div>
@@ -1044,12 +1119,21 @@ table.ocl tr.ocl-h.flash td{animation:oclFlash 1.6s ease-out}
           <button class="btn small" style="background:var(--brand);color:#fff;padding:3px 10px;font-size:11px;font-weight:800" onclick="rescanTotals('all')">🗂 전체 이력</button>
         </span></h2>
       <p class="hint tsa"><span id="tot-scan-at" style="color:var(--purple);font-weight:700"></span></p>
+      <div id="total-ocs-found"></div>
     </div>
-    <div id="total-ocs-found"></div>
     <div id="total-list"></div>
     <button class="btn" style="width:100%" onclick="openTotalDlg()">＋ 토탈 케이스 시작</button>
   </div>
 
+  <div class="osec" id="o-wj" style="display:none">
+    <div id="wj-noti"></div>
+    <div class="card tpcard wjtp"><div id="wj-head"></div><div id="wj-ocs-found"></div></div>
+    <div id="wj-slots"></div>
+    <div id="wj-cases"></div>
+    <div class="wjsrch"><input type="search" id="wj-q" placeholder="🔍 원진실 환자명·번호 검색" oninput="wjSearch(this.value)"><button onclick="wjAddPt()">＋ 환자</button></div>
+    <div id="wj-stat"></div>
+    <div id="wj-list"></div>
+  </div>
   <div class="osec" id="o-day">
     <div class="ocs-in">
       <label class="ocs-in-btn" for="ocs-file">📁 OCS 엑셀 올리기<span class="ocs-in-sub">.xlsx·.xls · 🔐 암호 · 여러 날 OK</span></label>
@@ -1299,6 +1383,7 @@ table.ocl tr.ocl-h.flash td{animation:oclFlash 1.6s ease-out}
   <div class="dlg-in">
     <h3 id="vd-title" style="font-size:15px">내원 기록</h3>
     <p class="hint" style="margin:2px 0 6px">이 내원에서 <b>어떤 항목</b>으로 받았는지 체크 — 카드에 내역이 쌓여요</p>
+    <div id="vd-cases"></div>
     <div id="vd-picked" style="margin:4px 0 6px"></div>
     <div style="display:flex;gap:5px;align-items:center;margin-bottom:5px">
       <input type="search" id="vd-tag-q" placeholder="🔍 항목 검색 (impression, 1st, 레포트…)" oninput="vdRenderTags(window.vdT)" style="flex:1;min-width:0;padding:7px 10px;border:1.5px solid var(--line);border-radius:9px;font-size:12.5px;box-sizing:border-box">
@@ -1343,7 +1428,7 @@ const DEP1R={j:"치주",b:"보존",c:"보철",k:"교정",s:"소치",n:"내과",o
 function txtOn(hex){try{const x=(hex||"").replace("#","");const r=parseInt(x.substr(0,2),16),g=parseInt(x.substr(2,2),16),b=parseInt(x.substr(4,2),16);return (0.299*r+0.587*g+0.114*b)/255>0.62?"#1E2823":"#fff";}catch(e){return "#fff";}}
 const DEPT_COLOR={"소치":"#EE7A1A","내과":"#C29B00","교정":"#2E9E44","치주":"#12A5B0","보존":"#3D7BE0","보철":"#23408F","외과":"#A8262A","영상":"#4F7FA8","병리":"#B0637C","원진실":"#9A5FD6","관악":"#6B2D8F","공통":"#5C6B73","기타":"#8A938D"};
 const KEY="wonnae-share-v1";
-const BUILD_ID="59";   /* 🎁 공유판(배포용) 빌드 — 새 파일마다 +1 */
+const BUILD_ID="62";   /* 🎁 공유판(배포용) 빌드 — 새 파일마다 +1 */
 function esc(s){return String(s??"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");}
 /* 저장 어댑터: 클로드 앱/웹에서 열면 계정 저장소(폰·PC 자동 동기화),
    파일을 따로 브라우저로 열면 그 기기 localStorage(비동기화)로 폴백 */
@@ -4162,7 +4247,7 @@ function notiBlockHtml(ds,opt){
   const list=notiListFor(ds);
   const md=+ds.slice(5,7)+"/"+ +ds.slice(8,10);
   const label=opt.label||`${md} 내원`;
-  const wjH=(()=>{try{return wjDayHtml(ds,label.split(" — ")[0]);}catch(e){return "";}})();   /* 원진실 내 진료 (#356) */
+  const wjH=opt.noWj?"":(()=>{try{return wjDayHtml(ds,label.split(" — ")[0]);}catch(e){return "";}})();   /* 원진실 내 진료 (#356) */
   if(!list.length){
     if(wjH)return wjH;
     if(!opt.showEmpty)return "";
@@ -4927,13 +5012,14 @@ function openVisitDlg(id,key){
   {const q=document.getElementById("vd-tag-q");if(q)q.value="";}
   window.vdAll=false;
   const vm=(t.vmeta||{})[key]||{};
-  window.vdPick=vm.tag||null;
+  window.vdPick=(t.dept==="원진실"?wjTagRest(vm):vm.tag)||null;
+  {const r=wjCsInit(t,date,vm,!!((t.vmeta||{})[key]));window.vdCs=r.cs;window.vdCsSug=r.sug;window.vdCsAuto=r.auto;}
   const _occ=String(key).indexOf("#")>=0?parseInt(String(key).split("#")[1],10):1;
   const _same=(t.visits||[]).filter(x=>x===date).length;
   document.getElementById("vd-title").textContent=`${t.pt} — ${+date.slice(5,7)}/${+date.slice(8,10)} 내원${_same>1?` (${_occ}/${_same}번째)`:""}`;
   tcSet("vd-memo",vm.m||"");
   const tags=vdTagsFor(t);
-  tcSet("vd-tag-etc",vm.tag&&!tags.includes(vm.tag)?vm.tag:"");
+  tcSet("vd-tag-etc",window.vdPick&&!tags.includes(window.vdPick)?window.vdPick:"");
   vdRenderTags(t);
   document.getElementById("visit-dlg").showModal();
 }
@@ -4954,6 +5040,7 @@ function vdToggleAll(){
 function vdRenderTags(t){
   t=t||window.vdT;
   if(!t)return;
+  try{wjVdCases(t);}catch(e){}
   const box=document.getElementById("vd-tags");
   if(!box)return;
   const cfg=TOTAL_CFG[t.dept]||{};
@@ -5005,9 +5092,11 @@ function vdSave(){
   t.vmeta=t.vmeta||{};
   const tag=(val("vd-tag-etc")||"").trim()||window.vdPick||"";
   const m=(val("vd-memo")||"").trim();
-  if(tag||m)t.vmeta[mk]={tag,m};else delete t.vmeta[mk];
+  let tg=tag;
+  if(t.dept==="원진실"){const cs=(window.vdCs||[]).slice();tg=[cs.join(" + "),tag].filter(Boolean).join(" · ");t.vmeta[mk]={tag:tg,m,cs};}   /* 원진실: 케이스 여러 개 + 항목 (비워도 '확인함' 표시로 남겨 자동 채움 안 함) (#371) */
+  else if(tag||m)t.vmeta[mk]={tag,m};else delete t.vmeta[mk];
   save();syncTotals();document.getElementById("visit-dlg").close();
-  toast(tag?`내역 저장 — ${tag}`:"내역 저장");
+  toast(tg?`내역 저장 — ${tg}`:"내역 저장");
 }
 function delVisit(id,key){
   const t=findT(id);if(!t)return;
@@ -5031,7 +5120,7 @@ function vdDelete(){
 function saveTotal(){
   const ed=window.tcEditId?findT(window.tcEditId):null;
   const t=ed||{id:uniqId(S.totals),visits:[],vmeta:{},done:false,ufol:false,report:false};
-  t.dept=val("tc-dept");t.item=val("tc-item");t.pt=val("tc-pt");t.ptno=val("tc-ptno").trim();t.dr=val("tc-dr");t.scope=val("tc-scope")||"dept";
+  t.dept=val("tc-dept");t.item=val("tc-item");t.pt=val("tc-pt");t.ptno=val("tc-ptno").trim();t.dr=val("tc-dr");if(t.dept==="원진실"&&wjMeOk())t.dr=wjMeName();t.scope=val("tc-scope")||"dept";
   t.memo=(val("tc-memo")||"").trim();
   t.need=Math.max(parseInt(val("tc-need"))||3,(t.visits||[]).filter(Boolean).length||0)||3;
   {const _n=val("tc-next"),_t=normTime(val("tc-nextT"));
@@ -5166,6 +5255,7 @@ function setTcSub(k){window.tcSub=(window.tcSub===k)?null:k;if(window.tcSub)tcIt
 
 /* 다음 내원(또는 마감) 임박 정렬용 — 작을수록 급함, 없으면 큰 값 */
 function tcUrgency(t){
+  if(isWjSelfT(t))return 1e9;   /* 원진실 신환 자리(내 이름) 토탈은 임박순 맨 아래 (#349) */
   /* ══ 임박순 정렬 기준 ══
      ① 내원 횟수를 다 채우고 레포트/유폴만 남은 케이스 → 맨 위 (마감이 임박한 순)
      ② 그 아래는 다음 내원일이 가까운 순
@@ -5259,17 +5349,17 @@ function renderTotals(listOnly){
     if(nb){
       const t0=ymd(new Date());
       const dt=new Date();dt.setDate(dt.getDate()+1);const t1=ymd(dt);
-      nb.innerHTML=notiBlockHtml(t0,{label:"오늘 내원",showEmpty:false,me:true})
-                  +notiBlockHtml(t1,{label:"내일 내원 — 오늘 저녁 노티",showEmpty:false,me:true});
+      nb.innerHTML=notiBlockHtml(t0,{label:"오늘 내원",showEmpty:false,me:true,noWj:true})
+                  +notiBlockHtml(t1,{label:"내일 내원 — 오늘 저녁 노티",showEmpty:false,me:true,noWj:true});
       if(!nb.innerHTML.trim()&&!(S.me||"").trim())nb.innerHTML=`<div class="card" style="padding:10px 12px"><div class="noti-me" style="margin:0"><span>📣 노티 내 정보</span><input class="noti-me-in" value="" placeholder="번호,이름 (예: 36,홍길동)" onchange="saveNotiMe(this.value)"></div></div>`;
     }
   }
-  const box=document.getElementById("total-list");
-  if(!S.totals.length){box.innerHTML=`<div class="card"><div class="empty">진행 토탈 없음 — 차팅→재진 잡히면 등록 (프리토탈 사인 먼저!)</div></div>`;return;}
+  const box=document.getElementById(window.__wjCtx?"wj-list":"total-list");
+  if(!S.totals.length&&!window.__wjCtx){box.innerHTML=`<div class="card"><div class="empty">진행 토탈 없음 — 차팅→재진 잡히면 등록 (프리토탈 사인 먼저!)</div></div>`;return;}
   /* 서브탭: 전체/과별 + 완료 보기 토글 */
   const deps=tcDeptList();
   /* 과 필터 후보 집합 (항목 세부탭·정렬에 쓰임) */
-  let scoped=(!tcDeptFilter||tcDeptFilter.size===0)?S.totals.slice():S.totals.filter(t=>tcDeptFilter.has(t.dept));
+  let scoped=(!tcDeptFilter||tcDeptFilter.size===0)?S.totals.filter(t=>t.dept!=="원진실"):S.totals.filter(t=>tcDeptFilter.has(t.dept));
   /* 완료 개수는 '현재 과 필터'를 반영해야 함 (전체 고정 X) */
   const doneN=scoped.filter(t=>t.done).length;
   /* 현재 스코프의 항목(item) 목록 */
@@ -5280,8 +5370,8 @@ function renderTotals(listOnly){
     const q=(window.tcQuery||"");
     const active=tcDeptFilter&&tcDeptFilter.size>0;
     filterHtml+=`<div style="display:flex;gap:4px;flex-wrap:wrap;align-items:center;margin:0 0 7px">
-      <button onclick="clearTcDept()" style="border:1.5px solid ${active?"var(--line)":"var(--brand)"};background:${active?"transparent":"var(--brand)"};color:${active?"var(--sub)":"#fff"};border-radius:999px;padding:2px 11px;font-size:11px;font-weight:800;cursor:pointer">전체 ${S.totals.length}</button>
-      ${deps.map(dep=>{const on=active&&tcDeptFilter.has(dep);const col=DEPT_COLOR[dep]||"#666";const n=S.totals.filter(t=>t.dept===dep).length;
+      <button onclick="clearTcDept()" style="border:1.5px solid ${active?"var(--line)":"var(--brand)"};background:${active?"transparent":"var(--brand)"};color:${active?"var(--sub)":"#fff"};border-radius:999px;padding:2px 11px;font-size:11px;font-weight:800;cursor:pointer">전체 ${S.totals.filter(t=>t.dept!=="원진실").length}</button>
+      ${deps.filter(d=>d!=="원진실").map(dep=>{const on=active&&tcDeptFilter.has(dep);const col=DEPT_COLOR[dep]||"#666";const n=S.totals.filter(t=>t.dept===dep).length;
         return `<button onclick="toggleTcDept('${dep}')" style="border:1.5px solid ${col};background:${on?col:col+"14"};color:${on?"#fff":col};border-radius:999px;padding:2px 11px;font-size:11px;font-weight:800;cursor:pointer">${dep} ${n}</button>`;}).join("")}
       ${(()=>{const noN=scoped.filter(tcNoNextOf).length;
         if(!noN)return "";
@@ -5319,6 +5409,7 @@ function renderTotals(listOnly){
       <button onclick="setTcSort('item')" style="border:1.5px solid ${tcSortMode==="item"?"var(--brand)":"var(--line)"};background:${tcSortMode==="item"?"var(--brand)":"transparent"};color:${tcSortMode==="item"?"#fff":"var(--sub)"};border-radius:999px;padding:2px 11px;font-size:10.5px;font-weight:800;cursor:pointer">🗂 항목별</button>
     </div>`;
   }
+  if(window.__wjCtx)filterHtml=wjListBar(scoped,doneN);else filterHtml+=wjTotNote();   /* 원진실은 원진실 탭으로 (#371) */
   let shown=scoped;
   if(tcItemFilter)shown=shown.filter(t=>(t.item||"").trim()===tcItemFilter);
   if(window.tcSub&&tcDeptFilter&&tcDeptFilter.size===1&&tcDeptFilter.has("교정"))shown=shown.filter(t=>orthoSubOf(t)===window.tcSub);   /* 교정 세부칩 (#352) */
@@ -5355,7 +5446,7 @@ function renderTotals(listOnly){
    });}
   {const q=(window.tcQuery||"").trim();
    if(!shown.length){
-     box.innerHTML=filterHtml+`<div class="card"><div class="empty">${q?`"${esc(q)}" 검색 결과 없음 — 이름·번호 일부만 입력해도 돼요`:"선택한 조건의 토탈이 없어요"}</div></div>`;tcBindSearch();return;}
+     box.innerHTML=filterHtml+`<div class="card"><div class="empty">${q?`"${esc(q)}" 검색 결과 없음 — 이름·번호 일부만 입력해도 돼요`:(window.__wjCtx?(window.tcQuery||window.wjNoNext?"조건에 맞는 원진실 환자가 없어요":"아직 원진실 환자가 없어요 — 위에서 내 예약 파일을 넣으면 예약 환자가 자동으로 만들어져요"):"선택한 조건의 토탈이 없어요")}</div></div>`;tcBindSearch();return;}
    if(q)filterHtml+=`<div class="hint" style="margin:-2px 0 6px 2px;font-size:11.5px">🔍 <b>"${esc(q)}"</b> 검색 결과 <b style="color:var(--brand)">${shown.length}건</b></div>`;
   }
   let _prevItem=null;
@@ -5454,7 +5545,7 @@ function renderTotals(listOnly){
       <div class="meta" style="white-space:normal;word-break:break-word">${esc(t.item||"")} · ${esc(t.dr||"담당쌤?")}${tagSum?`<br><span style="color:${dcol};font-weight:800">${tagSum}</span>`:""}</div>
       ${t.memo?`<div onclick="event.stopPropagation();editTotalMemo(${t.id})" style="margin:4px 0 2px;padding:5px 8px;border-radius:8px;background:#FFF9E6;border:1px solid #F0DFA8;font-size:11.5px;color:#6B5A20;cursor:pointer;word-break:break-word" title="탭하면 수정">📝 ${esc(t.memo)}</div>`
         :`<div onclick="event.stopPropagation();editTotalMemo(${t.id})" style="margin:3px 0 1px;font-size:10.5px;color:var(--sub);cursor:pointer">＋ 메모 추가</div>`}
-      ${um.map(u=>`<div class="deadline" style="border:1.5px dashed var(--purple);background:var(--purple-soft);color:var(--purple)">◇ OCS: ${fmtD(u.d)} ${u.t||""}${t.scope==="all"&&u.dep&&u.dep!==t.dept?` <span class="dept-tag" style="background:${DEPT_COLOR[u.dep]||"#666"};color:${txtOn(DEPT_COLOR[u.dep]||"#666")};font-size:9.5px">${u.dep}</span>`:""} ${esc(u.dr||"")}${u.cat?` · ${esc(u.cat)}`:""}${!nextsOf(t).some(x=>x&&x.d===u.d&&(!u.t||(x.t||"")===u.t))?` <button class="btn small" style="margin-left:6px;background:var(--purple);color:#fff" onclick="setNextFromUp(${t.id},'${u.d}','${u.t||""}','${(u.dr||"").replace(/'/g,"")}','${u.no||""}')">이 날짜로 반영</button>`:" · 반영됨 ✓"}</div>`).join("")}
+      ${um.map(u=>`<div class="deadline" style="border:1.5px dashed var(--purple);background:var(--purple-soft);color:var(--purple)">◇ OCS: ${fmtD(u.d)} ${u.t||""}${t.scope==="all"&&u.dep&&u.dep!==t.dept?` <span class="dept-tag" style="background:${DEPT_COLOR[u.dep]||"#666"};color:${txtOn(DEPT_COLOR[u.dep]||"#666")};font-size:9.5px">${u.dep}</span>`:""} ${u.dep==="원진실"?esc(wjProc(u)||""):`${esc(u.dr||"")}${u.cat?` · ${esc(u.cat)}`:""}`}${!nextsOf(t).some(x=>x&&x.d===u.d&&(!u.t||(x.t||"")===u.t))?` <button class="btn small" style="margin-left:6px;background:var(--purple);color:#fff" onclick="setNextFromUp(${t.id},'${u.d}','${u.t||""}','${(u.dr||"").replace(/'/g,"")}','${u.no||""}')">이 날짜로 반영</button>`:" · 반영됨 ✓"}</div>`).join("")}
       ${(t.ocsLog&&t.ocsLog.length)?`<div style="margin:7px 0 4px;border:1px solid var(--line);border-radius:9px;padding:6px 8px;background:#FAFCFB">
         <div style="font-size:10.5px;font-weight:800;color:var(--sub);margin-bottom:3px">📋 OCS 내원 이력 ${t.ocsLog.length}건 · <span style="color:#1D8A4E">봤음 ${t.ocsLog.filter(e=>e.seen==="o").length}</span> · <span style="color:var(--red)">못봄 ${t.ocsLog.filter(e=>e.seen==="x").length}</span> · 미체크 ${t.ocsLog.filter(e=>!e.seen).length}</div>
         ${(()=>{const all=t.ocsLog.map((e,ei)=>[e,ei]);const open=(window.tcLogOpen||{})[t.id];
@@ -5464,7 +5555,7 @@ function renderTotals(listOnly){
           <b style="width:34px;flex:0 0 auto">${+e.d.slice(5,7)}/${+e.d.slice(8,10)}</b>
           <span style="color:var(--sub);flex:0 0 auto">${e.t||""}</span>
           ${t.scope==="all"&&e.dep&&e.dep!==t.dept?`<span class="dept-tag" style="background:${DEPT_COLOR[e.dep]||"#666"};color:${txtOn(DEPT_COLOR[e.dep]||"#666")};font-size:9px;flex:0 0 auto">${e.dep}</span>`:""}
-          <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;${e.seen==="x"?"text-decoration:line-through":""}">${esc(e.cat||"—")}</span>
+          <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;${e.seen==="x"?"text-decoration:line-through":""}">${esc((t.dept==="원진실"?wjProc(e):e.cat)||"—")}</span>
           <button onclick="toggleSeen(${t.id},${ei},'o')" style="flex:0 0 auto;border:1.5px solid #1D8A4E;background:${e.seen==="o"?"#1D8A4E":"transparent"};color:${e.seen==="o"?"#fff":"#1D8A4E"};border-radius:7px;padding:0 6px;font-size:10px;font-weight:800;cursor:pointer">✅</button>
           <button onclick="toggleSeen(${t.id},${ei},'x')" style="flex:0 0 auto;border:1.5px solid var(--red);background:${e.seen==="x"?"var(--red)":"transparent"};color:${e.seen==="x"?"#fff":"var(--red)"};border-radius:7px;padding:0 6px;font-size:10px;font-weight:800;cursor:pointer">✖</button>
         </div>`).join("")+(show.length<all.length||open?`<div onclick="event.stopPropagation();(window.tcLogOpen=window.tcLogOpen||{})[${t.id}]=!${open?1:0};renderTotals(true)" style="font-size:10.5px;color:var(--sub);cursor:pointer;margin-top:2px;text-decoration:underline dotted">${open?"접기":`이력 전체 ${all.length}건 보기`}</div>`:"");})()}
@@ -5693,7 +5784,7 @@ function reconcileTotalEvents(t){
    linkD.forEach(d=>{if(live.has(d)&&!(t.confirmed&&t.confirmed[d])){t.confirmed=t.confirmed||{};t.confirmed[d]=Date.now();n++;}});}
   return n;
 }
-function reconcileAllTotals(){let n=0;try{n+=evOcsSync();}catch(e){}(S.totals||[]).forEach(t=>{try{n+=reconcileTotalEvents(t);}catch(e){}});return n;}
+function reconcileAllTotals(){let n=0;try{n+=wjFixDr();n+=wjAdoptEvents();}catch(e){}try{n+=evOcsSync();}catch(e){}(S.totals||[]).forEach(t=>{try{n+=reconcileTotalEvents(t);}catch(e){}});return n;}
 function syncConfirmedEvents(t){
   if(!t)return 0;
   let n=0;
@@ -5834,6 +5925,7 @@ function delTotal(id){const t=findT(id);
   askConfirm(`토탈 "${t?t.pt:""}" 케이스를 삭제할까요?`,()=>{
     S.delTot=S.delTot||[];if(!S.delTot.includes(String(id)))S.delTot.push(String(id));   /* 묘비 */
     if(S.delTot.length>200)S.delTot=S.delTot.slice(-200);
+    if(t&&t.dept==="원진실"){S.wjIgnore=S.wjIgnore||[];const k=normNoG(t.ptno)||t.pt;if(k&&!S.wjIgnore.includes(k))S.wjIgnore.push(k);if(S.wjIgnore.length>300)S.wjIgnore=S.wjIgnore.slice(-300);}   /* 지운 원진실 환자는 자동 토탈로 다시 안 만듦 (#348) */
     S.totals=S.totals.filter(x=>String(x.id)!==String(id));
     /* 확정 일정에 남은 이 토탈 연결 정리 (일정 자체는 내 일정으로 유지) */
     (S.events||[]).forEach(e=>{if(e&&Array.isArray(e.fromTotal)&&e.fromTotal.some(f=>String(f.id)===String(id))){e.fromTotal=e.fromTotal.filter(f=>String(f.id)!==String(id));e.u=Date.now();}});
@@ -6650,6 +6742,7 @@ function renderOcs(){
   try{renderHiPen();}catch(e){}
   const pill=document.querySelector("#ocs-pills button.on");
   const o=pill?pill.dataset.o:"day";
+  if(o==="wj"){renderWjTab();return;}
   if(o==="total")renderTotals();
   else if(o==="hl")renderOcsHl();
   else renderOcsDay();
@@ -7209,6 +7302,7 @@ let UPCOMING=[];
 function ocsStore(){S.ocs=S.ocs||{};S.ocs.days=S.ocs.days||{};S.ocs.arch=S.ocs.arch||[];return S.ocs;}
 function rebuildOcs(){
   const o=ocsStore(),today=ymd(new Date()),rows=[];
+  Object.keys(o.days).forEach(d=>(o.days[d]||[]).forEach(ocsDnFix));(o.arch||[]).forEach(ocsDnFix);   /* 예전 줄: 진료내역 앞 담당쌤 번호 정리 (#372) */
   Object.keys(o.days).forEach(d=>{if(d>=today)rows.push(...o.days[d]);});
   UPCOMING=rows.sort((a,b)=>(a.d+(a.t||""))<(b.d+(b.t||""))?-1:1);
   AGG.UPCOMING=UPCOMING;AGG.meta.days=Object.keys(o.days).length;
@@ -7362,12 +7456,13 @@ function parseOcsText(txt){
     let ln=raw.replace(/\t/g," ").replace(/\s+/g," ").trim();
     if(!ln)return;
     ln=ln.replace(/원내생\s+진료(센터|실)/g,"원내생진료$1").replace(/임플란트\s+진료센터/g,"임플란트진료센터").replace(/원스톱\s+협진센터/g,"원스톱협진센터");
-    if(/\bTS\d{6}\b/.test(ln))return;                          /* 테스트 더미 */
+    const isTS=/\bTS\d{6}\b/.test(ln);   /* 테스트 더미·신환 자리 — 원진실 내 예약이면 아래에서 살림 (#373) */
     const m=ln.match(OCS_LINE);
     if(!m){if(/^\d{4}[.\/-]\d{1,2}[.\/-]\d{1,2}\s+\d{1,2}:\d{2}/.test(ln))bad.push(ln.slice(0,50));return;}
     const d=`${m[1]}-${String(m[2]).padStart(2,"0")}-${String(m[3]).padStart(2,"0")}`;
     const t=m[4].padStart(5,"0"),no=m[5],pt=m[6];
-    if(/^전산실/.test(pt)||/^(휴진|.{2,3}휴진)$/.test(pt))return;                  /* 전산실·휴진 더미 */
+    if(/^(휴진|.{2,3}휴진)$/.test(pt))return;                  /* 휴진 더미 */
+    const dummy=isTS||/^전산실/.test(pt);
     let depTok=m[7],rest=(m[8]||"").trim(),dep=null,drFrag="";
     for(const[full,sh] of OCS_DEPTS){if(depTok.startsWith(full)){dep=sh;drFrag=depTok.slice(full.length);break;}}
     const sub=dep==="기타"?(/^원스톱/.test(depTok)?"원스톱":/^임플/.test(depTok)?"임플":""):"";   /* 원스톱·임플 구분 (#351) */
@@ -7385,9 +7480,11 @@ function parseOcsText(txt){
       if(/^\[.+\]/.test(first)){const bm=first.match(/^(\[[^\]]+\](?:일반|지정)?)/);const lab=bm?bm[1]:first;dr=lab;rest=rest.slice(lab.length).trim();}
       else if(!OCS_NOT_DR.test(first)){const f2=(x=>x.length>=2?x:first)(first.replace(/(교수님?|선생님?|쌤)$/,""));const dm=f2.match(/^([가-힣]{2,4}(?:[A-Z](?![A-Za-z])|#\d{1,2}[a-z]?)?)/);if(dm){dr=dm[1];rest=rest.slice((f2!==first&&dm[1]===f2)?first.length:dm[1].length).trim();}}   /* '김명주교수님' → 김명주 (#369) */
     }
+    let drn="";if(dep==="원진실"){const nm=rest.match(/^(\d{1,3})(?!\d)\s*/);if(nm&&dr){drn=nm[1];rest=rest.slice(nm[0].length);}}   /* 원진실 예약의사 '이름+번호' (#373) */
+    if(dummy){const u0={d,t,dep,pt,no,dr:String(dr||"").trim(),drn,cat:rest};if(!(dep==="원진실"&&typeof isMineWJ==="function"&&isMineWJ(u0)))return;}
     const cat=((/마취/.test(depNote)?"[마취전공] ":"")+rest.replace(OCS_TAIL,"").trim()).trim();   /* 마취전공 표시 */
     const k=d+"|"+t+"|"+no+"|"+dep+"|"+String(dr||"").trim();if(seen.has(k)){const x=rows.find(r=>r.d===d&&r.t===t&&r.no===no&&r.dep===dep&&r.dr===String(dr||"").trim());if(x&&cat&&!String(x.cat||"").split(" / ").includes(cat))x.cat=x.cat?x.cat+" / "+cat:cat;return;}seen.add(k);   /* 담당쌤 다르면 둘 다 (#369) */
-    rows.push(sub?{d,t,dep,sub,pt,no,dr:String(dr||"").trim(),cat}:{d,t,dep,pt,no,dr:String(dr||"").trim(),cat});
+    {const o=sub?{d,t,dep,sub,pt,no,dr:String(dr||"").trim(),cat}:{d,t,dep,pt,no,dr:String(dr||"").trim(),cat};if(drn)o.drn=drn;rows.push(o);}
   });
   return {rows,bad};
 }
@@ -7397,7 +7494,13 @@ function ocsIngest(rows,bad,srcLabel){
   const o=ocsStore();
   const key=r=>r.d+"|"+(r.t||"")+"|"+(r.no||"")+"|"+(r.dep||"");
   const by={};rows.forEach(r=>{((by[r.d]=by[r.d]||{})[r.dep]=by[r.d][r.dep]||[]).push(r);});
+  /* 🦷 내 원진실 예약만 담긴 파일(#371): 그 기간의 내 예약만 새 내용으로 · 다른 원진실 예약은 유지 · 파일에 없는 내 예약(취소·변경)은 정리 */
+  const wjMine=wjMeOk()&&rows.every(r=>r.dep==="원진실"&&isMineWJ(r));
+  const wjGen=!wjMine&&wjMeOk()&&rows.some(r=>r.dep==="원진실");
+  if(wjMine){const ds0=Object.keys(by).sort();const td0=ymd(new Date());const lo=td0<ds0[0]?td0:ds0[0];
+    Object.keys(o.days||{}).forEach(d=>{if(d>=lo&&!by[d]&&(o.days[d]||[]).some(u=>u.dep==="원진실"&&isMineWJ(u)))by[d]={};});}
   const dates=Object.keys(by).sort();
+  const wjOld=(wjMine||wjGen)?[].concat(...dates.map(d=>(o.days[d]||[]).filter(u=>u.dep==="원진실"&&isMineWJ(u)))):[];
   const fileDeps=new Set(rows.map(r=>r.dep).filter(Boolean));   /* 원진실도 다른 과와 같이 (#355) */   /* 파일에 있는 과 → 파일 속 날짜마다 그 과는 통째로 새 것으로 (그날 다 취소돼 0건이어도) (#354) */
   const rep354={};
   const prevByDate={},cur354={};let added=0,removed=0,keptDeps=0;
@@ -7405,12 +7508,12 @@ function ocsIngest(rows,bad,srcLabel){
     const base=(o.days[d]&&o.days[d].length)?o.days[d]:o.arch.filter(r=>r.d===d);
     prevByDate[d]=base.slice();
     const newDeps=new Set([...Object.keys(by[d]),...(Object.keys(by[d]).length?fileDeps:[])]);
-    let keep=base.filter(u=>!newDeps.has(u.dep));const uk=[];
-    newDeps.forEach(dp=>{const a=ocsPartialKeep(base.filter(u=>u.dep===dp),(by[d]||{})[dp]||[]);if(a.length){uk.push(...a);ocsPartialNote.push({lb:d.slice(5)+" "+dp,old:base.filter(u=>u.dep===dp).length,miss:a.length});}});keep=keep.concat(uk);   /* 일부만 담긴 파일 → 합침 (#369) */
+    let keep=wjMine?base.filter(u=>!(u.dep==="원진실"&&isMineWJ(u))):base.filter(u=>!newDeps.has(u.dep));const uk=[];
+    if(!wjMine)newDeps.forEach(dp=>{const a=ocsPartialKeep(base.filter(u=>u.dep===dp),(by[d]||{})[dp]||[]);if(a.length){uk.push(...a);ocsPartialNote.push({lb:d.slice(5)+" "+dp,old:base.filter(u=>u.dep===dp).length,miss:a.length});}});keep=keep.concat(uk);   /* 일부만 담긴 파일 → 합침 (#369) */
     keptDeps+=new Set(keep.map(u=>u.dep)).size;
     const seen=new Set(),fresh=[];
     {const s2=new Set();Object.values(by[d]).forEach(rs=>rs.forEach(r=>{const k2=key(r)+"|"+(r.dr||"")+"|"+(r.pt||"");if(s2.has(k2))return;s2.add(k2);seen.add(key(r));fresh.push(r);}));uk.forEach(r=>seen.add(key(r)));}   /* 담당쌤 다르면 둘 다 (#369) */
-    const oldK=new Set(base.filter(u=>newDeps.has(u.dep)).map(key));
+    const oldK=new Set(base.filter(u=>wjMine?(u.dep==="원진실"&&isMineWJ(u)):newDeps.has(u.dep)).map(key));
     fresh.forEach(r=>{if(!oldK.has(key(r)))added++;});
     oldK.forEach(k=>{if(!seen.has(k))removed++;});
     o.days[d]=keep.concat(fresh).sort((a,b)=>(a.t||"")<(b.t||"")?-1:(a.t||"")>(b.t||"")?1:0);
@@ -7438,8 +7541,25 @@ function ocsIngest(rows,bad,srcLabel){
   /* 같은 날짜 재업로드: 이전 OCS에 있던 이 환자 시간 (변동 카드에 '이전 OCS 09:00'으로 표시) */
   try{S.ocsPrev=S.ocsPrev||{};(S.totals||[]).filter(t=>t&&!t.done).forEach(t=>{dates.forEach(d=>{const p=matchRowsFor(t,prevByDate[d]||[]).find(u=>u.d===d);const k=t.id+"|"+d;if(p)S.ocsPrev[k]=p.t||"";else delete S.ocsPrev[k];});});}catch(e){}
   ocsRollover();rebuildOcs();
+  if(wjMine||wjGen){   /* 없어진 내 원진실 예약 → 변동 카드 · 파일 기간 기록 (#371) */
+    const k=u=>u.d+"|"+(u.t||"")+"|"+normNoG(u.no||"");const nowK=new Set(rows.filter(r=>r.dep==="원진실"&&isMineWJ(r)).map(k));
+    const td=ymd(new Date());
+    if(wjMine){const lo=td<dates[0]?td:dates[0];let hi=dates[dates.length-1];
+      wjOld.forEach(u=>{if(u.d>hi)hi=u.d;});
+      (S.totals||[]).forEach(t=>{if(t&&t.dept==="원진실"&&!t.done)nextsOf(t).forEach(x=>{if(x&&x.d>hi)hi=x.d;});});
+      S.wjCover={lo,hi,at:Date.now()};}
+    const wjT=(S.totals||[]).filter(t=>t.dept==="원진실");const ign=new Set((S.wjIgnore||[]).map(String));
+    const hasT=u=>ign.has(normNoG(u.no)||u.pt)||wjT.some(t=>(normNoG(t.ptno)&&normNoG(t.ptno)===normNoG(u.no))||(!t.ptno&&t.pt===u.pt));
+    let G=(S.wjGone||[]).filter(g=>!nowK.has(k(g))&&g.d>=td);const gk=new Set(G.map(k));
+    wjOld.forEach(u=>{if(nowK.has(k(u))||gk.has(k(u))||u.d<td||hasT(u))return;gk.add(k(u));
+      G.push({d:u.d,t:u.t||"",pt:u.pt,no:u.no||"",dep:"원진실",dr:u.dr||"",cat:(u.cat||"").slice(0,60),at:Date.now()});});
+    S.wjGone=G.slice(-60);
+    const nM=nowK.size;
+    setTimeout(()=>toast(wjMine?`🦷 내 원진실 예약 ${nM}건 — 다른 원진실 예약은 그대로, 내 예약만 최신으로`:`🦷 OCS 속 내 원진실 예약 ${nM}건 찾아 반영 (${wjMeName()}${wjMeNo()})`),900);
+  }
   let stale354=[];try{stale354=ocsStaleApply(rep354,prevByDate,cur354);}catch(e){console.warn("OCS 정리 실패",e);}   /* 예전 OCS로 잡힌 다음 내원·일정칩 자동 정리 (#354) */
   try{if(typeof reconcileAllTotals==="function")reconcileAllTotals();}catch(e){}   /* 토탈 다음 내원 ↔ 확정 일정 정합 */
+  try{if(wjMeOk())autoSyncWJ();}catch(e){}   /* 내 원진실 → 환자 자동 생성·예약 반영 (#371) */
   ocsAutoToast(stale354,3300);
   save(1);
   /* 당일 뷰: 오늘이 들어 있으면 오늘, 아니면 오늘 이후 첫 날짜(없으면 파일의 마지막 날짜) */
@@ -7658,7 +7778,9 @@ function upMatch(t){
   const ck=__upVer+"|"+today;if(ck!==__upCacheKey){__upCache.clear();__upCacheKey=ck;}
   const key=t.id+"|"+no+"|"+nm+"|"+(t.dept||"")+"|"+(t.scope||"");
   const hit=__upCache.get(key);if(hit)return hit;
+  const wj=t.dept==="원진실"&&t.scope!=="all"&&wjMeOk();
   const res=candRowsFor(t,UPCOMING).filter(u=>{
+    if(wj&&!isMineWJ(u))return false;
     if(u.d<today)return false;                                         /* ★과거일 제외 — 오늘 포함 이후만 */
     const uNo=normNo(u.no);
     if(no){                                                            /* ★환자번호가 등록돼 있으면 번호 정확일치만 토탈 — 동명이인 차단 */
@@ -7677,18 +7799,21 @@ function totalMatches(){
   return S.totals.filter(t=>!t.done).map(t=>({t,ms:upMatch(t)})).filter(x=>x.ms.length);
 }
 function renderTotalFound(){
-  const box=document.getElementById("total-ocs-found");const badge=document.getElementById("tot-match-badge");
+  const box=document.getElementById(window.__wjCtx?"wj-ocs-found":"total-ocs-found");const badge=window.__wjCtx?null:document.getElementById("tot-match-badge");
   if(!box)return;
   const L=ocsLiveItems();
   const M=totalMatches();
   const okN=M.reduce((a,x)=>a+x.ms.length,0);
   if(badge)badge.textContent=L.length?`OCS 변동 ${L.length}건`:(M.length?`OCS에서 ${M.length}명 발견 · 변동 없음`:((UPCOMING||[]).length?`예약 스캔 — 매칭 0`:"예약 데이터 대기중"));
-  if(!L.length&&!M.length){const an=ocsAutoHtml();box.innerHTML=an?`<div class="card ocslive">${an}</div>`:"";return;}
-  const LB={time:["🕐","시간 변경","var(--amber)"],missing:["🔎","OCS에 예약 없음 (취소?)","var(--red)"],new:["🆕","새 예약 · 다음 내원 미등록","var(--purple)"],visit:["✅","지난 내원 · visit 미기록","var(--brand)"]};
-  const ACT={wj:"원진실 토탈로 추가",time:"OCS 시간으로",missing:"예약 지우기",new:"다음 내원에 추가",visit:"visit 기록"};
+  const wjH=ocsLiveItems.__wjHidden||0;
+  const wjNote=wjH?`<p class="hint" style="margin:6px 0 0">🦷 원진실 변동 ${wjH}건은 <a href="javascript:void 0" onclick="goPill('wj')" style="color:#8E5BD6;font-weight:800">🦷 원진실 탭</a>에서 확인</p>`:"";
+  if(!L.length&&!M.length){const an=ocsAutoHtml();box.innerHTML=(wjNote||an)?`<div class="card ocslive">${wjNote}${an}</div>`:"";return;}
+  const LB={wjgone:["🗑","원진실 예약 없어짐","var(--red)"],wj:["🦷","원진실 내 진료 · 토탈 미등록","#8E5BD6"],time:["🕐","시간 변경","var(--amber)"],missing:["🔎","OCS에 예약 없음 (취소?)","var(--red)"],new:["🆕","새 예약 · 다음 내원 미등록","var(--purple)"],visit:["✅","지난 내원 · visit 미기록","var(--brand)"]};
+  const ACT={wjgone:"삭제",wj:"원진실 토탈로 추가",time:"OCS 시간으로",missing:"예약 지우기",new:"다음 내원에 추가",visit:"visit 기록"};
   const row=it=>{if(it.type==="move")return ocsMoveRow(it);const [ic,lb,c]=LB[it.type];
     const det=it.type==="time"?`내 입력 ${esc(it.from)} → <b>OCS ${esc(it.t)}</b>${it.cat?` · ${esc(it.cat)}`:""}`
       :it.type==="missing"?`내 입력 ${esc(it.t||"시간 미정")}${it.prevT?` · 이전 OCS엔 ${esc(it.prevT)} 있었음`:""} — 취소·예약변경?`
+      :it.type==="wjgone"?`예전 원진실 내역의 <b>${esc(it.t||"")}</b>${it.cat?` · ${esc(wjProc(it)||it.cat)}`:""} — 새 원진실 파일엔 없어요 (취소·변경?)`
       :it.type==="wj"?`<b>${esc(it.t||"시간?")}</b> · ${esc(it.cat||"")}${it.no?` · #${esc(it.no)}`:""}${it.more>0?` · 이후 예약 ${it.more}건 더`:""}`
       :it.type==="new"?`<b>${esc(it.t||"시간?")}</b>${it.dr?` · <b style="color:#5b4a7a">${esc(it.dr)}</b>`:""}${it.cat?` · ${esc(it.cat)}`:""}${it.prevT&&it.prevT!==it.t?` · 이전 OCS ${esc(it.prevT)}`:""}`
       :`${esc(it.t||"")}${it.cat?` · ${esc(it.cat)}`:""}`;
@@ -7699,9 +7824,9 @@ function renderTotalFound(){
   const skH=SK.length?`<details style="margin-top:8px"><summary class="hint" style="cursor:pointer;font-weight:800">🙈 '그대로' 둔 항목 ${SK.length}건 — 펼쳐서 다시 보기·바로 고치기</summary>${SK.map(it=>row(it).replace(/onclick="ocsLiveSkip\('/g,'onclick="ocsUnskip(\'').replace(/>그대로<\/button>/g,'>↩ 다시 알림</button>')).join("")}</details>`:"";
   const BL=L.filter(it=>it.type!=="missing"&&it.type!=="wjgone");   /* 사라진 예약은 수정/삭제를 직접 골라야 해서 '모두 반영'에서 빠짐 */
   box.innerHTML=`<div class="card ocslive" style="border:1.5px solid var(--purple)">
-    <h2 style="color:var(--purple)">📋 OCS 변동 · 추가할 내용 <span class="badge pu">${L.length}건</span></h2>
-    ${L.length?L.map(row).join("")+(BL.length>1?`<button class="btn" style="width:100%;margin-top:8px" onclick="ocsLiveAll()">${BL.length}건 모두 반영${BL.length<L.length?` <span style="font-weight:600;opacity:.8">(수정·삭제 ${L.length-BL.length}건 제외)</span>`:""}</button>`:""):`<p class="hint" style="margin:4px 0">변동 없음 — OCS에 잡힌 토탈 예약 ${okN}건 모두 등록돼 있어요 ✓</p>`}
-    ${skH}
+    ${L.length?`<h2 style="color:var(--purple)">OCS 변동 · 추가할 내용 <span class="badge pu">${L.length}건</span></h2>`:""}
+    ${L.length?L.map(row).join("")+(BL.length>1?`<button class="btn" style="width:100%;margin-top:8px" onclick="ocsLiveAll()">${BL.length}건 모두 반영${BL.length<L.length?` <span style="font-weight:600;opacity:.8">(수정·삭제 ${L.length-BL.length}건 제외)</span>`:""}</button>`:""):`<p class="hint" style="margin:4px 0">✓ 변동 없음 · OCS의 ${window.__wjCtx?"원진실":"토탈"} 예약 ${okN}건 모두 등록됨</p>`}
+    ${skH}${wjNote}
     ${ocsAutoHtml()}
   </div>`;
 }
@@ -7807,6 +7932,339 @@ function notiMissHtml(t,ds){
   return `<div class="hint" style="color:var(--red);font-size:10.5px;padding:0 0 5px">🔎 <b>OCS에 이 예약이 없어요</b> — 취소·예약변경된 것 같아요${nu?` · OCS엔 <b>${fmtD(nu.d)} ${esc(nu.t||"")}</b> 예약이 있어요`:""}
     <div style="display:flex;gap:5px;flex-wrap:wrap;margin-top:4px">${nu?`<button class="btn small" onclick="event.stopPropagation();notiMove(${t.id},'${ds}','${nu.d}','${esc(nu.t||"")}')">🔁 ${fmtD(nu.d)}${nu.t?" "+esc(nu.t):""}로 변경</button>`:""}<button class="btn small ghost" onclick="event.stopPropagation();ocsLiveEdit(notiItem(${t.id},'${ds}'))">✎ 날짜·시간 변경</button><button class="btn small danger" onclick="event.stopPropagation();ocsLiveDel(notiItem(${t.id},'${ds}'))">🗑 예약 지우기</button></div></div>`;
 }
+function wjAdoptEvents(){
+  let n=0;const today=ymd(new Date());
+  (S.totals||[]).forEach(t=>{
+    if(!t||t.done||t.dept!=="원진실"||isWjSelfT(t))return;
+    const arr=nextsOf(t);let ch=0;
+    arr.forEach(x=>{
+      if(!x||!x.d||x.d<today)return;
+      if((S.events||[]).some(e=>e&&Array.isArray(e.fromTotal)&&e.fromTotal.some(f=>String(f.id)===String(t.id)&&f.d===x.d)))return;
+      const M=evManualMatch({d:x.d,t:"",pt:t.pt,no:t.ptno,dept:"원진실"});
+      if(M.length!==1)return;
+      const e=M[0];const pinfo=`${t.ptno?t.ptno+" ":""}${t.pt}`;
+      let u=null;try{u=upMatch(t).find(v=>v.d===x.d&&v.t);}catch(err){}
+      if(u){x.t=u.t;}else if(!x.t&&e.time){x.t=e.time;}            /* 시간: OCS → 없으면 내가 넣은 일정 시간 */
+      if(x.t&&e.time!==x.t){e.time=x.t;e.span=null;}
+      e.fromTotal=[{id:t.id,d:x.d,pt:t.pt,pinfo}];
+      if(!String(e.memo||"").includes(pinfo))e.memo=(String(e.memo||"").trim()?String(e.memo).trim()+"\n":"")+pinfo;
+      e.title=totalLabel(t,x.d);e.dept="원진실";
+      if(e.bid!=null)e.src="base-edited";
+      e.u=Date.now();t.confirmed=t.confirmed||{};t.confirmed[x.d]=Date.now();
+      t.nextU=e.u;n++;ch++;
+    });
+    if(ch){t.nexts=arr;syncNextPrimary(t);}
+  });
+  return n;
+}
+function wjGoneEdit(it,nd,nt){
+  const slot=isWjNewSlot(it);
+  const evs=evManualMatch({d:it.d,t:it.t,pt:it.pt,no:it.no,dept:"원진실",slot});
+  S.wjGone=(S.wjGone||[]).filter(g=>["wjgone",g.no||g.pt,g.d,g.t||""].join("|")!==it.key);
+  let msg="";
+  if(!slot){
+    evs.forEach(e=>{S.events=S.events.filter(x=>x!==e);evTomb(e);});
+    const no=normNoG(it.no);
+    let t=(S.totals||[]).find(x=>x&&x.dept==="원진실"&&!x.done&&((no&&normNoG(x.ptno)===no)||(!x.ptno&&x.pt===it.pt)));
+    if(!t){t={id:uniqId(S.totals),dept:"원진실",pt:it.pt,ptno:it.no||"",item:wjProc(it)||"원진실 진료",dr:wjMeName(),scope:"dept",need:3,memo:"",
+      visits:[],vmeta:{},done:false,ufol:false,report:false,nexts:[]};S.totals.push(t);msg=" · 원진실 토탈 추가";}
+    const arr=nextsOf(t);const ex=arr.find(y=>y&&y.d===nd);
+    if(ex){if((ex.t||"")!==nt)dropTotalEvents(t,nd,false);ex.t=nt;}else arr.push({d:nd,t:nt,memo:wjProc(it)||""});
+    t.nexts=arr;syncNextPrimary(t);t.u=Date.now();t.nextU=Date.now();
+    S.ocsSkip=S.ocsSkip||{};S.ocsSkip[[t.id,"missing",nd,nt].join("|")]=Date.now();
+    msg+=evs.length?` · 확정 일정 ${evs.length}개 → 점선칩`:"";
+  }else{
+    evs.forEach(e=>{e.date=nd;e.time=nt||null;if(nt)e.span=null;e.tent=1;e.u=Date.now();});
+    msg=evs.length?` · 일정칩 ${evs.length}개 옮김(점선=확인 전, 일정 수정·저장하면 확정)`:" · 연결된 일정칩은 없어요";
+  }
+  save(true);syncAll();try{refreshStrip();}catch(e){}
+  toast(`✎ ${esc(it.pt)} ${fmtD(nd)}${nt?" "+nt:""}(으)로 수정${msg}`);
+}
+function autoSyncWJ(){
+  try{
+    /* ① 새 이름으로 잡힌 내 원진실 진료 → 원진실 토탈 자동 추가 (신환 자리는 제외) (#347) */
+    const W=ocsLiveItemsAll().filter(it=>it.type==="wj");let nw=0;
+    W.forEach(it=>{if(ocsLiveApply(it.key,true))nw++;});
+    /* ② 새 예약·시간 변경 → 다음 내원 자동 반영 */
+    const L=ocsLiveItemsAll().filter(it=>it.dept==="원진실"&&(it.type==="new"||it.type==="time"));
+    let n=0;L.forEach(it=>{if(ocsLiveApply(it.key,true))n++;});
+    if(!n&&!nw)return 0;
+    save(true);toast(`🦷 원진실${nw?` 새 환자 토탈 ${nw}명 추가`:""}${nw&&n?" ·":""}${n?` 예약 ${n}건 다음 내원 반영`:""}`);
+    return n;
+  }catch(e){return 0;}
+}
+function wjNewSlotsHtml(){   /* 원진실 탭: 내 원진실 예약 전체 — 날짜·시간순 · 오른쪽에 환자 이름/번호(신환 자리는 '신환') (#354·#355) */
+  const today=ymd(new Date());const sk=new Set();
+  const L=(UPCOMING||[]).filter(u=>u&&u.d>=today&&isMineWJ(u)).filter(u=>{const k=u.d+"|"+(u.t||"")+"|"+(u.no||"")+"|"+(u.pt||"");if(sk.has(k))return false;sk.add(k);return true;})
+    .sort((a,b)=>{const x=a.d+(a.t||""),y=b.d+(b.t||"");return x<y?-1:x>y?1:0;});
+  const gone=(S.wjGone||[]).filter(g=>g&&g.d>=today);
+  const nNew=L.filter(u=>isWjNewSlot(u)).length;
+  const head=`<h2 style="color:#8E5BD6">🦷 원진실 내 예약 <span class="badge pu">${L.length}건</span>${nNew?`<span class="wjnb">🌱 신환 ${nNew}</span>`:""}</h2>`;
+  if(!L.length&&!gone.length)return `<div class="card" style="border:1.5px dashed #8E5BD6">${head}<p class="hint">앞으로 잡힌 내 원진실 예약이 없어요</p></div>`;
+  const dow=d=>"일월화수목금토"[new Date(d+"T00:00").getDay()];
+  const MAX=15,open=!!window.wjAllOpen,show=open?L:L.slice(0,MAX);
+  const row=u=>{const nw=isWjNewSlot(u);
+    return `<div class="wjr${u.d===today?" td":""}"><b class="wjd">${fmtD(u.d)}<i>${dow(u.d)}</i></b><b class="wjt">${esc(u.t||"")}</b><span class="wjc">${esc(wjProc(u)||"—")}</span>`
+      +`<span class="wjp">${nw?`<em title="${/전산실/.test(u.pt||"")?"전산실":"내 이름"}으로 잡아 둔 자리">신환</em>`:`<b>${esc(u.pt||"")}</b><small>${esc(u.no||"")}</small>`}</span></div>`;};
+  return `<div class="card wjcard" style="border:1.5px solid #8E5BD6">${head}
+    ${show.map(row).join("")}
+    ${L.length>MAX?`<div onclick="event.stopPropagation();window.wjAllOpen=!window.wjAllOpen;renderWjTab()" class="hint" style="cursor:pointer;margin-top:5px;text-decoration:underline dotted;font-weight:700">${open?"접기":`나머지 ${L.length-MAX}건 더 보기`}</div>`:""}
+    ${gone.length?`<p class="hint" style="margin-top:6px;color:var(--red)">🗑 없어진 예약 ${gone.length}건 — 변동 카드에서 확인</p>`:""}</div>`;
+}
+/* ═══ 원진실 내 진료 인식 — 배포용 (#371) ═══
+   내 정보(이름·번호)는 노티와 같은 '내 정보'(S.me = "번호,이름")에 저장 → 이 파일엔 개인정보 없음.
+   OCS 원내생진료센터 '예약의사' 칸이 "이름+번호"(예: 홍길동36)거나, 진료내역이 "이름번호 …"로 시작하면 내 진료 */
+function wjMeParse(){
+  const v=String((typeof S!=="undefined"&&S&&S.me)||"").trim();if(!v)return {n:"",no:""};
+  if(wjMeParse.__v===v)return wjMeParse.__r;
+  let n="",no="";
+  v.split(/[,\s/·|]+/).filter(Boolean).forEach(p=>{
+    const m=p.match(/^([가-힣A-Za-z]{2,10})(\d{1,3})$/);if(m){n=n||m[1];no=no||m[2];return;}
+    if(/^\d{1,3}$/.test(p))no=no||p;else if(/^[가-힣A-Za-z]{2,10}$/.test(p))n=n||p;});
+  wjMeParse.__v=v;wjMeParse.__r={n,no};return wjMeParse.__r;
+}
+function wjMeName(){return wjMeParse().n;}
+function wjMeNo(){return wjMeParse().no;}
+function wjMeOk(){const m=wjMeParse();return m.n.length>=2&&!!m.no;}
+function wjEsc(s){return String(s).replace(/[.*+?^${}()|[\]\\]/g,"\\$&");}
+function wjMeRe(){const n=wjMeName(),no=wjMeNo();const k=n+"|"+no;
+  if(wjMeRe.__k!==k){wjMeRe.__k=k;wjMeRe.__r=new RegExp("^"+wjEsc(n)+"\\s*"+no+"(?!\\d)");wjMeRe.__c=new RegExp("^\\s*("+no+"(?!\\d)|[A-Za-z(/])");wjMeRe.__p=new RegExp("^\\s*("+wjEsc(n)+")?\\s*"+no+"(?!\\d)\\s*");}
+  return wjMeRe.__r;}
+function isMineWJ(u){
+  if(!u||u.dep!=="원진실"||!wjMeOk())return false;
+  const n=wjMeName(),no=wjMeNo();const c=String(u.cat||"").trim(),d=String(u.dr||"").replace(/\s+/g,"");
+  if(wjMeRe().test(c))return true;
+  if(d===n||d===n+no){const dn=u.drn||u.dn;if(dn)return String(dn)===no;const m=c.match(/^\s*(\d{1,3})(?!\d)/);return !m||m[1]===no;}
+  return false;
+}
+function wjProc(u){if(!wjMeOk())return String(u&&u.cat||"").trim();wjMeRe();return String(u.cat||"").replace(wjMeRe.__p,"").trim();}
+function isWjNewSlot(u){
+  if(!u||u.dep!=="원진실")return false;
+  const pt=String(u.pt||"").trim(),n=wjMeName();
+  return (n&&pt===n)||/전산실/.test(pt)||/^[A-Za-z]/.test(String(u.no||""));
+}
+function isWjSelfT(t){const n=wjMeName();return !!t&&t.dept==="원진실"&&((n&&String(t.pt||"").trim()===n)||/전산실/.test(t.pt||"")||/^TS/i.test(String(t.ptno||"").trim()));}
+function wjFixDr(){const n=wjMeName();if(!wjMeOk())return 0;let k=0;(S.totals||[]).forEach(t=>{if(t&&t.dept==="원진실"&&t.dr!==n){t.dr=n;k++;}});return k;}
+/* 아직 내 정보 없을 때: 원진실 예약의사 칸에서 '이름+번호' 후보 (탭 한 번으로 저장) */
+function wjMeCands(){
+  const C=new Map();
+  (UPCOMING||[]).forEach(u=>{if(!u||u.dep!=="원진실")return;const d=String(u.dr||"").replace(/\s+/g,"");const m=(u.drn||u.dn)?[0,String(u.drn||u.dn)]:String(u.cat||"").match(/^\s*(\d{1,3})(?!\d)/);
+    if(!/^[가-힣]{2,4}$/.test(d)||!m)return;const k=d+"|"+m[1];C.set(k,(C.get(k)||0)+1);});
+  return [...C.entries()].sort((a,b)=>b[1]-a[1]).slice(0,8).map(([k,c])=>{const [n,no]=k.split("|");return {n,no,c};});
+}
+function wjSaveMeUI(){const n=(document.getElementById("wj-me-n")||{}).value||"",no=(document.getElementById("wj-me-no")||{}).value||"";wjSaveMe(n,no);}
+function wjSaveMe(n,no){
+  n=String(n||"").replace(/\s+/g,"");no=String(no||"").replace(/\D/g,"").replace(/^0+(?=\d)/,"");
+  if(n.length<2||!no){toast("이름(2글자 이상)과 번호를 둘 다 넣어주세요");return;}
+  S.me=no+","+n;window.wjMeEdit=false;
+  document.querySelectorAll(".noti-me-in").forEach(el=>{if(el.value!==S.me)el.value=S.me;});
+  try{__upVer++;}catch(e){}try{__upCache.clear();}catch(e){}
+  let k=0;try{k=wjMyUpcoming().length;}catch(e){}
+  try{wjFixDr();}catch(e){}
+  save(true);
+  try{autoSyncWJ();}catch(e){}
+  try{renderAll();}catch(e){}try{renderOcs();}catch(e){}
+  toast(`👤 ${n}${no} 저장 — 내 원진실 예약 ${k}건 인식${k?"":" (OCS 원진실 파일을 넣으면 찾아요)"}`);
+}
+setTimeout(()=>{try{if(wjMeOk()&&autoSyncWJ()){try{renderOcs();}catch(e){}}}catch(e){}},1500);
+/* ═══ 🦷 원진실 탭 (#371) ═══
+   OCS › 원진실: 내 원진실 진료를 한 곳에서 — 내 정보·예약 파일 → 내 예약 자동 인식 → 환자(토탈) 자동 생성 → 변동·노티·케이스까지 팔로업.
+   토탈 탭에 있던 원진실 칩·변동·내 예약 목록·노티는 전부 여기로 옮김 (토탈 탭 '전체'엔 원진실 없음) */
+const WJ_CASES=["OESC","PCI","re-eval","RP","SC","OP","ENDO","simple ext","surgical ext"];
+/* OCS 진료내역 → 케이스 추정 (영문 약어는 앞뒤가 글자가 아닐 때만: OESC 속 SC, OPG 속 OP는 안 잡음) */
+function wjCaseDetect(txt){
+  const s=String(txt||"");if(!s.trim())return [];
+  const W=a=>new RegExp("(^|[^A-Za-z])("+a+")(?![A-Za-z])","i");
+  const has={
+    "OESC":/OESC|구강\s*검진/i.test(s),
+    "PCI":W("PCI").test(s),
+    "re-eval":/re[\s\-_.]*eval|재\s*평가/i.test(s),
+    "RP":W("S?RP").test(s)||/root\s*plan|치근\s*활택/i.test(s),
+    "SC":W("SC|S\\/C").test(s)||/scaling|스케일링/i.test(s),
+    "OP":W("OP|GI").test(s)||/operative|resin|레진|아말감|amalgam/i.test(s),
+    "ENDO":/endo|근관|발수|pulpect/i.test(s)||W("RCT|CF|BMP").test(s),
+    "surgical ext":/surg|매복|수술\s*발치|impact/i.test(s)};
+  has["simple ext"]=/simple|단순\s*발치/i.test(s)||(!has["surgical ext"]&&(W("ext").test(s)||/extraction|발치/i.test(s)));
+  return WJ_CASES.filter(c=>has[c]);
+}
+function wjMeLabel(){try{const n=wjMeName(),no=wjMeNo();return n&&no?n+no:"";}catch(e){return "";}}
+/* 내 원진실 앞으로 예약 (중복 제거) */
+function wjMyUpcoming(){
+  const today=ymd(new Date());const sk=new Set();
+  return (UPCOMING||[]).filter(u=>{if(!u||u.d<today||u.dep!=="원진실")return false;let m=false;try{m=isMineWJ(u);}catch(e){}if(!m)return false;
+    const k=u.d+"|"+(u.t||"")+"|"+(u.no||"")+"|"+(u.pt||"");if(sk.has(k))return false;sk.add(k);return true;});
+}
+function wjPts(){return (S.totals||[]).filter(t=>t&&t.dept==="원진실"&&!(typeof isWjSelfT==="function"&&isWjSelfT(t)));}
+/* 내원 기록에 케이스 자동 채움 — 아직 아무 내역도 안 적은 원진실 내원만 (직접 고친 건 절대 안 건드림) */
+function wjAutoCases(){
+  let n=0;
+  wjPts().forEach(t=>{
+    let ch=0;
+    vListOf(t).forEach(vo=>{
+      if(t.vmeta&&t.vmeta[vo.key])return;
+      let oc="";try{oc=ocsCatOf(t,vo.d);}catch(e){}
+      const cs=wjCaseDetect(oc);if(!cs.length)return;
+      t.vmeta=t.vmeta||{};t.vmeta[vo.key]={tag:cs.join(" + "),m:"",cs,auto:1};ch++;});
+    if(ch){t.u=Date.now();n+=ch;}
+  });
+  return n;
+}
+/* 내원 기록창: 원진실이면 케이스 여러 개 고르기 */
+function wjTagRest(vm){
+  vm=vm||{};const tag=String(vm.tag||"");
+  if(Array.isArray(vm.cs)&&vm.cs.length){const pre=vm.cs.join(" + ");if(tag===pre)return "";if(tag.startsWith(pre+" · "))return tag.slice(pre.length+3);}
+  return tag;
+}
+function wjCsInit(t,date,vm,has){
+  let sug=[];try{sug=wjCaseDetect(ocsCatOf(t,date));}catch(e){}
+  if(has)return {cs:Array.isArray(vm.cs)?vm.cs.slice():[],sug,auto:!!vm.auto};
+  return {cs:sug.slice(),sug,auto:sug.length>0};
+}
+function wjVdCases(t){
+  const box=document.getElementById("vd-cases");if(!box)return;
+  if(!t||t.dept!=="원진실"){box.innerHTML="";return;}
+  const sel=new Set(window.vdCs||[]),sug=new Set(window.vdCsSug||[]);
+  box.innerHTML=`<div class="wjvd"><div class="wjvd-h">🦷 케이스 <span>여러 개 고를 수 있어요</span>${window.vdCsAuto?`<em>🤖 OCS 진료내역으로 미리 골라 둠 — 확인 후 저장</em>`:""}</div>
+    <div class="wjcs">${WJ_CASES.map(c=>`<button type="button" class="${sel.has(c)?"on":""}${sug.has(c)&&!sel.has(c)?" sg":""}" onclick="wjCsToggle('${c}')">${sel.has(c)?"✓ ":""}${c}</button>`).join("")}</div></div>`;
+}
+function wjCsToggle(c){
+  const a=(window.vdCs||[]).slice();const i=a.indexOf(c);if(i>=0)a.splice(i,1);else a.push(c);
+  window.vdCs=WJ_CASES.filter(x=>a.includes(x));window.vdCsAuto=false;wjVdCases(window.vdT);
+}
+/* 케이스 집계 */
+function wjCaseStats(){
+  const by={},plan={};WJ_CASES.forEach(c=>{by[c]=[];plan[c]=0;});
+  let auto=0;
+  wjPts().forEach(t=>vListOf(t).forEach(vo=>{const g=(t.vmeta||{})[vo.key];if(!g||!Array.isArray(g.cs))return;
+    if(g.auto&&g.cs.length)auto++;
+    g.cs.forEach(c=>{if(by[c])by[c].push({t,vo,auto:!!g.auto});});}));
+  const seen=new Set();
+  wjMyUpcoming().forEach(u=>{if(isWjNewSlot(u))return;const k=u.d+"|"+(normNoG(u.no)||u.pt);if(seen.has(k))return;seen.add(k);
+    wjCaseDetect(wjProc(u)).forEach(c=>{plan[c]++;});});
+  return {by,plan,auto};
+}
+function wjCasesHtml(){
+  const st=wjCaseStats();const tot=WJ_CASES.reduce((a,c)=>a+st.by[c].length,0);const pl=WJ_CASES.reduce((a,c)=>a+st.plan[c],0);
+  const op=window.wjCaseOpen||"";
+  const chip=c=>{const n=st.by[c].length,p=st.plan[c];
+    return `<button type="button" class="wjcb${op===c?" on":""}${n?"":" z"}" onclick="wjCaseToggle('${c}')"><b>${c}</b><i>${n}</i>${p?`<small>+${p} 예정</small>`:""}</button>`;};
+  let det="";
+  if(op&&st.by[op]){const L=st.by[op].slice().sort((a,b)=>a.vo.d<b.vo.d?1:-1);
+    det=`<div class="wjcl"><div class="hint" style="font-weight:800;margin:2px 0 3px">${esc(op)} — ${L.length}건${st.plan[op]?` · 앞으로 예약 ${st.plan[op]}건`:""}</div>${L.length?L.map(x=>`<div class="wjcr" onclick="openVisitDlg(${x.t.id},'${x.vo.key}')"><b>${fmtD(x.vo.d)}</b><span>${esc(x.t.pt)}${x.t.ptno?` <small>${esc(x.t.ptno)}</small>`:""}</span>${x.auto?`<em>🤖 확인</em>`:""}<i>✏️</i></div>`).join(""):`<p class="hint">아직 기록 없음 — 환자 카드의 내원(●)을 눌러 케이스를 골라요</p>`}</div>`;}
+  return `<div class="card wjcases"><h2 style="color:#8E5BD6">📊 내 케이스 <span class="badge pu">${tot}건</span>${pl?`<span class="wjnb">📅 예정 ${pl}</span>`:""}</h2>
+    <div class="wjcg">${WJ_CASES.map(chip).join("")}</div>${det}
+    ${st.auto?`<p class="hint" style="margin-top:6px">🤖 ${st.auto}건은 OCS 진료내역으로 자동 기록 — 탭해서 확인·수정</p>`:""}</div>`;
+}
+function wjCaseToggle(c){window.wjCaseOpen=window.wjCaseOpen===c?"":c;const b=document.getElementById("wj-cases");if(b)b.innerHTML=wjCasesHtml();}
+/* 맨 위: 내 정보 · 파일 넣기 · 한눈에 */
+function wjUpload(){const el=document.getElementById("ocs-up")||document.getElementById("ocs-file");if(!el)return;try{el.value="";}catch(e){}el.click();}
+function wjToggleNoNext(){window.wjNoNext=!window.wjNoNext;renderWjTab();}
+function wjSearch(v){clearTimeout(window.__wjQT);window.__wjQT=setTimeout(()=>{window.wjQuery=v||"";wjRenderList();},90);}
+function wjCycleDone(){const m=window.wjDoneMode||"hide";window.wjDoneMode=m==="hide"?"only":m==="only"?"all":"hide";wjRenderList();}
+function wjAddPt(){openTotalDlg();try{const s=document.getElementById("tc-dept");s.value="원진실";tcKindChips();}catch(e){}}
+/* 원진실 탭 목록 위 정렬·보기 줄 (토탈 탭의 과 칩 대신) */
+function wjListBar(scoped,doneN){
+  const live=scoped.filter(t=>!t.done&&!(typeof isWjSelfT==="function"&&isWjSelfT(t)));
+  const m=window.wjDoneMode||"hide";const b=(on,c)=>`border:1.5px solid ${on?c:"var(--line)"};background:${on?c:"transparent"};color:${on?"#fff":"var(--sub)"}`;
+  return `<div class="wjbar"><b>👥 내 원진실 환자 ${live.length}명</b>
+    <button style="${b(tcSortMode==="deadline","var(--brand)")}" onclick="setTcSort('deadline')">⏰ 임박순</button>
+    <button style="${b(tcSortMode==="item","var(--brand)")}" onclick="setTcSort('item')">🗂 항목별</button>
+    ${doneN?`<button style="${b(m!=="hide","var(--coral)")}" onclick="wjCycleDone()">${m==="hide"?`✅완료 ${doneN} 보기`:m==="only"?`✅완료만 ${doneN}`:`✅완료 포함 ${doneN}`}</button>`:""}
+    ${window.wjNoNext?`<button style="${b(1,"var(--amber)")}" onclick="wjToggleNoNext()">⚠ 예약 없는 환자만 ✕</button>`:""}</div>`;
+}
+/* 토탈 탭(전체)에선 원진실 환자 수만 알려주고 원진실 탭으로 */
+function wjTotNote(){
+  if(tcDeptFilter&&tcDeptFilter.size)return "";
+  const n=wjPts().filter(t=>!t.done).length;if(!n)return "";
+  return `<p class="hint" style="margin:-3px 0 8px 2px">🦷 원진실 환자 ${n}명은 <a href="javascript:void 0" onclick="goPill('wj')" style="color:#8E5BD6;font-weight:800">원진실 탭</a>에서 관리해요</p>`;
+}
+/* 토탈 목록·변동 카드를 '원진실만'으로 그려서 원진실 탭에 넣음 (토탈 탭 상태는 그대로 되돌림) */
+function wjCtx(fn){
+  const sv=[tcDeptFilter,window.tcQuery,tcItemFilter,window.tcSub,window.tcNoNext,window.tcDoneMode,window.tcShowDone];
+  window.__wjCtx=1;tcDeptFilter=new Set(["원진실"]);window.tcQuery=window.wjQuery||"";tcItemFilter=null;window.tcSub=null;
+  window.tcNoNext=!!window.wjNoNext;window.tcDoneMode=window.wjDoneMode||"hide";window.tcShowDone=window.tcDoneMode!=="hide";
+  try{return fn();}
+  finally{tcDeptFilter=sv[0];window.tcQuery=sv[1];tcItemFilter=sv[2];window.tcSub=sv[3];window.tcNoNext=sv[4];window.tcDoneMode=sv[5];window.tcShowDone=sv[6];window.__wjCtx=0;}
+}
+function wjTabOn(){const s=document.getElementById("o-wj");return !!(s&&s.style.display!=="none"&&s.offsetParent!==null);}   /* OCS 탭이 열려 있을 때만 (다른 탭에선 OCS 탭 열 때 그림) */
+function wjRenderList(){wjCtx(()=>{try{__wjRT0(true);}catch(e){console.warn(e);}});}
+/* 토탈 탭을 다시 그릴 때(반영·확정·수정 등) 원진실 탭이 열려 있으면 같이 갱신 */
+const __wjRT0=renderTotals,__wjRF0=renderTotalFound;
+renderTotals=function(listOnly){
+  if(window.__wjCtx)return __wjRT0.apply(this,arguments);
+  window.__rtIn=(window.__rtIn||0)+1;
+  try{return __wjRT0.apply(this,arguments);}
+  finally{window.__rtIn--;if(!window.__rtIn&&wjTabOn()){if(listOnly)wjRenderList();else renderWjTab();}}
+};
+renderTotalFound=function(){
+  const r=__wjRF0.apply(this,arguments);
+  if(!window.__wjCtx&&!window.__rtIn&&wjTabOn())renderWjTab();
+  return r;
+};
+/* ═══ #372: 담당쌤 이름 뒤 번호(예: 홍길동36의 36)는 진료내역이 아니라 따로 (u.dn) ═══
+   예전에 저장된 줄도 불러올 때 한 번 정리 — 진료내역 앞 "36 " → dn, 진료내역은 깨끗하게 */
+/* ═══ #373: 담당쌤 번호 정리 다시 — 원진실 학생 번호만 따로(u.drn) · 다른 과 진료내역은 절대 안 건드림 ═══
+   #372의 '진료내역 앞 숫자 떼기'가 "3 달후 재진예약"·"6 달 후 …" 같은 다른 과 진료내역 숫자까지 뗀 오류를 되돌림:
+   · 다른 과: #372에서 뗀 숫자(dn)는 진료내역 앞에 그대로 복구
+   · 원진실: 예약의사가 학생(이름+번호)이라 앞 번호 = 학생 번호 → drn으로 */
+function ocsDnFix(u){
+  if(!u)return u;
+  const wj=u.dep==="원진실";
+  if(u.dn!=null&&u.dn!==""){
+    if(wj){if(!u.drn)u.drn=String(u.dn);}
+    else u.cat=(String(u.dn)+" "+String(u.cat||"")).trim();
+    delete u.dn;
+  }else if(u.dn!==undefined)delete u.dn;
+  if(wj&&!u.drn){const c=String(u.cat||"");const m=c.match(/^\s*(\d{1,3})(?=\s|$)/);if(m){u.drn=m[1];u.cat=c.slice(m[0].length).trim();}}
+  return u;
+}
+(function(){
+  const H=histDay;histDay=function(){const r=H.apply(this,arguments);try{if(Array.isArray(r))r.forEach(ocsDnFix);}catch(e){}return r;};
+  const O=histObjs;histObjs=function(){const r=O.apply(this,arguments);try{if(Array.isArray(r))r.forEach(ocsDnFix);}catch(e){}return r;};
+})();
+/* 원진실 탭 맨 위 상자 — 토탈 파이프라인처럼 한 줄 (아래에 변동 카드가 붙음) */
+function wjHeadHtml(){
+  const ed=typeof wjSaveMe==="function";const ok=wjMeOk();const n=ok?wjMeName():"",no=ok?wjMeNo():"";
+  const at=S.wjCover&&S.wjCover.at?fmtD(ymd(new Date(S.wjCover.at)))+" 파일":"";
+  const me=ok?(ed?`<button type="button" class="wjmec" onclick="wjMeEditT()" title="내 이름·번호 바꾸기">${esc(n+no)} ✎</button>`:`<span class="wjmec">${esc(n+no)}</span>`):"";
+  let h=`<h2>원진실 예약 ${me}${at?`<span class="badge pu">${at}</span>`:""}<span style="margin-left:auto;display:flex;gap:5px"><button class="btn small wjupb" onclick="wjUpload()">📁 파일 넣기</button></span></h2>`;
+  if(ed&&(!ok||window.wjMeEdit)){
+    const cand=ok?[]:wjMeCands();
+    h+=`<div class="wjme" style="margin-top:7px"><input id="wj-me-n" placeholder="내 이름" value="${esc(n)}" autocomplete="off"><input id="wj-me-no" placeholder="번호" inputmode="numeric" value="${esc(no)}" autocomplete="off"><button class="btn small" onclick="wjSaveMeUI()">저장</button></div>
+      ${ok?"":`<p class="hint tsa" style="margin-top:4px">예약의사 칸의 '이름+번호'로 내 원진실 예약을 찾아요</p>`}
+      ${cand.length?`<div class="wjcand"><span class="hint">혹시 나?</span>${cand.map(c=>`<button class="btn small ghost" onclick="wjSaveMe('${esc(c.n)}','${esc(c.no)}')">${esc(c.n+c.no)} <small>${c.c}</small></button>`).join("")}</div>`:""}`;
+  }
+  return h;
+}
+function wjMeEditT(){window.wjMeEdit=!window.wjMeEdit;const el=document.getElementById("wj-head");if(el)el.innerHTML=wjHeadHtml();}
+/* 원진실 분류 태그 (검색창 아래) */
+function wjStatHtml(){
+  if(!wjMeOk())return "";
+  const U=wjMyUpcoming();const today=ymd(new Date());const wk=ymd(daysFrom(today,7));
+  const nNew=U.filter(u=>isWjNewSlot(u)).length;
+  const P=new Set(U.filter(u=>!isWjNewSlot(u)).map(u=>normNoG(u.no)||u.pt));
+  const nWk=U.filter(u=>u.d<wk).length;
+  const nn=wjPts().filter(t=>!t.done).filter(tcNoNextOf).length;
+  return `<div class="wjstat"><span>앞으로 예약 <b>${U.length}</b></span><span>환자 <b>${P.size}</b></span>${nNew?`<span>신환 자리 <b>${nNew}</b></span>`:""}<span>7일 안 <b>${nWk}</b></span>${nn?`<button type="button" class="${window.wjNoNext?"on":""}" onclick="wjToggleNoNext()">⚠ 다음 예약 없는 환자 <b>${nn}</b></button>`:""}</div>`;
+}
+function renderWjTab(){
+  if(!document.getElementById("o-wj"))return;
+  if(window.__wjBusy)return;window.__wjBusy=1;
+  try{
+    try{if(wjAutoCases())save(true);}catch(e){}
+    const set=(id,h)=>{const el=document.getElementById(id);if(el)el.innerHTML=h;};
+    const t0=ymd(new Date()),t1=ymd(daysFrom(t0,1));
+    let nt="";try{nt=wjDayHtml(t0,"오늘")+wjDayHtml(t1,"내일 — 오늘 저녁 노티");}catch(e){}
+    set("wj-noti",nt);
+    set("wj-head",wjHeadHtml());
+    wjCtx(()=>{try{__wjRF0();}catch(e){console.warn(e);}});
+    let sl="";try{sl=wjMeOk()?wjNewSlotsHtml():"";}catch(e){}
+    set("wj-slots",sl);
+    set("wj-cases",wjCasesHtml());
+    set("wj-stat",wjStatHtml());
+    wjRenderList();
+  }finally{window.__wjBusy=0;}
+}
 function ocsLiveItems(){
   const items=[],skd=[];const today=ymd(new Date());const skip=S.ocsSkip||{};
   const nowHM=(()=>{const n=new Date();return String(n.getHours()).padStart(2,"0")+":"+String(n.getMinutes()).padStart(2,"0");})();
@@ -7815,22 +8273,23 @@ function ocsLiveItems(){
   const DD=ocsLiveItems.__dd;
   const hasDayDep=(d,dep)=>DD.has(dep?d+"|"+dep:d);
   (S.totals||[]).forEach(t=>{
-    if(!t||t.done||t.dept==="원진실")return;   /* 원진실은 변동 추적 제외 */
+    if(!t||t.done)return;
     const ms=upMatch(t);const nx=nextsOf(t);const mis=[],nw=[];
     const base={id:t.id,pt:t.pt,dept:t.dept||"",item:t.item||""};
     const add=o=>{const it=Object.assign({},base,o);it.key=[t.id,it.type,it.d,it.t||""].concat(it.type==="move"?[it.nd,it.nt||""]:[]).join("|");if(!ocsSkipped(skip,it.key,it.type,it.d))items.push(it);else{it.skipped=1;skd.push(it);}};
     nx.forEach(x=>{
       if(!x||!x.d||x.d<today)return;
-      if(!hasDayDep(x.d,t.scope==="all"?null:t.dept))return;          /* 그 날짜·과 OCS가 아직 없으면 판단 보류 */
+      const wjCov=t.dept==="원진실"&&S.wjCover&&x.d>=S.wjCover.lo&&x.d<=S.wjCover.hi;   /* 원진실 파일 기간 안이면 그날 원진실 행이 없어도 판단 (#347) */
+      if(!wjCov&&!hasDayDep(x.d,t.scope==="all"?null:t.dept))return;          /* 그 날짜·과 OCS가 아직 없으면 판단 보류 */
       const hit=ms.filter(u=>u.d===x.d);
       const prevT=(S.ocsPrev||{})[t.id+"|"+x.d]||"";
       if(!hit.length){mis.push({type:"missing",d:x.d,t:x.t||"",prevT});return;}
       const u=hit.find(h=>h.t===x.t)||hit[0];
-      if(u.t&&u.t!==(x.t||""))add({type:"time",d:x.d,t:u.t,from:x.t||"시간 미정",dr:u.dr||"",cat:(u.cat)||""});
+      if(u.t&&u.t!==(x.t||""))add({type:"time",d:x.d,t:u.t,from:x.t||"시간 미정",dr:u.dr||"",cat:(u.dep==="원진실"?wjProc(u):u.cat)||""});
     });
     const seenD=new Set();
     ms.forEach(u=>{if(isPast(u)||nx.some(x=>x&&x.d===u.d)||seenD.has(u.d))return;seenD.add(u.d);
-      nw.push({type:"new",d:u.d,t:u.t||"",dr:u.dr||"",no:u.no||"",cat:(u.cat)||"",dep:u.dep,prevT:(S.ocsPrev||{})[t.id+"|"+u.d]||""});});
+      nw.push({type:"new",d:u.d,t:u.t||"",dr:u.dep==="원진실"?"":(u.dr||""),no:u.no||"",cat:(u.dep==="원진실"?wjProc(u):u.cat)||"",dep:u.dep,prevT:(S.ocsPrev||{})[t.id+"|"+u.d]||""});});
     /* 🔁 예약 변경 짝짓기 (#368): OCS에서 없어진 예약 ↔ 새로 생긴 예약(가까운 날짜끼리) → 한 항목으로 */
     {const sk=o=>ocsSkipped(skip,[t.id,o.type,o.d,o.t||""].join("|"),o.type,o.d);
      const dd=(a,b)=>Math.abs((new Date(a+"T00:00")-new Date(b+"T00:00"))/864e5);
@@ -7849,9 +8308,26 @@ function ocsLiveItems(){
       try{if(ocsLogStale(t,e))return;}catch(x){}   /* 그날 그 과 최신 OCS에 없는 예전 줄 (#359) */
       add({type:"visit",d:e.d,t:e.t||"",cat:e.cat||""});});
   });
-  const ord={wj:0,move:1,time:1,missing:2,new:3,visit:4};
+  /* ⑤ 원진실: 내가 예약의사인 앞으로의 진료인데 토탈에 없는 환자 */
+  {const wjT=(S.totals||[]).filter(t=>t.dept==="원진실");   /* 완성한 토탈 환자는 다시 만들지 않음 (#348) */
+   const ign=new Set((S.wjIgnore||[]).map(String));          /* 지운 원진실 토탈 환자도 */
+   const seenP=new Set();
+   UPCOMING.filter(u=>isMineWJ(u)&&!isPast(u)&&!isWjNewSlot(u)).forEach(u=>{
+     const no=normNoG(u.no);
+     if(ign.has(no||u.pt))return;
+     if(wjT.some(t=>(no&&normNoG(t.ptno)===no)||(!t.ptno&&t.pt===u.pt)))return;
+     const pk=(no||u.pt);if(seenP.has(pk))return;seenP.add(pk);
+     const all=UPCOMING.filter(x=>isMineWJ(x)&&!isPast(x)&&!isWjNewSlot(x)&&(normNoG(x.no)===no||(!no&&x.pt===u.pt)));
+     const it={type:"wj",id:0,pt:u.pt,dept:"원진실",item:wjProc(u),d:u.d,t:u.t||"",no:u.no||"",cat:wjProc(u),more:all.length-1};
+     it.key=["wj",no||u.pt,u.d,u.t||""].join("|");if(!skip[it.key])items.push(it);});}
+  /* ⑥ 원진실: 예전 원진실 내역엔 있었는데 새로 올린 원진실 파일엔 없는 내 예약 (토탈 없는 신환 자리 등) */
+  (S.wjGone||[]).forEach(g=>{if(!g||g.d<today)return;const it={type:"wjgone",id:0,dep:"원진실",pt:g.pt,dept:"원진실",item:isWjNewSlot(g)?"신환 자리":"",d:g.d,t:g.t||"",cat:g.cat||"",no:g.no||""};
+    it.key=["wjgone",g.no||g.pt,g.d,g.t||""].join("|");if(!skip[it.key])items.push(it);});
+  const ord={wj:0,move:1,time:1,missing:2,wjgone:2,new:3,visit:4};
   let out=items.sort((a,b)=>ord[a.type]-ord[b.type]||(a.d<b.d?-1:a.d>b.d?1:0));
-  if(!(ocsLiveItems.__all)){try{if(tcDeptFilter&&tcDeptFilter.size)out=out.filter(it=>tcDeptFilter.has(it.dept));}catch(e){}}   /* 카드 표시는 토탈 탭 과 필터 반영 */
+  ocsLiveItems.__wjHidden=0;
+  if(!(ocsLiveItems.__all)){try{if(tcDeptFilter&&tcDeptFilter.size)out=out.filter(it=>tcDeptFilter.has(it.dept));
+    else{const n0=out.length;out=out.filter(it=>it.dept!=="원진실");ocsLiveItems.__wjHidden=n0-out.length;}}catch(e){}}   /* 전체 보기엔 원진실 제외 (#347) */   /* 카드 표시는 토탈 탭 과 필터 반영 */
   {let so=skd;try{if(tcDeptFilter&&tcDeptFilter.size)so=skd.filter(it=>tcDeptFilter.has(it.dept));else so=skd.filter(it=>it.dept!=="원진실");}catch(e){}ocsLiveItems.__skipped=so;}
   if(ocsLiveItems.__all)return out.concat(skd);   /* 넘긴 항목도 버튼으로 바로 반영되게 */
   return out;
@@ -7859,6 +8335,20 @@ function ocsLiveItems(){
 function ocsLiveItemsAll(){ocsLiveItems.__all=1;try{return ocsLiveItems();}finally{ocsLiveItems.__all=0;}}
 function ocsLiveApply(key,quiet,opt){
   const it=ocsLiveItemsAll().find(x=>x.key===key);if(!it)return false;
+  if(it.type==="wj"){   /* 원진실 내 진료 → 원진실 토탈 새로 만들기 (앞으로의 내 예약 전부 다음 내원으로) */
+    const no=normNoG(it.no);
+    const rows=UPCOMING.filter(x=>isMineWJ(x)&&x.d>=ymd(new Date())&&(normNoG(x.no)===no||(!no&&x.pt===it.pt)));
+    const t={id:uniqId(S.totals),dept:"원진실",pt:it.pt,ptno:it.no||"",item:it.item||"원진실 진료",dr:wjMeName(),scope:"dept",need:3,memo:"",
+      visits:[],vmeta:{},done:false,ufol:false,report:false,nexts:rows.map(x=>({d:x.d,t:x.t||"",memo:wjProc(x)}))};
+    S.totals.push(t);syncNextPrimary(t);
+    if(!quiet){save(true);syncAll();try{refreshStrip();}catch(e){}toast(`🦷 원진실 토탈 추가: ${esc(it.pt)} (${rows.length}건 예약)`);}
+    return true;
+  }
+  if(it.type==="wjgone"){   /* 확인 = 목록에서 지움 (#347) */
+    S.wjGone=(S.wjGone||[]).filter(g=>["wjgone",g.no||g.pt,g.d,g.t||""].join("|")!==it.key);
+    if(!quiet){save(true);renderTotalFound();toast(`✓ ${esc(it.pt)} ${fmtD(it.d)} 없어진 원진실 예약 확인`);}
+    return true;
+  }
   const t=findT(it.id);if(!t)return false;
   const arr=nextsOf(t);const before=JSON.parse(JSON.stringify(arr));
   if(it.type==="move"||(it.type==="new"&&opt==="repl"&&it.alt)){   /* 🔁 예약 변경 (#368) */
@@ -8390,7 +8880,9 @@ function candRowsFor(t,rows){
 function matchRowsFor(t,rows){
   const nm=String(t.pt||"").trim();const no=normNoG(t.ptno);
   if(nm.length<2&&!no)return [];
+  const wj=t.dept==="원진실"&&t.scope!=="all"&&wjMeOk();
   return candRowsFor(t,rows).filter(u=>{
+    if(wj&&!isMineWJ(u))return false;          /* 원진실 토탈 = 내가 예약의사인 진료만 */
     if(no){if(normNoG(u.no)!==no)return false;}
     else if(!(nm.length>=2&&(u.pt.includes(nm)||nm.includes(u.pt))))return false;
     if(t.scope==="all")return true;
@@ -8490,16 +8982,16 @@ function ocsCellsRow(d,t,no,pt,depRaw,dr,cat){
   let note="";{const pm=frag.match(/^\(([^)]*)\)/);if(pm){note=pm[1];frag=frag.slice(pm[0].length);}}
   if(!dep)dep=tok.replace(/\(.*$/,"")||"기타";                                /* 처음 보는 과도 그 이름 그대로 */
   const sub=dep==="기타"?(/^원스톱/.test(tok)?"원스톱":/^임플/.test(tok)?"임플":""):"";
-  let c=String(cat||"").replace(/\s+/g," ").trim();
+  let dn="",c=String(cat||"").replace(/\s+/g," ").trim();
   dr=String(dr||"").replace(/\s+/g,"");if(!dr&&frag)dr=frag;
   {const d2=dr.replace(/(교수님?|선생님?|쌤)$/,"");if(d2.length>=2)dr=d2;}                                  /* '김명주교수님' → 김명주 (교수님 판정 누락 방지) */
   if(dr&&/^\[/.test(dr)){const bm=dr.match(/^(\[[^\]]+\](?:일반|지정)?)/);if(bm&&bm[1].length<dr.length){c=(dr.slice(bm[1].length)+" "+c).trim();dr=bm[1];}}
   else if(dr){                                                                 /* 예전 규칙 그대로: 이름(+A/B·#번호)만 담당쌤, 나머지는 진료내역 앞에 */
     if(OCS_NOT_DR.test(dr)){c=(dr+" "+c).trim();dr="";}
     else{const dm=dr.match(/^([가-힣]{2,4}(?:[A-Z](?![A-Za-z])|#\d{1,2}[a-z]?)?)/);
-      if(dm){const rest=dr.slice(dm[1].length);dr=dm[1];if(rest)c=(rest+" "+c).trim();}else{c=(dr+" "+c).trim();dr="";}}}
+      if(dm){const rest=dr.slice(dm[1].length);if(/^\d{1,3}$/.test(rest)){dr=dm[1];dn=rest;}else if(/^\d/.test(rest)&&/[가-힣]/.test(rest)){}else{dr=dm[1];if(rest)c=(rest+" "+c).trim();}}else{c=(dr+" "+c).trim();dr="";}}}
   c=((/마취/.test(note)?"[마취전공] ":"")+c).trim();
-  const o={d,t:t||"",dep,pt,no,dr,cat:c};if(sub)o.sub=sub;return o;
+  const o={d,t:t||"",dep,pt,no,dr,cat:c};if(sub)o.sub=sub;if(dn)o.drn=dn;return o;
 }
 function ocsMergeRows(L){
   const m=new Map(),out=[];
@@ -8547,13 +9039,16 @@ function ocsRowsFromWorkbook(wb){
       const d=ocsCellDate(g(cD));if(!d)continue;
       if(/^Y/i.test(g(cX))){out.canc++;continue;}                           /* 취소된 예약 제외 */
       const t=ocsCellTime(g(cT))||ocsCellTime(g(cD));
-      const no=g(cN).replace(/\s+/g,""),pt=g(cP).replace(/\s+/g," "),dep=g(cDep),dr=g(cDr).replace(/\s+/g,"");
+      const no=g(cN).replace(/\s+/g,""),pt=g(cP).replace(/\s+/g," "),dep=g(cDep);let dr=g(cDr).replace(/\s+/g,"");
+      if(/원내생|원진실/.test(dep)&&wjMeOk()&&!dr.startsWith(wjMeName())){   /* 전체 OCS: 예약의사 칸이 다른 열이어도 '이름번호' 칸을 찾아 내 진료로 (#371) */
+        const re=new RegExp("^"+wjEsc(wjMeName())+"("+wjMeNo()+")?$");const hit=r.findIndex((c,ci)=>ci!==cP&&re.test(String(c==null?"":c).replace(/\s+/g,"")));
+        if(hit>=0)dr=String(r[hit]).replace(/\s+/g,"");}
       if((!no&&!pt)||!dep){out.bad.push([d,t,no,pt,dep].join(" ").slice(0,50));continue;}   /* 시간·번호 중 하나가 비어도 살림 (#369) */
       /* 원진실 '신환 자리' 예약: 환자명이 전산실·번호가 TS…(더미)라도 내가 예약의사면 살림 (#347) */
       if(/원내생|원진실/.test(dep)&&(/^[A-Za-z]/.test(no)||/전산실/.test(pt))){
         if(typeof isMineWJ==="function"){
           const dm=dr.match(/^([가-힣]{2,4})(\d{1,3})?$/);
-          const u={d:d.replace(/\//g,"-"),t,no,pt,dep:"원진실",dr:dm?dm[1]:dr,cat:((dm&&dm[2]?dm[2]+" ":"")+g(cC)).replace(/\s+/g," ").trim(),canc:"N"};
+          const u={d:d.replace(/\//g,"-"),t,no,pt,dep:"원진실",dr:dm?dm[1]:dr,drn:dm&&dm[2]?dm[2]:undefined,cat:(""+g(cC)).replace(/\s+/g," ").trim(),canc:"N"};
           if(isMineWJ(u))direct.push(u);
         }
         continue;
